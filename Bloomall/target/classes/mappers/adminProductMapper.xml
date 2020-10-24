@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="com.bloomall.mappers.AdminProductMapper">
+
+	<!-- 1차 카테고리 -->
+	<select id="primaryCtgrList" resultType="CategoryVO">
+		select ctgr_cd, ctgr_prt_cd, ctgr_name
+		from category_tb
+		where ctgr_prt_cd is null
+	</select>
+	
+	
+	<!-- 1차 카테고리에 따른 2차 카테고리 -->
+	<select id="subCategoryList" resultType="CategoryVO" parameterType="String">
+		select ctgr_cd, ctgr_prt_cd, ctgr_name
+		from category_tb
+		where ctgr_prt_cd=#{ctgr_cd}
+	</select>
+	
+	
+	<!-- 상품 등록 -->
+	<insert id="productRegi" parameterType="ProductVO">
+		insert into product_tb(prd_idx, ctgr_cd, ctgr_prt_cd, prd_title, prd_author, prd_price,
+					prd_dc_price, prd_company, prd_detail, prd_img, prd_amount, prd_in_stock, prd_regdate)
+            values(seq_prd_idx.nextval, #{ctgr_cd}, #{ctgr_prt_cd}, #{prd_title}, #{prd_author}, 
+            	   #{prd_price}, #{prd_dc_price}, #{prd_company}, #{prd_detail}, #{prd_img}, #{prd_amount}, #{prd_in_stock}, sysdate)
+	</insert>
+	
+	<!-- 상품 리스트 -->
+	<select id="productList" resultType="ProductVO" parameterType="SearchCriteria">
+		select prd_idx, ctgr_cd, ctgr_prt_cd, prd_title, prd_author, prd_price, prd_dc_price, 
+			   prd_company, prd_detail, prd_img, prd_amount, prd_in_stock, prd_regdate, prd_updatedate
+		from (select prd_idx, ctgr_cd, ctgr_prt_cd, prd_title, prd_author, prd_price,
+			  prd_dc_price, prd_company, prd_detail, prd_img, prd_amount, prd_in_stock,
+			  prd_regdate, prd_updatedate, row_number() over(order by prd_idx desc)
+			  p_seq from product_tb
+			  <include refid="searchQeury" />)
+		where p_seq between #{rowStart} and #{rowEnd}
+	</select>
+	
+	
+	<!-- 검색쿼리 - 상품리스트/상품개수 포함 -->
+	<sql id="searchQeury">
+		<if test="searchType != null">
+			<if test="searchType == 'title'.toString()">
+				where prd_title like '%' || #{keyword} || '%'
+			</if>	
+			<if test="searchType == 'author'.toString()">
+				where prd_author like '%' || #{keyword} || '%'
+			</if>	
+			<if test="searchType == 'detail'.toString()">
+				where prd_detail like '%' || #{keyword} || '%'
+			</if>	
+			<if test="searchType == 'company'.toString()">
+				where prd_company like '%' || #{keyword} || '%'
+			</if>	
+			<if test="searchType == 'title_author'.toString()">
+				where (prd_title like '%' || #{keyword} || '%') 
+				or 
+				(prd_author like '%' || #{keyword} || '%')
+			</if>	
+			<if test="searchType == 'title_author_company'.toString()">
+				where (prd_title like '%' || #{keyword} || '%') 
+				or (prd_author like '%' || #{keyword} || '%')
+				or (prd_company like '%' || #{keyword} || '%')
+			</if>	
+		</if>
+	</sql>
+	
+	
+	<!-- 상품개수(검색 기능 포함) -->
+	<select id="searchCount" resultType="int" parameterType="SearchCriteria">
+		select count(prd_idx)
+		from product_tb
+		<include refid="searchQeury"></include>
+	</select>
+	
+	
+	<!-- 상품 상세 페이지 - 상품정보 읽어오기 -->
+	<select id="productDetail" resultType="ProductVO" parameterType="int">
+		select prd_idx, ctgr_cd, ctgr_prt_cd, prd_title, prd_author, prd_price, prd_dc_price,
+			   prd_company, prd_detail, prd_img, prd_amount, prd_in_stock, prd_regdate, prd_updatedate
+		from product_tb
+		where prd_idx=#{prd_idx}
+	</select>
+	
+	
+	<!-- 상품 수정 -->
+	<update id="updateProduct" parameterType="ProductVO">
+		update product_tb
+		set ctgr_cd=#{ctgr_cd}, ctgr_prt_cd=#{ctgr_prt_cd}, prd_title=#{prd_title},
+		    prd_author=#{prd_author}, prd_price=#{prd_price}, prd_dc_price=#{prd_dc_price},
+		    prd_company=#{prd_company}, prd_detail=#{prd_detail}, prd_img=#{prd_img},
+		    prd_amount=#{prd_amount}, prd_in_stock=#{prd_in_stock}, prd_updatedate=sysdate
+		where prd_idx=#{prd_idx}		
+	</update>
+	
+	<!-- 상품 삭제 -->
+	<delete id="deleteProduct" parameterType="int">
+		delete from product_tb
+		where prd_idx=#{prd_idx}
+	</delete>
+	
+	
+	<!-- 선택 상품 수정 -->
+	<update id="updateChked">
+		update product_tb
+		set prd_amount=#{prd_amount}, prd_in_stock=#{prd_in_stock}, prd_updatedate=sysdate
+		where prd_idx=#{prd_idx}
+	</update>
+	
+
+</mapper>

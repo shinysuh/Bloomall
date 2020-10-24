@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="com.bloomall.mappers.AdminMapper">
+
+	<!-- 관리자 로그인 -->
+	<select id="adminLogin" resultType="AdminVO" parameterType="AdminVO">
+		select ad_id, ad_pw, ad_name, ad_last_visit
+		from admin_tb
+		where ad_id=#{ad_id}
+	</select>
+	
+	<!-- 최근 접속시간 업데이트 -->
+	<update id="updateVisit" parameterType="String">
+		update admin_tb
+		set ad_last_visit=sysdate
+		where ad_id=#{ad_id}
+	</update>
+
+</mapper>

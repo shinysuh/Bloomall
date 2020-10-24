@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+	xsi:schemaLocation="http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-4.3.xsd
+		http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd">
+
+	<!-- spring-jdbc 
+	<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="oracle.jdbc.driver.OracleDriver" />
+		<property name="url" value="jdbc:oracle:thin:@localhost:1521:orcl" />
+		<property name="username" value="project" />
+		<property name="password" value="1234" />
+	</bean>-->
+	
+	<!-- log4 jdbc -->			
+	<!-- sql문에서 오류가 났을 때, 오류 구문을 로그에 나타내 유지보수 용이. BUT 성능에 좋지 않아 사용 후 다시 위 dataSource로 돌려줘야 함. -->
+	<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="net.sf.log4jdbc.sql.jdbcapi.DriverSpy" />
+		<property name="url" value="jdbc:log4jdbc:oracle:thin:@localhost:1521:orcl" />
+		<property name="username" value="PROJECT" />
+		<property name="password" value="1234" />
+	</bean> 
+	
+	<!-- mybatis-spring -->
+	<!-- SqlSession 을 생성하는 기능 -->
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<!-- 여기의 property들은 setter의 역할을 한다 -->
+		<!-- ref는 위 jdbc <bean>의 id를 가져온 것 -->
+		<property name="dataSource" ref="dataSource" />	
+		<property name="configLocation" value="classpath:/mybatis-config.xml" />
+		<property name="mapperLocations" value="classpath:mappers/**/*Mapper.xml" />
+	</bean>
+	
+	<!-- xml 문서에서 sql구문을 읽어와서 실행을 담당하는 기능 -->
+	<!-- SqlSession에 해당된다 -->
+	<bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate" destroy-method="clearCache">
+		<!-- ref는 위 classpath:mappers <bean>의 id를 가져온 것 -->
+		<constructor-arg name="sqlSessionFactory" ref="sqlSessionFactory" />
+	</bean>
+	
+	<!-- Email 설정 -->
+	<!-- JavaMailSenderImpl클래스를 bean객체로 설정시 메일버서의 정보를 구성해야 한다. Gmail계정정보를 사용(보안설정 낮게 ) -->
+	<bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+		<property name="host" value="smtp.gmail.com" />
+		<property name="port" value="587" />
+		<property name="username" value="shinysuh1992@gmail.com" />
+		<property name="password" value="1234" />
+		<property name="javaMailProperties">
+			<props>
+				<prop key="mail.smtp.auth">true</prop>
+				<prop key="mail.smtp.starttls.enable">true</prop>
+			</props>
+		</property>
+	</bean>
+	
+	<!-- Root Context: defines shared resources visible to all other web components -->
+		
+</beans>

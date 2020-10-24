@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.bloomall.mappers.MemberMapper">
+	
+	<!-- 회원가입 -->
+	<insert id="join" parameterType="MemberVO">
+		insert into member_tb(mem_id, mem_pw, mem_name, mem_email, mem_zip, mem_addr, 
+							  mem_addr_d, mem_tel, mem_nick, mem_email_accp)
+   		values(#{mem_id}, #{mem_pw}, #{mem_name}, #{mem_email}, #{mem_zip}, #{mem_addr},
+   			   #{mem_addr_d}, #{mem_tel}, #{mem_nick}, #{mem_email_accp})
+	</insert>
+	
+		
+	<!-- 아이디 중복 체크 -->
+	<select id="confirmId" parameterType="String" resultType="String">
+		select mem_id
+		from member_tb
+		where mem_id=#{mem_id}
+ 	</select>
+	
+	
+	<!-- 로그인(MemberDTO) - 파라미터에 비번 사용X -->
+	<select id="login" parameterType="MemberDTO" resultType="MemberDTO">
+		select mem_id, mem_pw, mem_name, mem_nick, mem_point, mem_last_visit
+		from member_tb
+		where mem_id = #{mem_id}
+	</select>
+	
+	
+	<!-- 로그인 시간 업데이트 -->
+	<update id="loginDateUpdate" parameterType="String">
+		update member_tb
+		set mem_last_visit=sysdate
+		where mem_id = #{mem_id}
+	</update>
+	
+
+	<!-- MemberVO 정보 가져오기 -->
+	<select id="getUserInfo" parameterType="String" resultType="MemberVO">
+		select mem_id, mem_pw, mem_name, mem_email, mem_zip, mem_addr, 
+			mem_addr_d, mem_tel, mem_nick, mem_email_accp, mem_point, mem_regdate, 
+			mem_updatedate, mem_last_visit, mem_authcode 
+		from member_tb
+		where mem_id=#{mem_id} 
+	</select>
+		
+	
+	<!-- 회원정보 수정 -->
+	<update id="modifyInfo" parameterType="MemberVO">
+		update member_tb
+		set mem_name=#{mem_name}, mem_email=#{mem_email}, mem_zip=#{mem_zip}, mem_addr=#{mem_addr},
+		    mem_addr_d=#{mem_addr_d}, mem_tel=#{mem_tel}, mem_nick=#{mem_nick},
+		    mem_email_accp=#{mem_email_accp}, mem_updatedate=sysdate
+		where mem_id=#{mem_id}
+	</update>
+	
+	
+	<!-- 비밀번호 변경 -->
+	<update id="updatePW" parameterType="MemberDTO">
+		update member_tb
+		set mem_pw=#{mem_pw}
+		where mem_id=#{mem_id}
+	</update>
+	
+	
+	<!-- 회원탈퇴 -->
+	<delete id="deleteMember" parameterType="String">
+		delete from member_tb
+		where mem_id=#{mem_id}
+	</delete>
+	
+
+</mapper>

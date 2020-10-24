@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC
+ "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="com.bloomall.mappers.UserProductMapper">
+
+	<!-- 1차 카테고리 -->
+	<select id="primaryCtgrList" resultType="CategoryVO">
+		select ctgr_cd, ctgr_prt_cd, ctgr_name
+		from category_tb
+		where ctgr_prt_cd is null
+	</select>
+
+	<!-- 1차 카테고리에 따른 2차 카테고리 subCategoryList -->
+	<select id="subCategoryList" resultType="CategoryVO" parameterType="String">
+		select ctgr_cd, ctgr_prt_cd, ctgr_name
+		from category_tb
+		where ctgr_prt_cd=#{ctgr_cd}
+	</select>
+
+	<!-- 카테고리 이름 가져오기 -->
+	<select id="getCtgrName" resultType="String" parameterType="String">
+		select ctgr_name
+		from category_tb
+		where ctgr_cd=#{ctgr_cd}
+	</select>
+	
+	<!-- 부모 카테고리 이름 가져오기 -->
+	<select id="getPrtName" resultType="String" parameterType="String">
+		select p.ctgr_name
+		from category_tb c, category_tb p
+		where c.ctgr_prt_cd=p.ctgr_cd
+		and c.ctgr_cd=#{ctgr_cd}
+	</select>
+	
+	<!-- 상품 리스트 (카테고리 선택 시) => 페이징 - Criteria 파라미터 -->
+	<select id="productList" resultType="ProductVO" parameterType="Map">
+		select prd_idx, ctgr_cd, ctgr_prt_cd, prd_title, prd_author, prd_price, prd_dc_price,
+		        prd_company, prd_detail, prd_img, prd_amount, prd_in_stock, prd_regdate
+		from (select prd_idx, ctgr_cd, ctgr_prt_cd, prd_title, prd_author, prd_price, prd_dc_price,
+		            prd_company, prd_detail, prd_img, prd_amount, prd_in_stock, prd_regdate,
+		            row_number() over(order by prd_idx desc) seq_p
+		      from product_tb
+		      where ctgr_cd=#{ctgr_cd})
+		where seq_p between #{cri.rowStart} and #{cri.rowEnd}
+	</select>
+	
+	<!-- 상품리스트(카테고리 - 1차) -->
+	<select id="primeList" resultType="ProductVO" parameterType="Map">
+		select prd_idx, ctgr_cd, ctgr_prt_cd, prd_title, prd_author, prd_price, prd_dc_price,
+		       prd_company, prd_detail, prd_img, prd_amount, prd_in_stock, prd_regdate
+		from (select prd_idx, ctgr_cd, ctgr_prt_cd, prd_title, prd_author, prd_price, prd_dc_price,
+		             prd_company, prd_detail, prd_img, prd_amount, prd_in_stock, prd_regdate,
+		             row_number() over(order by prd_idx desc) seq_p
+		      from product_tb
+		      where ctgr_cd in (select ctgr_cd from category_tb where ctgr_prt_cd = #{ctgr_prt_cd})
+		      )
+		where seq_p between #{cri.rowStart} and #{cri.rowEnd}
+	</select>
+	
+	<!-- 모든 상품 가져오기 -->
+	<select id="productListAll" resultType="ProductVO" parameterType="Map">
+		select prd_idx, ctgr_cd, ctgr_prt_cd, prd_title, prd_author, prd_price, prd_dc_price,
+		        prd_company, prd_detail, prd_img, prd_amount, prd_in_stock, prd_regdate
+		from (select prd_idx, ctgr_cd, ctgr_prt_cd, prd_title, prd_author, prd_price, prd_dc_price,
+		            prd_company, prd_detail, prd_img, prd_amount, prd_in_stock, prd_regdate,
+		            row_number() over(order by prd_idx desc) seq_p
+		      from product_tb)
+		where seq_p between #{cri.rowStart} and #{cri.rowEnd}
+	</select>
+	
+	<!-- 해당되는 상품 개수(카테고리) -->
+	<select id="countByCtgr" resultType="int" parameterType="String">
+		select count(prd_idx)
+		from product_tb
+		where ctgr_cd=#{ctgr_cd}
+	</select>
+	
+	<!-- 해당되는 상품 개수(1차 카테고리) -->
+	<select id="prime_countByCtgr" resultType="int" parameterType="String">
+		select count(prd_idx)
+		from product_tb
+		where ctgr_prt_cd=#{ctgr_prt_cd}
+	</select>
+	
+	<!-- 해당되는 상품 개수(전체) -->
+	<select id="all_countByCtgr" resultType="int">
+		select count(prd_idx)
+		from product_tb
+	</select>
+	
+	<!-- 상품 리스트 (검색 시) => 검색/페이징 - SearchCriteria 파라미터 -->
+	<select id="productListSearch" parameterType="SearchCriteria" resultType="ProductVO">
+		select prd_idx, ctgr_cd, ctgr_prt_cd, prd_title, prd_author, prd_price, prd_dc_price,
+		        prd_company, prd_detail, prd_img, prd_amount, prd_in_stock, prd_regdate
+		from (select prd_idx, ctgr_cd, ctgr_prt_cd, prd_title, prd_author, prd_price, prd_dc_price,
+		             prd_company, prd_detail, prd_img, prd_amount, prd_in_stock, prd_regdate,
+		             row_number() over(order by prd_idx desc) seq_p
+		      from product_tb
+              where (prd_title like '%' || #{keyword} || '%')
+		      or (prd_author like '%' || #{keyword} || '%')
+		      or (prd_detail like '%' || #{keyword} || '%')
+		      or (prd_company like '%' || #{keyword} || '%')
+		       
+		     )
+		where seq_p between #{rowStart} and #{rowEnd}
+	</select>
+	
+	<!-- 해당되는 상품 개수(검색) -->
+	<select id="countBySearch" parameterType="String" resultType="int">
+		select count(prd_idx)
+		from product_tb
+	    where (prd_title like '%' || #{keyword} || '%')
+	    or (prd_author like '%' || #{keyword} || '%')
+	    or (prd_detail like '%' || #{keyword} || '%')
+	    or (prd_company like '%' || #{keyword} || '%')
+	</select>
+
+	
+	<!-- 상품 상세정보 페이지 -->
+	<select id="productDetail" resultType="ProductVO" parameterType="int">
+		select prd_idx, ctgr_cd, ctgr_prt_cd, prd_title, prd_author, prd_price, prd_dc_price,
+		        prd_company, prd_detail, prd_img, prd_amount, prd_in_stock, prd_regdate
+		from product_tb
+		where prd_idx=#{prd_idx}
+	</select>
+
+</mapper>
+
