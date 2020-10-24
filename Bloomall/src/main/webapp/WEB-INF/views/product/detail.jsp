@@ -279,14 +279,15 @@ $(function(){
 								<%-- 상품 후기 --%>
 								<div class="col-sm-12 review_area" style="margin-left:3%;width:95%;">
 									<br>
-									<div class='popup back' style="display:none;"></div>
-								    <div id="popup_front" class='popup front' style="display:none;">
+									<div class="popup back" style="display:none;"></div>
+								    <div id="popup_front" class="popup front" style="display:none;">
 								     	<img id="popup_img">
 								    </div>
-							    	<form role="form" action="modifyPage" method="post">
-										<input type='hidden' name='bno' value="${boardVO.bno}">
-										<input type='hidden' name='page' value="${cri.page}"> 
-										<input type='hidden' name='perPageNum' value="${cri.perPageNum}">
+								    <%-- 후기 수정 폼 (hidden) --%>
+							    	<form role="form" action="editPage" method="post">
+										<input type="hidden" name="bno" value="${boardVO.bno}">
+										<input type="hidden" name="page" value="${cri.page}"> 
+										<input type="hidden" name="perPageNum" value="${cri.perPageNum}">
 										<%-- 
 										<input type='hidden' name='searchType' value="${cri.searchType}">
 										<input type='hidden' name='keyword' value="${cri.keyword}">
@@ -306,7 +307,7 @@ $(function(){
 											        <a href="#">★</a>
 												</p>
 											</div>
-											<textarea id="reviewContent" rows="3" style="width:100%;"></textarea><br>
+											<textarea id="reviewContent" rows="3" style="width:100%;" placeholder=" 후기를 작성해 주세요."></textarea><br>
 										
 											<!-- 상품 후기 리스트 -->
 										 	<ul class="timeline">
