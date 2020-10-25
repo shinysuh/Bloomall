@@ -98,7 +98,7 @@ $(function() {
         // DB 연동
         $.ajax({
             type: "post",
-            url: "/review/write",
+            url: "/review/write/",
             dataType: "text",
             data: JSON.stringify({
                 rvw_rating: rvw_rating,
@@ -132,7 +132,7 @@ $(function() {
             // 버튼 이름 바꾸기
             $(".timeline li span span").html("리뷰 보기");
 
-            $(".rvwList").remove();
+            $(".openList").remove();
             $(".noReview").hide();
             $("#pagination li").remove();
 
@@ -247,7 +247,9 @@ function getStars(starInfo) {
         if (data.rvwList.length > 0) {
             printData(data.rvwList, $("#starRvwList"), $("#starTemplate"));
         } else { // 별점 후기 존재 X
-            printNoData();
+            $("#starRvwList").remove();
+            $(".noStarRvw").show();
+            $("#more_rvw").remove();
         }
     });
 }
@@ -258,18 +260,15 @@ function printData(reviewList, target, templateObj) {
     var template = Handlebars.compile(templateObj.html());
 
     var html = template(reviewList);
-    $(".rvwList").remove();
+    $(".openList").remove();
     $("noReview").hide();
     target.after(html);
 }
 
 // 핸들바 함수 : 후기가 없을 경우
 function printNoData() {
-    $(".rvwList").remove();
+    $(".openList").remove();
     $(".noReview").show();
-    $("#starRvwList").remove();
-    $(".noStarRvw").show();
-    $("#more_rvw").remove();
 }
 
 

@@ -51,7 +51,7 @@ hr{
     color: lightgray;
 }
 #star_score a.on{
-    color: #0275d8;
+    color:#4e789c;
 }
 
 .popup {
@@ -91,7 +91,7 @@ hr{
 <%-- 핸들바: 리뷰리스트 --%>
 <script id="rvwTemplate" type="text/x-handlebars-template">
 	{{#each .}}
-		<li class="rvwList" data-rvw_idx={{rvw_idx}}>
+		<li class="rvwList openList" data-rvw_idx={{rvw_idx}}>
 			<i class="fa fa-comments bg-blue"></i>
 			<div class="timeline-item">
 				<span class="time">
@@ -395,7 +395,7 @@ $(function(){
 											        <a href="#">★</a>
 												</p>
 											</div>
-											<textarea id="reviewContent" rows="3" style="width:100%;" placeholder=" 후기를 작성해 주세요."></textarea><br>
+											<textarea id="rvw_content" rows="3" style="width:100%;" placeholder=" 후기를 작성해 주세요."></textarea><br>
 										
 											<!-- 상품 후기 리스트 -->
 										 	<ul class="timeline">

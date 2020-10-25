@@ -43,6 +43,8 @@ public class ReviewController {
 		
 		service.writeRvw(vo, dto.getMem_id());
 		
+		logger.info(vo.toString());
+		logger.info(dto.toString());
 	}
 	
 	
@@ -71,6 +73,7 @@ public class ReviewController {
 	public ResponseEntity<String> deleteRvw(@PathVariable("rvw_idx") int rvw_idx){
 		
 		logger.info("======== deleteRvw() called ========");
+		logger.info("rvw_idx:" + rvw_idx);
 		
 		ResponseEntity<String> entity = null;
 		
