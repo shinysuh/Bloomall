@@ -11,7 +11,7 @@
 		from review_tb
 		where prd_idx=#{prd_idx}
 	</select>
-
+	
 	<!-- 리뷰 쓰기 -->
 	<insert id="writeRvw" parameterType="ReviewVO">
 		insert into review_tb(rvw_idx, mem_id, prd_idx, rvw_content, rvw_rating, rvw_regdate)
@@ -35,7 +35,7 @@
 	<select id="rvwList" resultType="ReviewVO" parameterType="Map">
 		select rvw_idx, mem_id, prd_idx, rvw_content, rvw_rating, rvw_regdate
 		from (select rvw_idx, mem_id, prd_idx, rvw_content, rvw_rating, rvw_regdate,
-		             row_number() over(order by rvw_idx) r_seq
+		             row_number() over(order by rvw_idx desc) r_seq
 		      from review_tb
 		      where prd_idx=#{prd_idx})
 		where r_seq between #{cri.rowStart} and #{cri.rowEnd}

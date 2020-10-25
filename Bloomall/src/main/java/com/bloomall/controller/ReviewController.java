@@ -67,7 +67,7 @@ public class ReviewController {
 	
 	
 	// 리뷰 삭제
-	@RequestMapping(value = "/delete", method=RequestMethod.POST)
+	@RequestMapping(value = "/delete/{rvw_idx}", method=RequestMethod.POST)
 	public ResponseEntity<String> deleteRvw(@PathVariable("rvw_idx") int rvw_idx){
 		
 		logger.info("======== deleteRvw() called ========");
