@@ -100,21 +100,23 @@ $(function() {
             type: "post",
             url: "/review/write/",
             dataType: "text",
-            data: JSON.stringify({
+            data: {
                 rvw_rating: rvw_rating,
                 rvw_content: rvw_content,
                 prd_idx: prd_idx
-            }),
+            },
             success: function(data) {
                 alert("리뷰가 등록되었습니다.");
                 
                 replyPage = 1;
 
                 getPage("/review/" + prd_idx + "/" + replyPage);
+                $(".stars_div").empty();
+                getStars("/review/" + $("#prd_idx").val() + "/" + replyPage);
                 
                 // 별점/상품 후기 비우기
                 $("#star_score a").parent().children("a").removeClass("on");
-                $("#rvw_content").val("");
+                $("#reviewContent").val("");
             }
         });
     });
@@ -157,93 +159,105 @@ $(function() {
     });
 
 
-
-
-
-
-
-
-
-
 /* 상품 후기 수정 begin */
-    // 상품후기 [수정] 버튼 이벤트
-    $("button[name='btn_rvwEdit']").click(function(){
+    // Modal 창에 db 정보 가져오기
+    $(".timeline").on("click", ".rvwList", function(event){
 
-        $(".editFormat").show();
-        // $(".editFormat").prevAll().hide();
+        var rvw_idx = $(this).attr("data-rvw_idx");
+        var rating = $(this).find(".rvw_rating").text();
 
-        var rvw_rating_hb = 0;
-        var rvw_rating_hb = $(this).find(".rvw_rating").text();
-        var r_content_hb = $("#r_content_hb").val();
-
-
-
-        // 입력된 별점의 개수 가져옴
-        $("#star_score a").each(function(i, e) {
-            if ($(this).attr("class") == "on") {
-                rvw_rating_hb += 1;
+        // 후기 평점 가져오기
+        $("#star_score_modal a").each(function(index,item){
+            // alert(rating);
+            if(index < rating){
+                $(item).addClass("on");
+            }else{
+                $(item).removeClass("on");
             }
         });
 
-        // 유효성 검사
-        if (rvw_rating_hb == 0) {
-            alert("별점을 선택해주세요.");
-            return;
-        } else if (r_content_hb == "" || r_content_hb == null) {
-            alert("리뷰 내용을 입력해주세요.")
-            return;
-        }
+        // 후기 내용 가져오기
+        $("#replytext").val($(this).find("#rvw_content").text());
 
-
+        // 후기 번호 가져오기
+        $(".modal-body").attr("data-rvw_idx", rvw_idx);
+        $("#r_idx_modal").html("글번호:"+rvw_idx);
 
     });
-    
 
-    // 리뷰 수정 - 별점 클릭 시, 색상 변경
-    $("#star_score_hb a").click(function() {
-        // 별점 on 클래스 전부 제거(style 설정)
+    // Modal 창에서 별점 클릭 시, 별 색상 변경
+    $("#star_score_modal a").click(function(){
         $(this).parent().children("a").removeClass("on");
-        // 선택된 별과 그 앞 별들 다 on 클래스 다시 생성
         $(this).addClass("on").prevAll("a").addClass("on");
-
         return false;
     });
 
+    // Modal 창 [수정] 버튼
+    $("#btn_modal_modify").click(function(){
 
+        var rvw_idx = $(".modal-body").attr("data-rvw_idx");
+        var rvw_content = $("#replytext").val();
+        var prd_idx = $("#prd_idx").val();
 
+        var rvw_rating = 0;
 
+        // 수정된 별점 개수 가져오기
+        $("#star_score_modal a").each(function(i,e){
+            if($(this).attr('class')=="on"){
+                rvw_rating += 1;
+            }
 
-
-
+        });
+        
+        $.ajax({
+            type: "post",
+            url: "/review/update/",
+            dataType: "text",
+            data: {rvw_idx : rvw_idx,
+                   rvw_rating : rvw_rating, 
+                   rvw_content : rvw_content},
+            success: function(data){
+                if(data=='SUCCESS'){
+                    
+                    alert("리뷰가 수정되었습니다.");
+                    
+                    $("#modifyModal").modal('hide');
+                    
+                    getPage("/review/" + prd_idx + "/" + replyPage);
+                    $(".stars_div").empty();
+                    getStars("/review/" + $("#prd_idx").val() + "/" + replyPage);
+                }
+            }
+        });
+    });
 /* 상품 후기 수정 end */
 
 
 
 
-    // // 상품후기 [삭제] 버튼
-    // $(".btn_rvwDelete").click(function() {
+    // 상품후기 [삭제] 버튼
+    $("#ul").on("click", ".btn_rvwDelete", function() {
 
-    //     var rvw_idx = $(this).prev().prev().prev().prev().val();
-
-    //     if (confirm("상품 후기를 삭제하시겠습니까?")) {
-    //         $.ajax({
-    //             type: "post",
-    //             url: "/review/delete/" + rvw_idx,
-    //             dataType: "text",
-    //             data: JSON.stringify({ rvw_idx: rvw_idx }),
-    //             success: function(data) {
-    //                 alert("상품 후기가 삭제되었습니다.");
-    //                 $("#repliesDiv").empty();
-    //                 var prd_idx = $("#prd_idx").val();
-    //                 getPage("/review/" + prd_idx + "/" + replyPage);
-    //             }
-    //         });
-    //     } else {}
-    // });
-
-
-
-   
+        var rvw_idx = $(this).prev().prev().prev().prev().val();
+        
+        if (confirm("상품 후기를 삭제하시겠습니까?")) {
+            $.ajax({
+                type: "delete",
+                url: "/review/" + rvw_idx,
+                dataType: "text",
+                success: function(data) {
+                    if(data=='SUCCESS'){
+                        alert("상품 후기가 삭제되었습니다.");
+                    }
+                    $(".openList").empty();
+                    var prd_idx = $("#prd_idx").val();
+                    getPage("/review/" + prd_idx + "/" + replyPage);
+                    $(".stars_div").empty();
+                    getStars("/review/" + $("#prd_idx").val() + "/" + replyPage);
+                }
+            });
+        } else {}
+    });
 
 
     // 회색 칸에서 [회원리뷰 *건] 과 [리뷰 자세히 보기 >>] - 클릭시 리뷰 앵커 / 펼쳐짐 기능
@@ -341,56 +355,3 @@ function printPage(pageMaker, target) {
     target.html(str);
 }
 
-
-
- // 상품후기 [삭제] 버튼 함수
-function deleteRvw(rvw_idx){
-    if (confirm("상품 후기를 삭제하시겠습니까?")) {
-        $.ajax({
-            type: "post",
-            url: "/review/" + rvw_idx,
-            dataType: "text",
-            success: function(data) {
-                if(data=='SUCCESS'){
-                    alert("상품 후기가 삭제되었습니다.");
-                }
-                $("#repliesDiv").empty();
-                var prd_idx = $("#prd_idx").val();
-                getPage("/review/" + prd_idx + "/" + replyPage);
-            }
-        });
-    } else {}
-}
-
-// 상품후기 [수정] 버튼 함수
-function editRvw(rvw_idx){
-    
-    if($(".editFormat").hide()){
-        $(".editFormat").show();
-
-        var rvw_rating_hb = 0;
-        var rvw_rating_hb = $(this).find(".rvw_rating").text();
-        
-    
-        // 입력된 별점의 개수 가져옴
-        $("#star_score a").each(function(i, e) {
-            if ($(this).attr("class") == "on") {
-                rvw_rating_hb += 1;
-            }
-        });
-    }else{
-        $(".editFormat").hide();
-    }
-
-
-    var r_content_hb = $("#r_content_hb").val();
-
-    // 유효성 검사
-    if (rvw_rating_hb == 0) {
-        alert("별점을 선택해주세요.");
-        return;
-    } else if (r_content_hb == "" || r_content_hb == null) {
-        alert("리뷰 내용을 입력해주세요.")
-        return;
-    }
-}

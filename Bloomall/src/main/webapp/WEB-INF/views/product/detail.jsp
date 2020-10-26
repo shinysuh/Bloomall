@@ -7,84 +7,8 @@
 <%@include file="/WEB-INF/views/include/header.jsp" %>
 <%@include file="/WEB-INF/views/include/plugin_js.jsp" %>
 <head>
-<style type="text/css">
-.prd_title{
-	color:black;
-	font-weight:bold;
-	font-size: 24px;
-}
-.rvwCount, .noStarRvw{
-	color: grey;
-	font-size: 12px;
-}
-.prd_info, .org_price, .point_benefit, .basic_notice{
-	color: grey;
-	font-size: 14px;
-}
-.basic_notice{
-	line-height: 220%;
-}
-.stars{
-	font-size: 28px;
-}
-hr{
-	border-top: 1px solid rgb(167, 167, 167);
-}
-#recent_r{
-	font-weight:bold;
-	font-size:14px;
-}
-#on_sale{
-	font-weight:bold;
-	font-size:16px;
-}
-#btn_addCart, #btn_purchaseNow {
-	width:40%;
-	height:40px;
-	font-weight:bold;
-	font-size:16px;
-	margin-right:5px;
-}
-#star_score a{
- 	font-size:22px;
-    text-decoration: none;
-    color: lightgray;
-}
-#star_score a.on{
-    color:#4e789c;
-}
+<%@include file="/WEB-INF/views/include/detailCss.jsp" %>
 
-.popup {
-	position: absolute;
-}
-.back { 
-	background-color: gray; 
-	opacity:0.5; 
-	width: 100%; 
-	height: 300%; 
-	overflow:hidden;  
-	z-index:1101;
-}
-.front { 
-	z-index:1110; 
-	opacity:1; 
-	border:1px; 
-	margin: auto; 
-}
-.star_title{
-	font-size:10px;
-	color:grey;
-}
-.stars_right{
-	color:#4e789c;
-	line-height:80%;
-}
-.starUl{
-	list-style-type: none;
-	margin: 0;
-	padding: 0;
-}
-</style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/3.0.1/handlebars.js"></script>
 <script type="text/javascript" src="/js/product/detail.js"></script>
 
@@ -108,21 +32,6 @@ hr{
 					<p style="float:right;">작성자: {{mem_id}}</p> <br>
 					<p id="rvw_content">{{rvw_content}}</p>
 				</div>
-				<%-- 핸들바 수정 포맷(수정 버튼 클릭시 나타남) --%>
-				<div class="editFormat" style="display:none;">
-					<label>리뷰를 수정해주세요</label><br>
-					<div class="rating">
-						<p id="star_score_hb">
-							<a href="#">★</a>
-							<a href="#">★</a>
-							<a href="#">★</a>
-							<a href="#">★</a>
-						 	<a href="#">★</a>
-						</p>
-					</div>
-					<textarea id="r_content_hb" rows="3" style="width:100%;" placeholder=" 후기를 작성해 주세요.">{{rvw_content}}</textarea><br>
-				</div>
-				<%-- 수정 포맷 end --%>
 				<div class="timeline-footer" style="float:right;">
 					<input type="hidden" name="rvw_idx" value="{{rvw_idx}}" />
 					<input type="hidden" name="replyer" value="{{mem_id}}" />
@@ -130,9 +39,6 @@ hr{
 					{{checkReplyer mem_id rvw_idx}}
 				</div>
 			</div>
-
-
-
 		</li>
 	{{/each}}
 </script>
@@ -141,7 +47,7 @@ hr{
 <script id="starTemplate" type="text/x-handlebars-template">
 	{{#each .}}
 		<li class="rvwList" data-rvw_idx={{rvw_idx}}>
-			<div class="timeline-item">
+			<div class="stars_div">
 				<div class="star_title">
 					<span style="float:left;">{{tidyDate rvw_regdate}}</span>
 					<span style="float:right;">작성자: {{mem_id}}</span> <br>
@@ -167,12 +73,12 @@ $(function(){
 		
 		// 수정/삭제 버튼 html
 		var button_html = "";
-		
+		var mem_id = "${sessionScope.user.mem_id}";
 		// 리뷰 작성자와 사용자의 아이디가 일치할 경우
-		if(replyer_id == "${sessionScope.user.mem_id}"){
-			button_html = "<button name='btn_rvwEdit' class='btn_rvwEdit btn btn-primary btn-xs' type='button'>수정</button>"
-						+ "<button name='btn_rvwEdit' class='btn_rvwDelete btn btn-danger btn-xs' onclick='deleteRvw("+ rvw_idx +")' type='button' style='margin-left:5px;'>삭제</button>"
-		}
+		if(replyer_id == mem_id){
+			button_html = "<a name='btn_rvwEdit' class='btn btn-primary btn-xs' data-toggle='modal' data-target='#modifyModal'>수정</a>"
+						+ "<button name='btn_rvwDelete' class='btn_rvwDelete btn btn-danger btn-xs'  type='button' style='margin-left:5px;'>삭제</button>"
+		}		
 		return new Handlebars.SafeString(button_html);
 	});
 	
@@ -332,7 +238,7 @@ $(function(){
 														<div class="rvwCount">
 															판매지수 <span style="color:red;"> (판매count 넣기)</span>
 															<span class='divi'>&nbsp;|&nbsp;</span>
-															회원리뷰 (<a href="#" class="toRvw">${rvwCount}</a>건) <!-- 클릭시 리뷰 앵커 / 펼쳐짐 기능 js-->
+															회원리뷰 (<a href="#" class="toRvw" id="r_count">${rvwCount}</a>건) <!-- 클릭시 리뷰 앵커 / 펼쳐짐 기능 js-->
 														</div>
 													</div>
 												
@@ -413,10 +319,10 @@ $(function(){
 											        <a href="#">★</a>
 												</p>
 											</div>
-											<textarea id="reviewContent" rows="3" style="width:100%;" placeholder=" 후기를 작성해 주세요."></textarea><br>
+											<textarea id="reviewContent" name="rvw_content" rows="3" style="width:100%;" placeholder=" 후기를 작성해 주세요."></textarea><br>
 										
 											<!-- 상품 후기 리스트 -->
-										 	<ul class="timeline">
+										 	<ul class="timeline" id="ul">
 					 							 <!-- timeline time label -->
 												<li class="time-label" id="repliesDiv">
 													<span class="btn btn-default">
@@ -438,6 +344,33 @@ $(function(){
 												<ul id="pagination" class="pagination pagination-sm no-margin "></ul>
 										 	</div>
 										 </div>
+										 <div id="modifyModal" class="modal modal-primary fade" role="dialog">
+											<div class="modal-dialog">
+											  <!-- Modal content-->
+											  <div class="modal-content">
+											    <div class="modal-header" >
+											      <button type="button" class="close" data-dismiss="modal">&times;</button>
+											      <div class="modal-title">
+											      <div style="color:black;font-size:12px;" id="r_idx_modal"></div>
+												<p id="star_score_modal">
+											        <a href="#">★</a>
+											        <a href="#">★</a>
+											        <a href="#">★</a>
+											        <a href="#">★</a>
+											        <a href="#">★</a>
+												</p>
+											      </div>
+											    </div>
+											    <div class="modal-body" data-rvw_idx>
+											      <p><input type="text" id="replytext" name="rvw_content" class="form-control"></p>
+											    </div>
+											    <div class="modal-footer">
+											      <button type="button" class="btn btn-info" id="btn_modal_modify">수정</button>
+											      <button type="button" class="btn btn-default" data-dismiss="modal">취소</button>
+											    </div>
+											  </div>
+											</div>
+										</div>
 									</div>
 								</div>
 								<%-- 리뷰 끝 --%>

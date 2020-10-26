@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -33,6 +34,7 @@ public class ReviewController {
 
 	
 	// 상품 리뷰 쓰기
+	
 	@RequestMapping(value = "/write", method = RequestMethod.POST)
 	public void writeRvw(ReviewVO vo, HttpSession session) throws Exception{
 		
@@ -60,7 +62,7 @@ public class ReviewController {
 		
 		try {
 			service.updateRvw(vo);
-			entity = new ResponseEntity<String>(HttpStatus.OK);
+			entity = new ResponseEntity<String>("SUCCESS", HttpStatus.OK);
 		}catch(Exception e) {
 			e.printStackTrace();
 			entity = new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
@@ -70,7 +72,7 @@ public class ReviewController {
 	
 	
 	// 리뷰 삭제
-	@RequestMapping(value = "/{rvw_idx}", method=RequestMethod.POST)
+	@RequestMapping(value = "/{rvw_idx}", method=RequestMethod.DELETE)
 	public ResponseEntity<String> deleteRvw(@PathVariable("rvw_idx") int rvw_idx){
 		
 		logger.info("======== deleteRvw() called ========");

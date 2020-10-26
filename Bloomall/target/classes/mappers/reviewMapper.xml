@@ -15,7 +15,7 @@
 	<!-- 리뷰 쓰기 -->
 	<insert id="writeRvw" parameterType="ReviewVO">
 		insert into review_tb(rvw_idx, mem_id, prd_idx, rvw_content, rvw_rating, rvw_regdate)
-    		values(seq_rvw_idx.nextval, #{mem_id}, #{prd_idx}, #{rvw_content}, #{rvw_rating}, sysdate)
+   			values(seq_rvw_idx.nextval, #{mem_id}, #{prd_idx}, #{rvw_content}, #{rvw_rating}, sysdate)
 	</insert>
 	
 	<!-- 리뷰 수정 -->
