@@ -108,6 +108,21 @@ hr{
 					<p style="float:right;">작성자: {{mem_id}}</p> <br>
 					<p id="rvw_content">{{rvw_content}}</p>
 				</div>
+				<%-- 핸들바 수정 포맷(수정 버튼 클릭시 나타남) --%>
+				<div class="editFormat" style="display:none;">
+					<label>리뷰를 수정해주세요</label><br>
+					<div class="rating">
+						<p id="star_score_hb">
+							<a href="#">★</a>
+							<a href="#">★</a>
+							<a href="#">★</a>
+							<a href="#">★</a>
+						 	<a href="#">★</a>
+						</p>
+					</div>
+					<textarea id="r_content_hb" rows="3" style="width:100%;" placeholder=" 후기를 작성해 주세요.">{{rvw_content}}</textarea><br>
+				</div>
+				<%-- 수정 포맷 end --%>
 				<div class="timeline-footer" style="float:right;">
 					<input type="hidden" name="rvw_idx" value="{{rvw_idx}}" />
 					<input type="hidden" name="replyer" value="{{mem_id}}" />
@@ -115,6 +130,9 @@ hr{
 					{{checkReplyer mem_id rvw_idx}}
 				</div>
 			</div>
+
+
+
 		</li>
 	{{/each}}
 </script>
@@ -152,8 +170,8 @@ $(function(){
 		
 		// 리뷰 작성자와 사용자의 아이디가 일치할 경우
 		if(replyer_id == "${sessionScope.user.mem_id}"){
-			button_html = "<button class='btn_rvwEdit btn btn-primary btn-xs' type='button'>수정</button>"
-						+ "<button class='btn_rvwDelete btn btn-danger btn-xs' type='button' style='margin-left:5px;'>삭제</button>"
+			button_html = "<button name='btn_rvwEdit' class='btn_rvwEdit btn btn-primary btn-xs' type='button'>수정</button>"
+						+ "<button name='btn_rvwEdit' class='btn_rvwDelete btn btn-danger btn-xs' onclick='deleteRvw("+ rvw_idx +")' type='button' style='margin-left:5px;'>삭제</button>"
 		}
 		return new Handlebars.SafeString(button_html);
 	});
@@ -395,7 +413,7 @@ $(function(){
 											        <a href="#">★</a>
 												</p>
 											</div>
-											<textarea id="rvw_content" rows="3" style="width:100%;" placeholder=" 후기를 작성해 주세요."></textarea><br>
+											<textarea id="reviewContent" rows="3" style="width:100%;" placeholder=" 후기를 작성해 주세요."></textarea><br>
 										
 											<!-- 상품 후기 리스트 -->
 										 	<ul class="timeline">

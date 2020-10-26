@@ -5,7 +5,7 @@ $(function() {
     // [장바구니] 버튼 ([바로구매]는 submit으로 전송됨)
     $("#btn_addCart").click(function() {
 
-        var prd_idx = $("#prd_idx").val(); // 상품코드
+        var prd_idx = $("#prd_idx").val();   // 상품코드
         var ord_amount = $("#ord_amount").val(); // 구매수량
 
         // ajax로 장바구니에 전송
@@ -76,7 +76,7 @@ $(function() {
     $("#btn_writeRvw").click(function() {
 
         var rvw_rating = 0;
-        var rvw_content = $("#rvw_content").val();
+        var rvw_content = $("#reviewContent").val();
         var prd_idx = $("#prd_idx").val();
 
         // 입력된 별점의 개수 가져옴
@@ -107,14 +107,14 @@ $(function() {
             }),
             success: function(data) {
                 alert("리뷰가 등록되었습니다.");
-
-                // 별점/상품 후기 비우기
-                $("#star_score a").parent().children("a").removeClass("on");
-                $("#rvw_content").val("");
-
+                
                 replyPage = 1;
 
                 getPage("/review/" + prd_idx + "/" + replyPage);
+                
+                // 별점/상품 후기 비우기
+                $("#star_score a").parent().children("a").removeClass("on");
+                $("#rvw_content").val("");
             }
         });
     });
@@ -124,6 +124,7 @@ $(function() {
     $("#repliesDiv").click(function() {
 
         var prd_idx = $("#prd_idx").val();
+
         // 버튼 이름 바꾸기
         $(".timeline li span span").html("리뷰 접기");
 
@@ -141,7 +142,6 @@ $(function() {
 
         // 닫혀 있으면 열기, 목록 보여주기
         getPage("/review/" + prd_idx + "/" + replyPage);
-
     });
 
 
@@ -157,8 +157,6 @@ $(function() {
     });
 
 
-    // 상품후기 [수정] 버튼 - demo_prac 참조
-    // 별점 수정 시 기능도 포함
 
 
 
@@ -167,40 +165,85 @@ $(function() {
 
 
 
+/* 상품 후기 수정 begin */
+    // 상품후기 [수정] 버튼 이벤트
+    $("button[name='btn_rvwEdit']").click(function(){
+
+        $(".editFormat").show();
+        // $(".editFormat").prevAll().hide();
+
+        var rvw_rating_hb = 0;
+        var rvw_rating_hb = $(this).find(".rvw_rating").text();
+        var r_content_hb = $("#r_content_hb").val();
 
 
 
+        // 입력된 별점의 개수 가져옴
+        $("#star_score a").each(function(i, e) {
+            if ($(this).attr("class") == "on") {
+                rvw_rating_hb += 1;
+            }
+        });
+
+        // 유효성 검사
+        if (rvw_rating_hb == 0) {
+            alert("별점을 선택해주세요.");
+            return;
+        } else if (r_content_hb == "" || r_content_hb == null) {
+            alert("리뷰 내용을 입력해주세요.")
+            return;
+        }
 
 
 
-
-
-
-
-
-
-
-
-
-    // 상품후기 [삭제] 버튼
-    $(".btn_rvwDelete").click(function() {
-
-        var rvw_idx = $(this).prev().prev().prev().prev().val();
-
-        if (confirm("상품 후기를 삭제하시겠습니까?")) {
-            $.ajax({
-                type: "post",
-                url: "/review/delete/" + rvw_idx,
-                dataType: "text",
-                data: JSON.stringify({ rvw_idx: rvw_idx }),
-                success: function(data) {
-                    alert("상품 후기가 삭제되었습니다.");
-                    var prd_idx = $("#prd_idx").val();
-                    getPage("/review/" + prd_idx + "/" + replyPage);
-                }
-            });
-        } else {}
     });
+    
+
+    // 리뷰 수정 - 별점 클릭 시, 색상 변경
+    $("#star_score_hb a").click(function() {
+        // 별점 on 클래스 전부 제거(style 설정)
+        $(this).parent().children("a").removeClass("on");
+        // 선택된 별과 그 앞 별들 다 on 클래스 다시 생성
+        $(this).addClass("on").prevAll("a").addClass("on");
+
+        return false;
+    });
+
+
+
+
+
+
+
+/* 상품 후기 수정 end */
+
+
+
+
+    // // 상품후기 [삭제] 버튼
+    // $(".btn_rvwDelete").click(function() {
+
+    //     var rvw_idx = $(this).prev().prev().prev().prev().val();
+
+    //     if (confirm("상품 후기를 삭제하시겠습니까?")) {
+    //         $.ajax({
+    //             type: "post",
+    //             url: "/review/delete/" + rvw_idx,
+    //             dataType: "text",
+    //             data: JSON.stringify({ rvw_idx: rvw_idx }),
+    //             success: function(data) {
+    //                 alert("상품 후기가 삭제되었습니다.");
+    //                 $("#repliesDiv").empty();
+    //                 var prd_idx = $("#prd_idx").val();
+    //                 getPage("/review/" + prd_idx + "/" + replyPage);
+    //             }
+    //         });
+    //     } else {}
+    // });
+
+
+
+   
 
 
     // 회색 칸에서 [회원리뷰 *건] 과 [리뷰 자세히 보기 >>] - 클릭시 리뷰 앵커 / 펼쳐짐 기능
@@ -216,7 +259,6 @@ $(function() {
 
         // 닫혀 있으면 열기, 목록 보여주기
         getPage("/review/" + prd_idx + "/" + replyPage);
-
 
     });
 
@@ -292,5 +334,63 @@ function printPage(pageMaker, target) {
     if (pageMaker.next) {
         str += "<li class='paging'><a href='" + (pageMaker.endPage + 1) + "'> [다음] </a></li>";
     }
+    
+    // 확인용
+    //alert("startPage="+pageMaker.startPage +"/ endPage="+pageMaker.endPage +" / page="+pageMaker.cri.page);
+
     target.html(str);
+}
+
+
+
+ // 상품후기 [삭제] 버튼 함수
+function deleteRvw(rvw_idx){
+    if (confirm("상품 후기를 삭제하시겠습니까?")) {
+        $.ajax({
+            type: "post",
+            url: "/review/" + rvw_idx,
+            dataType: "text",
+            success: function(data) {
+                if(data=='SUCCESS'){
+                    alert("상품 후기가 삭제되었습니다.");
+                }
+                $("#repliesDiv").empty();
+                var prd_idx = $("#prd_idx").val();
+                getPage("/review/" + prd_idx + "/" + replyPage);
+            }
+        });
+    } else {}
+}
+
+// 상품후기 [수정] 버튼 함수
+function editRvw(rvw_idx){
+    
+    if($(".editFormat").hide()){
+        $(".editFormat").show();
+
+        var rvw_rating_hb = 0;
+        var rvw_rating_hb = $(this).find(".rvw_rating").text();
+        
+    
+        // 입력된 별점의 개수 가져옴
+        $("#star_score a").each(function(i, e) {
+            if ($(this).attr("class") == "on") {
+                rvw_rating_hb += 1;
+            }
+        });
+    }else{
+        $(".editFormat").hide();
+    }
+
+
+    var r_content_hb = $("#r_content_hb").val();
+
+    // 유효성 검사
+    if (rvw_rating_hb == 0) {
+        alert("별점을 선택해주세요.");
+        return;
+    } else if (r_content_hb == "" || r_content_hb == null) {
+        alert("리뷰 내용을 입력해주세요.")
+        return;
+    }
 }

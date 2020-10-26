@@ -40,6 +40,7 @@ public class ReviewController {
 		logger.info(vo.toString());
 		
 		MemberDTO dto = (MemberDTO)session.getAttribute("user");
+		logger.info(dto.toString());
 		
 		service.writeRvw(vo, dto.getMem_id());
 		
@@ -69,7 +70,7 @@ public class ReviewController {
 	
 	
 	// 리뷰 삭제
-	@RequestMapping(value = "/delete/{rvw_idx}", method=RequestMethod.POST)
+	@RequestMapping(value = "/{rvw_idx}", method=RequestMethod.POST)
 	public ResponseEntity<String> deleteRvw(@PathVariable("rvw_idx") int rvw_idx){
 		
 		logger.info("======== deleteRvw() called ========");
@@ -79,7 +80,7 @@ public class ReviewController {
 		
 		try {
 			service.deleteRvw(rvw_idx);
-			entity = new ResponseEntity<String>(HttpStatus.OK);
+			entity = new ResponseEntity<String>("SUCCESS", HttpStatus.OK);
 		}catch(Exception e) {
 			entity = new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
 		}
