@@ -5,65 +5,78 @@
 <%@include file="/WEB-INF/views/include/header.jsp" %>
 <%@include file="/WEB-INF/views/include/plugin_js.jsp" %>
 <head>
-<style type="text/css">
-.product_title {
-	color: black;
-	fonr-weight: bold;
-}
+<%@include file="/WEB-INF/views/include/listCSS.jsp" %>
 
-td{
-	padding: 7px;
-}
-.dc_price{
-	color: black;
-	font-size: 20px;
-	font-weight: bold;
-}
-.org_price{
-	color: darkgrey;
-	font-size: 12px;
-}
-.point_benefit{
-	color: rgb(64, 126, 167);
-	font-size: 12px;
-}
-.dotted_hr{
-	border-top: 1px dotted grey;
-	margin-left: 0;
-	width:90%;
-}
-.info, .price, .rvwCount, .rating{
-	font-size: 12px;
-}
-.product_img{
-	text-align: center;
-}
-.stars{
-	font-size: 16px;
-}
-
-</style>
 <script type="text/javascript">
 $(function(){
-	
-	// 체크 상품 장바구니
-	
-	
-	
-	// 체크 상품 위시리스트
-	
-	
-	
-	// 장바구니
+	 
+	// 바로구매  btn_purchaseNow
+	$(".btn_purchaseNow").click(function(){
+		
+		
+		
+	});
 	
 	
+	// 체크 상품 바로구매	btn_buyChk
+	$("#btn_buyChk").click(function(){
+		
+		
+	});
 	
+	// 장바구니  btn_addToCart
+	$(".btn_addToCart").click(function(){
+		
+		var prd_idx = $(this).val();
+		var cart_amount = $(this).prev().find("input[name='count_input']").val();
+		
+		$.ajax({
+			type	: 'post',
+			url		: '/cart/add/',
+			dataType: 'text',
+			data	: {prd_idx:prd_idx, cart_amount:cart_amount},
+			success	: function(data){
+				if(confirm("상품이 장바구니에 추가되었습니다. \n장바구니로 이동 하시겠습니까?")){
+					location.href = "/cart/list";
+				}else{}
+			}
+		});
+	});
 	
-	// 바로구매
-	
-	
-	
-	
+	// 체크 상품 장바구니	btn_cartChk
+	$("#btn_cartChk").click(function(){
+		
+		var checked = $("input[name='check']:checked");
+		
+		// 체크박스 유효성 검사
+		if(checked.length == 0){
+			alert("장바구니에 추가할 상품을 선택해주세요.");
+			return;
+		}
+		
+		var chkArr = [];
+		var amtArr =[];
+		
+		checked.each(function(i){
+			var prd_idx = $(this).val();
+			var cart_amount = $(this).next().next().val();
+			
+			chkArr.push(prd_idx);
+			amtArr.push(cart_amount);
+		});
+		
+		$.ajax({
+			type	: 'post',
+			url		: '/cart/addchk/',
+			dataType: 'text',
+			data	: {chkArr : chkArr, amtArr :amtArr},
+			success	: function(data){
+				if(confirm("선택 상품이 장바구니에 담겼습니다. \n장바구니로 이동 하시겠습니까?")){
+					location.href = "/cart/list";
+				}else{}
+			}
+		});
+	});
 	
 });
 
@@ -89,7 +102,7 @@ $(function(){
 					</h1>
 					<ol class="breadcrumb">
 						<li>
-							<a href="/product/list?ctgr_cd=all"><i class="fa fa-dashboard"></i> Product</a>
+							<a href="#"><i class="fa fa-dashboard"></i> Product</a>
 						</li>
 						<li>All</li>
 					</ol>
@@ -138,8 +151,8 @@ $(function(){
 
 
 						<div style="display: inline-block; float: right; margin-right:10%;">
-							<button type="button" id="btnDelChk" class="btn btn-default">&#9745;장바구니</button>					
-							<button type="button" id="btnRegi" class="btn btn-default">&#9745;바로구매</button>					
+							<button type="button" id="btn_cartChk" class="btn btn-default">&#9745;장바구니</button>					
+							<button type="button" id="btn_buyChk" class="btn btn-default">&#9745;바로구매</button>					
 						</div>
 					<br><hr class="dotted_hr"><br>
 					</div>
@@ -224,15 +237,13 @@ $(function(){
 									<br>
 								</td>
 								<td class="buttons">
-									<input type="hidden" name="idx_${prdList.prd_idx }" value="${prdList.prd_idx }" />
-									
 									<span class="prd_count_edit">
-										<input type="checkbox" class="check" />
+										<input type="checkbox" name="check" class="check" value="${prdList.prd_idx }" />
 										<span class="count">수량</span>
-										<input type="text" class="count_input" value="1" name="count_input" style="width:70%;" />
+										<input type="text" class="count_input" value="1" id="count_${prdList.prd_idx }" name="count_input" style="width:70%;" />
 									</span>
-									<button type="button" class="btn btn-primary" style="width:100%;">장바구니</button>
-									<button type="button" class="btn btn-default" style="width:100%;">바로구매</button>
+									<button type="button" class="btn_addToCart btn btn-primary" style="width:100%;" value="${prdList.prd_idx }">장바구니</button>
+									<button type="button" class="btn_purchaseNow btn btn-default" style="width:100%;">바로구매</button>
 								</td>
 							</tr>     
 							</c:forEach>            

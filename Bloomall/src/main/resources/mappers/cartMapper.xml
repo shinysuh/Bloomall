@@ -6,6 +6,56 @@
   
 <mapper namespace="com.bloomall.mappers.CartMapper">
 
+	<!-- 장바구니 추가 merge 이용 , 장바구니에 이미 존재하면 update, 존재하지 않으면 insert -->
+			<!-- 더북 오라클 3장. 04. MERGE -->
+		<!-- 장바구니 테이블에서 사용자가 상품정보를 처리하고자 할 경우에,
+		     해당 상품이 존재하면 수량만 변경(update), 존재하지 않으면 상품 추가(insert) -->
+		<!-- 두번째 줄의 dual의 join을 사용할 테이블이 없을 때 사용 -->
+		<!--
+			 merge into 실제사용테이블명
+			 using 조인테이블(없으면 dual)
+			 on 조건식
+			 when matched then(위의 조건식이 일치하면)
+			 	update set 컬럼명=업데이트쿼리 (merge에서는 여기 구문 사용시 테이블명 사용 필요 x)
+			 when not matched then(조건식 불일치 시)
+			 	insert 구문 
+		 -->
+	<!-- 장바구니에 추가 -->
+	<insert id="addToCart" parameterType="CartVO">
+		merge into cart_tb c
+		using dual
+		on (c.mem_id=#{mem_id} and c.prd_idx=#{prd_idx})
+		when matched then
+		    update set cart_amount= cart_amount + #{cart_amount}
+		when not matched then
+		    insert(cart_idx, prd_idx, mem_id, cart_amount)
+		    values(seq_cart_idx.nextval, #{prd_idx}, #{mem_id}, #{cart_amount})
+	</insert>
+	
+	
+	<!-- 장바구니 리스트 가져오기 : 장바구니 뷰에 보여줄 항목 또는 정보를 파악 -->
+	<select id="cartList" resultType="UserCartListVO" parameterType="String">
+		select c.cart_idx, c.cart_amount, p.prd_idx, p.prd_title, p.prd_price, p.prd_dc_price, p.prd_img
+		from (select cart_idx, prd_idx, mem_id, cart_amount
+		      from cart_tb) c inner join product_tb p 
+        on c.prd_idx = p.prd_idx
+        where mem_id = #{mem_id}
+	</select>
+	
+	
+	<!-- 장바구니 수량 변경 -->
+	<update id="updateCart" parameterType="CartVO">
+		update cart_tb
+		set cart_amount=#{cart_amount}
+		where cart_idx = #{cart_idx}
+	</update>	
+	
 
+	<!-- 장바구니 삭제 -->
+	<delete id="deleteCart" parameterType="int">
+		delete from cart_tb
+		where cart_idx = #{cart_idx}
+	</delete>
 
+	
 </mapper>

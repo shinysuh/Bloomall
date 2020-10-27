@@ -171,7 +171,7 @@
 						</ul>
 					</li>
 					<li class="dropdown user user-menu">
-						<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+						<a href="/cart/list" class="toggle">
 						  <span class="hidden-xs">장바구니</span>
 						</a>
 					</li>
