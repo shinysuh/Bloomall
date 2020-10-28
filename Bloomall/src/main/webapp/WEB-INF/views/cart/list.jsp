@@ -8,40 +8,8 @@
 <%@include file="/WEB-INF/views/include/plugin_js.jsp" %>
 <head>
 <%@include file="/WEB-INF/views/include/listCSS.jsp" %>
-
-<script type="text/javascript">
-$(function(){
-	
-	// 수량 변경
-
-	
-	
-	// 상품 삭제
-	
-	
-	// checkAll 버튼 기능 - 항상 checked(모든 체크박스 checked)
-	
-	
-	// 체크 상품 삭제
-	
-		
-	
-	// 선택 구매
-	
-	
-	
-	// 상품 구매
-	
-	
-	
-	
-	
-});
-
-
-
-</script>
-
+<!-- 버튼 클릭 jQuery 파일 -->
+<script type="text/javascript" src="/js/cart/list.js"></script>
 </head>
 
 <body class="hold-transition skin-blue sidebar-mini">
@@ -67,14 +35,14 @@ $(function(){
 
 			<!-- Main content -->
 			<section class="content container-fluid">
-
+			<div class="col-lg-10">
 				<div class="row">
 					<!-- left column -->
 					<div class="box" style="border: none;">
 						<form method="post" action="/order/buyFromCart">
 						<div class="btn-container" style="display: inline-block; float: right; margin:20px 10px 5px 5px;">
-							<button type="submit" id="btn_buy_check"  class="btn btn-primary" >선택 상품 구매</button>
-							<button id="btn_delete_check"  class="btn btn-default" >선택 상품 삭제</button>
+							<button type="button" id="btn_buy_chk"  class="btn btn-primary" >선택 상품 구매</button>
+							<button type="button" id="btn_delete_chk"  class="btn btn-default" >선택 상품 삭제</button>
 						</div>
 						<div class="box-body">
 							<table class="table table-striped text-center">
@@ -99,7 +67,6 @@ $(function(){
 								</c:if>
 								
 								<%-- 상품이 존재하는 경우,  리스트 출력 --%>
-								<c:set var="i" value="${fn:length(cartList)}" ></c:set> <!-- cartList : 컬렉션 형태 -->
 								<c:forEach items="${cartList}" var="cartList">
 									<tr>
 										<td class="col-md-1">
@@ -119,18 +86,23 @@ $(function(){
 												style="color: black;"> ${cartList.prd_title} </a>
 										</td>
 										<td class="col-md-1">
-											<p>${cartList.prd_price}</p>
+											<p><fmt:formatNumber value="${cartList.prd_price}" pattern="###,###,###" />원</p>
 											<input type="hidden" name="price_${cartList.cart_idx}" value="${cartList.prd_price}" /></td>
 										<td class="col-md-2">
-											<p>${cartList.prd_dc_price}</p>
-											<input type="hidden" name="dc_price_${cartList.cart_idx}" value="${cartList.prd_dc_price}" /></td>
+											<p><fmt:formatNumber value="${cartList.prd_dc_price}" pattern="###,###,###" />원 <br>
+												(<fmt:formatNumber value="${100-(cartList.prd_dc_price / cartList.prd_price * 100)}" pattern="###,###,###" />%
+												<span style="color:rgb(209, 4, 199);"> &#8681;</span>) <br>
+												<span style="color:#4e789c;font-size:13px;"> P <fmt:formatNumber value="${cartList.prd_price *0.03 }" pattern="##,###"/></span></p>
+											<input type="hidden" name="dc_price_${cartList.cart_idx}" value="${cartList.prd_dc_price}" />
+											<input type="hidden" name="point_${cartList.cart_idx}" value="${cartList.prd_price * 0.03}" />
+										</td>
 										<td class="col-md-2">
 											<input type="number" name="cart_amount_${cartList.cart_idx}"
 												style="width:50px; height:30px; padding-left:5px; margin-bottom:3px;text-align:right;" value="${cartList.cart_amount}" /> <br>
 											<!-- 수량변경 키에 장바구니 코드를 value로 숨겨 놓음 -->
-											<button type="button" name="btnUpdate" class="btn btn-default" value="${cartList.cart_idx}" style="width:50px;" >변경</button>    
+											<button type="button" name="btnUpdate" class="btn btn-default btnUpdate" value="${cartList.cart_idx}" style="width:50px;" >변경</button>    
 										</td>
-										<td class="col-md-1">${cartList.prd_dc_price * cartList.cart_amount}</td>
+										<td class="col-md-1" style="font-weight:bold;"><fmt:formatNumber value="${cartList.prd_dc_price * cartList.cart_amount}" pattern="###,###,###" />원</td>
 										<td class="col-md-2">
 											<button type="button" name="btnOrder" class="btn btn-primary" value="${cartList.cart_idx}">주문하기</button>
 											<button type="button" name="btnDelete" class="btn btn-default" value="${cartList.cart_idx}" >삭제</button>    
@@ -140,22 +112,33 @@ $(function(){
 							</table>
 						</div>
 						</form>
-						
-						<div class="box-body" style="margin: 7% 10%; padding-bottom:10%; min-width: 600px;">
+						<hr class="dotted_hr" style="margin-left:5%;">
+						<div class="box-body" style="margin: 3% 10%; padding-bottom:10%; min-width: 600px;">
 							<table class="table table-striped text-center">
 								<tr>
 									<td class="col-md-1" style="font-weight:bold">총 상품금액</td>
-									<td class="col-md-1">예상 적립 포인트</td>
-									<td class="col-md-1" style="color:rgb(214, 51, 119);font-weight:bold;">최종 결제 금액</td>
+									<td class="col-md-1"></td>
+									<td class="col-md-1">총 할인금액</td>
+									<td class="col-md-1"></td>
+									<td class="col-md-1" style="color:rgb(190, 90, 129);font-weight:bold;">최종 결제 금액</td>
+									<td class="col-md-1"></td>
 								</tr>
 								<tr >
-									<td class="col-md-1" style="height:50px; text-align: center;font-weight:bold"><p id="totalPrice">0</p></td>
-									<td class="col-md-1" style="height:50px; text-align: center;"><p id="totalPoint">0</p></td>
-									<td class="col-md-1" style="height:50px; text-align: center;color:rgb(214, 51, 119);font-weight:bold"><p id="total_dc_price">0</p></td>
+									<td class="col-md-1 total" style="height:50px;"><p id="total_price">0</p></td>
+									<td class="col-md-1 math">&#8722;</td>
+									<td class="col-md-1" style="height:50px;font-size:18px;text-align: center;"><p id="total_discount">0</p></td>
+									<td class="col-md-1 math">&#61;</td>
+									<td class="col-md-1 total" style="height:50px;color:rgb(190, 90, 129);"><p id="total_dc_price">0</p><br></td>
+									<td class="col-md-1" style="height:50px;font-size:12px;color:#4e789c;text-align:center;">예상 적립 포인트<br><p id="total_point">0</p></td>
 								</tr>
 							</table>
+						<form id="orderAll" action="/order/orderAll" method="post" style="text-align:center;">
+							<button type="submit" class="btn btn-primary" id="orderAll">전체상품 주문하기</button>
+							<a href="/product/list?ctgr_cd=all"><button type="button" id="goToListAll" class="btn btn-default">쇼핑 계속하기</button></a>
+						</form>
 						</div>
 					</div>
+				</div>
 				</div>
 				<!--/.col (left) -->
 			</section>

@@ -36,5 +36,13 @@ td{
 .stars{
 	font-size: 16px;
 }
-
+.total{
+	text-align: center;
+	font-weight:bold;
+	font-size:20px;
+}
+.math{
+	font-weight:bold;
+	font-size:20px;
+}
 </style>

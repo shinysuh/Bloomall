@@ -1,8 +1,6 @@
 package com.bloomall.controller;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
@@ -132,12 +130,12 @@ public class CartController {
 	}
 	
 	
-	// 장바구니 전체 삭제
+	// 장바구니 삭제
 	@ResponseBody
-	@RequestMapping(value = "/empty", method=RequestMethod.POST)
-	public ResponseEntity<String> emptyCart(int cart_idx){
+	@RequestMapping(value = "/delete", method=RequestMethod.POST)
+	public ResponseEntity<String> deleteCart(int cart_idx){
 		
-		logger.info("======== emptyCart() called ========");
+		logger.info("======== deleteCart() called ========");
 		logger.info("=====cart_idx : " + cart_idx);
 		
 		ResponseEntity<String> entity = null;
