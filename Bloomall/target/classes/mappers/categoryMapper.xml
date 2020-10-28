@@ -8,7 +8,7 @@
 	<!-- 카테고리 등록 -->
 	<insert id="register" parameterType="CategoryVO">
 		insert into category_tb(ctgr_cd, ctgr_prt_cd, ctgr_name)
-        values(#{ctgr_cd}, #{ctgr_prt_cd}, #ctgr_name{})
+        values(#{ctgr_cd}, #{ctgr_prt_cd}, #{ctgr_name})
 	</insert>
 	
 	

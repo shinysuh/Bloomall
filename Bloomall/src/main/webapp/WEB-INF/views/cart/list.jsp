@@ -78,19 +78,15 @@ $(function(){
 						</div>
 						<div class="box-body">
 							<table class="table table-striped text-center">
-								<tr>
+								<tr style="font-size:12px;">
 									<th><input type="checkbox" id="checkAll" checked="checked"/></th>
-									
-									
-									<%-- 카트 번호 <th> 삭제하고 합계 <th> 추가. <td> 구현 시 주의 --%>
-									
 									<th><!-- 상품이미지 --></th>
 									<th>상품명</th>
-									<th>판매가</th>
-									<th>할인가</th>
+									<th>정가</th>
+									<th>BLOOMALL 판매가</th>
 									<th>수량</th>
 									<th>합계</th>
-									<th>구매/삭제</th>
+									<th>주문</th>
 								</tr>
 								
 								<%-- 상품이 존재하지 않는 경우 --%>
@@ -113,8 +109,7 @@ $(function(){
 											<input type="hidden" name="cart_amount" value="${cartList.cart_amount}" >
 											<input type="hidden" name="cart_idx" value="${cartList.cart_idx}" >
 										</td>
-										<td class="col-md-1">${i}</td>
-										<td class="col-md-2">
+										<td class="col-md-1">
 											<a href="/product/detail?prd_idx=${cartList.prd_idx}&ctgr_cd=${ctgr_cd}">
 												<img src="/product/fileDisplay?fileName=${cartList.prd_img }" alt="${cartList.prd_title}">
 											</a>
@@ -126,20 +121,20 @@ $(function(){
 										<td class="col-md-1">
 											<p>${cartList.prd_price}</p>
 											<input type="hidden" name="price_${cartList.cart_idx}" value="${cartList.prd_price}" /></td>
-										<td class="col-md-1">
+										<td class="col-md-2">
 											<p>${cartList.prd_dc_price}</p>
 											<input type="hidden" name="dc_price_${cartList.cart_idx}" value="${cartList.prd_dc_price}" /></td>
 										<td class="col-md-2">
 											<input type="number" name="cart_amount_${cartList.cart_idx}"
-												style="width:60px; height:34px; padding-left:5px;" value="${cartList.cart_amount}" />
-											<!-- 변경 키에 장바구니 코드를 value로 숨겨 놓음 -->
-											<button type="button" name="btnUpdate" class="btn btn-default" value="${cartList.cart_idx}" >변경</button>    
+												style="width:50px; height:30px; padding-left:5px; margin-bottom:3px;text-align:right;" value="${cartList.cart_amount}" /> <br>
+											<!-- 수량변경 키에 장바구니 코드를 value로 숨겨 놓음 -->
+											<button type="button" name="btnUpdate" class="btn btn-default" value="${cartList.cart_idx}" style="width:50px;" >변경</button>    
 										</td>
+										<td class="col-md-1">${cartList.prd_dc_price * cartList.cart_amount}</td>
 										<td class="col-md-2">
-											<button type="button" name="btnOrder" class="btn btn-primary" value="${cartList.cart_idx}">구매</button>
+											<button type="button" name="btnOrder" class="btn btn-primary" value="${cartList.cart_idx}">주문하기</button>
 											<button type="button" name="btnDelete" class="btn btn-default" value="${cartList.cart_idx}" >삭제</button>    
 										</td>
-										<c:set var="i" value="${i-1}" ></c:set>
 									</tr>
 								</c:forEach>
 							</table>
@@ -147,14 +142,16 @@ $(function(){
 						</form>
 						
 						<div class="box-body" style="margin: 7% 10%; padding-bottom:10%; min-width: 600px;">
-							<table class="table table-striped text-center" >
+							<table class="table table-striped text-center">
 								<tr>
-									<td class="col-md-1">총 상품금액</td>
-									<td class="col-md-1">결제 예정 금액</td>
+									<td class="col-md-1" style="font-weight:bold">총 상품금액</td>
+									<td class="col-md-1">예상 적립 포인트</td>
+									<td class="col-md-1" style="color:rgb(214, 51, 119);font-weight:bold;">최종 결제 금액</td>
 								</tr>
 								<tr >
-									<td class="col-md-1" style="height:50px; text-align: center;"><p id="totalPrice">0</p></td>
-									<td class="col-md-1" style="height:50px; text-align: center;"><p id="totalDiscount">0</p></td>
+									<td class="col-md-1" style="height:50px; text-align: center;font-weight:bold"><p id="totalPrice">0</p></td>
+									<td class="col-md-1" style="height:50px; text-align: center;"><p id="totalPoint">0</p></td>
+									<td class="col-md-1" style="height:50px; text-align: center;color:rgb(214, 51, 119);font-weight:bold"><p id="total_dc_price">0</p></td>
 								</tr>
 							</table>
 						</div>
