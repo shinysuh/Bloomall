@@ -41,5 +41,15 @@ public class CartServiceImpl implements CartService {
 		dao.deleteCart(cart_idx);
 	}
 
+	// 선택상품 주문 시 장바구니에서 구매상품 삭제
+	@Override
+	public void emptyCart(Map<String, Object> map) throws Exception {
+		dao.emptyCart(map);
+	}
 
+	// 전체 주문 시 장바구니 전체 비우기
+	@Override
+	public void emptyCartAll(String mem_id) throws Exception {
+		dao.emptyCartAll(mem_id);
+	}
 }

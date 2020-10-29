@@ -7,8 +7,8 @@ public class OrderHistoryDetailVO {
 	private int 	prd_idx;   		// 상품코드 - OrderDetailVO
 	private String 	prd_title; 		// 주문내역(주문 상품명)  - ProductVO
 	private String 	prd_img;		// 상품이미지  - ProductVO
+	private int 	prd_price;    	// 상품 가격 - ProductVO
 	private int 	ord_amount;  	// 각 주문수량 - OrderDetailVO
-	private int 	ord_price;    	// 각 상품 주문 금액 - OrderDetailVO
 	private int 	ord_tot_price;  // 총 주문금액 - OrderVO
 	
 	public int getOrd_idx() {
@@ -35,17 +35,17 @@ public class OrderHistoryDetailVO {
 	public void setPrd_img(String prd_img) {
 		this.prd_img = prd_img;
 	}
+	public int getPrd_price() {
+		return prd_price;
+	}
+	public void setPrd_price(int prd_price) {
+		this.prd_price = prd_price;
+	}
 	public int getOrd_amount() {
 		return ord_amount;
 	}
 	public void setOrd_amount(int ord_amount) {
 		this.ord_amount = ord_amount;
-	}
-	public int getOrd_price() {
-		return ord_price;
-	}
-	public void setOrd_price(int ord_price) {
-		this.ord_price = ord_price;
 	}
 	public int getOrd_tot_price() {
 		return ord_tot_price;
@@ -57,7 +57,7 @@ public class OrderHistoryDetailVO {
 	@Override
 	public String toString() {
 		return "OrderHistoryDetailVO [ord_idx=" + ord_idx + ", prd_idx=" + prd_idx + ", prd_title=" + prd_title
-				+ ", prd_img=" + prd_img + ", ord_amount=" + ord_amount + ", ord_price=" + ord_price
+				+ ", prd_img=" + prd_img + ", prd_price=" + prd_price + ", ord_amount=" + ord_amount
 				+ ", ord_tot_price=" + ord_tot_price + "]";
 	}
 	

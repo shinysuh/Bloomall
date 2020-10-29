@@ -56,6 +56,20 @@
 		delete from cart_tb
 		where cart_idx = #{cart_idx}
 	</delete>
+	
 
+	<!-- 선택상품 주문 시 장바구니에서 구매상품 삭제 -->
+	<delete id="emptyCart" parameterType="Map">
+		delete from cart_tb
+		where prd_idx=#{prd_idx} and mem_id = #{mem_id}
+	</delete>
+	
+	
+	<!-- 전체 주문 시 장바구니 전체 비우기 -->
+	<delete id="emptyCartAll" parameterType="String">
+		delete from cart_tb
+		where mem_id = #{mem_id}
+	</delete>
+	
 	
 </mapper>

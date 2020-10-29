@@ -39,7 +39,7 @@
 				<div class="row">
 					<!-- left column -->
 					<div class="box" style="border: none;">
-						<form method="post" action="/order/buyFromCart">
+						<form method="post" action="/order/orderChkCart">
 						<div class="btn-container" style="display: inline-block; float: right; margin:20px 10px 5px 5px;">
 							<button type="button" id="btn_buy_chk"  class="btn btn-primary" >선택 상품 구매</button>
 							<button type="button" id="btn_delete_chk"  class="btn btn-default" >선택 상품 삭제</button>

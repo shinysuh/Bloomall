@@ -5,14 +5,61 @@
   
 <mapper namespace="com.bloomall.mappers.OrderMapper">
 
+	<!-- 주문코드 시퀀스 -->
+	<select id="getOrderCode" resultType="int">
+		select seq_ord_idx.nextval from dual
+	</select>
 
+	
+	<!-- 주문내역 추가(주문상세테이블) -->
+	<insert id="addOrderDetailInfo" parameterType="OrderDetailVO">
+		insert into ord_detail_tb(ord_idx, prd_idx, ord_amount, ord_price)
+    		values(#{ord_idx}, #{prd_idx}, #{ord_amount}, #{ord_price})
+	</insert>
 
-
-
-
-
-
-
-
-
+	
+	<!-- 주문정보 추가(주문테이블) -->
+	<insert id="addOrderInfo" parameterType="OrderVO">
+		insert into order_tb(ord_idx, mem_id, ord_recp_name, ord_recp_zip, ord_recp_addr,
+							 ord_recp_addr_d, ord_recp_tel, ord_tot_price, ord_date)
+    		values(#{ord_idx},#{mem_id},#{ord_recp_name},#{ord_recp_zip},#{ord_recp_addr},
+    			   #{ord_recp_addr_d},#{ord_recp_tel},#{ord_tot_price},sysdate)
+	</insert>
+	
+	
+	<!-- 주문내역리스트 (OrderHistoryVO) -->
+	<select id="orderHistoryList" resultType="OrderHistoryVO" parameterType="String">
+		select o.ord_idx, p.prd_title, o.ord_tot_price, d.ord_amount, o.mem_id, o.ord_recp_name, o.ord_date
+		from order_tb o inner join ord_detail_tb d
+		    on o.ord_idx = d.ord_idx
+		inner join product_tb p
+		    on p.prd_idx = d.prd_idx
+		where mem_id=#{mem_id}
+		order by o.ord_idx desc and d.prd_idx desc
+	</select>
+	
+	
+	<!-- 주문 상세 내역 (OrderHistoryDetailVO) -->
+	<select id="orderHistoryDetail" resultType="OrderHistoryDetailVO" parameterType="int">
+		select o.ord_idx, d.PRD_IDX, p.PRD_TITLE, p.PRD_IMG, p.PRD_PRICE, d.ORD_AMOUNT, o.ORD_TOT_PRICE
+		from order_tb o inner join ord_detail_tb d
+		    on o.ord_idx = d.ord_idx
+		inner join product_tb p
+		    on p.prd_idx = d.prd_idx
+		where o.ord_idx=#{ord_idx}
+		order by d.prd_idx desc
+	</select>
+	
+	
+	<!-- 주문자 정보(주문테이블) -->
+	<select id="recipientInfo" resultType="OrderVO" parameterType="int">
+		select ord_idx, mem_id, ord_recp_name, ord_recp_zip, ord_recp_addr, ord_recp_addr_d,
+			   ord_recp_tel, ord_tot_price, ord_date
+		from order_tb
+		where ord_idx = #{ord_idx}
+	</select>
+	
+	
+	
+	
 </mapper>

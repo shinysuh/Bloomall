@@ -20,4 +20,10 @@ public interface CartDAO {
 	// 장바구니 삭제
 	public void deleteCart(int cart_idx) throws Exception;
 	
+	// 선택상품 주문 시 장바구니에서 구매상품 삭제
+	public void emptyCart(Map<String, Object> map) throws Exception;
+	
+	// 전체 주문 시 장바구니 전체 비우기
+	public void emptyCartAll(String mem_id) throws Exception;
+	
 }
