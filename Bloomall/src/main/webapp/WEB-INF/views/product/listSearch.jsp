@@ -9,13 +9,13 @@
 
 <script type="text/javascript">
 $(function(){
-	
 	 
-	// 바로구매  btn_purchaseNow
-	$(".btn_purchaseNow").click(function(){
+	// 바로구매  btn_purchaseOne
+	$(".btn_purchaseOne").click(function(){
+		var prd_idx = $(this).val();
+		var ord_amount = $("#count_"+prd_idx).val();
 		
-		
-		
+		location.href = "/order/one?prd_idx=" + prd_idx + "&ord_amount=" + ord_amount;
 	});
 	
 	
@@ -122,6 +122,7 @@ $(function(){
 
 
 						<div style="display: inline-block; float: right; margin-right:10%;">
+							<span>선택한 상품 &nbsp;</span>
 							<button type="button" id="btn_cartChk" class="btn btn-default">&#9745;장바구니</button>					
 							<button type="button" id="btn_buyChk" class="btn btn-default">&#9745;바로구매</button>					
 						</div>
@@ -158,7 +159,7 @@ $(function(){
 								<td class="product_info" style="line-height:170%;">
 									<div>&nbsp;</div>
 									<a href="/product/detailSearch${pageMaker.makeSearch(pageMaker.cri.page)}&prd_idx=${prdList.prd_idx}">
-										<strong style="color:black;font-size:17px;">${prdList.prd_title}</strong>
+										<strong style="color:black;font-size:16px;">${prdList.prd_title}</strong>
 									</a>
 									<div class="info">
 										${prdList.prd_author} 저 <span class='dim_txt002'>|</span>${prdList.prd_company}
@@ -190,10 +191,10 @@ $(function(){
 									<span class="prd_count_edit">
 										<input type="checkbox" name="check" class="check" value="${prdList.prd_idx }" />
 										<span class="count">수량</span>
-										<input type="text" class="count_input" value="1" id="count_${prdList.prd_idx }" name="count_input" style="width:70%;" />
+										<input type="text" class="count_input" value="1" id="count_${prdList.prd_idx }" name="count_input" style="width:70%;margin-bottom:3px;" />
 									</span>
-									<button type="button" class="btn_addToCart btn btn-primary" style="width:100%;" value="${prdList.prd_idx }">장바구니</button>
-									<button type="button" class="btn_purchaseNow btn btn-default" style="width:100%;">바로구매</button>
+									<button type="button" class="btn_addToCart btn btn-primary" style="width:100%;margin-bottom:3px;" value="${prdList.prd_idx }">장바구니</button>
+									<button type="button" class="btn_purchaseOne btn btn-default" style="width:100%;" value="${prdList.prd_idx }">바로구매</button>
 								</td>
 							</tr>     
 							</c:forEach>           

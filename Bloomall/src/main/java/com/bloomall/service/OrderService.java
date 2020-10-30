@@ -9,24 +9,20 @@ import com.bloomall.domain.OrderVO;
 
 public interface OrderService {
 	
-	// [단일상품] - 상품상세/상품리스트/카트
-	public void purchaseOne(OrderVO orderVO, OrderDetailVO detailVO) throws Exception;
+	// [단일상품] - 상품상세/상품리스트
+	public void orderOne(OrderVO orderVO, OrderDetailVO detailVO) throws Exception;
 	
-	// [여러상품(선택상품)] - 상품리스트/카트(선택)/카트(전체)
-	public void purachseMultiple(OrderVO orderVO, List<OrderDetailVO> detailList) throws Exception;
+	// [여러상품(선택상품)] - 상품리스트
+	public void orderChk(OrderVO orderVO, List<OrderDetailVO> detailList) throws Exception;
 	
-
-//	// 상품상세/상품리스트 => [바로구매] 단일 상품
-//	public void purchaseOne(OrderVO orderVO, OrderDetailVO detailVO) throws Exception;
-//	
-//	// 상품리스트 => [바로구매] 여러 상품
-//	public void purachseMultiple(OrderVO orderVO, List<OrderDetailVO> detailList) throws Exception;
-//	
-//	// 장바구니 구매 - 선택상품
-//	public void purchaseCart(String mem_id, OrderVO orderVO, List<OrderDetailVO> detailList) throws Exception;
-//
-//	// 장바구니 구매 - 전체상품
-//	public void purchaseAllCart(String mem_id, OrderVO orderVO, List<OrderDetailVO> detailList) throws Exception;
+	// [단일상품] - 카트
+	public void orderCartOne(String mem_id, OrderVO orderVO, OrderDetailVO detailVO) throws Exception;
+	
+	// [여러상품(선택)] - 카트
+	public void orderCartChk(String mem_id, OrderVO orderVO, List<OrderDetailVO> detailList) throws Exception;
+	
+	// [전체상품] - 카트
+	public void orderCartAll(String mem_id, OrderVO orderVO, List<OrderDetailVO> detailList) throws Exception;
 	
 	// 주문내역리스트 (OrderHistoryVO)
 	public List<OrderHistoryVO> orderHistoryList(String mem_id) throws Exception;

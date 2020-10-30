@@ -23,6 +23,14 @@
 hr{
 	border-top: 1px solid rgb(167, 167, 167);
 }
+#btn_purchaseOne{
+	border-color:rgb(38, 170, 159);
+	background-color: rgb(41, 182, 170);
+}
+#btn_purchaseOne:hover{
+	border-color:rgb(34, 148, 138);
+	background-color: rgb(38, 167, 156);
+}
 #recent_r{
 	font-weight:bold;
 	font-size:14px;
@@ -31,7 +39,7 @@ hr{
 	font-weight:bold;
 	font-size:16px;
 }
-#btn_addCart, #btn_purchaseNow {
+#btn_addCart, #btn_purchaseOne {
 	width:40%;
 	height:40px;
 	font-weight:bold;

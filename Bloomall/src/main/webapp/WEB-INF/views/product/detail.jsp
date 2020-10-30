@@ -191,13 +191,13 @@ $(function(){
 												<div class="form-group purchase_info">
 													<p id="on_sale"> ${on_sale} </p>
 													<div class="in_stock">
-														<form method="get" action="/order/purchase" >
+														<form method="get">
 															<label for="ord_amount">수량</label><br>
 															<input type="number" id="ord_amount" name="ord_amount" value="1" /><br><br>
 															<input type="hidden" id="prd_idx" name="prd_idx" value="${vo.prd_idx}" />
 															<!-- 장바구니 기능으로 진행. js 파일에서 따로 jQuery 작업 -->
 															<button type="button" id="btn_addCart" class="btn btn-primary">장바구니</button>
-															<button type="submit" id="btn_purchaseNow" class="btn btn-default">바로구매</button>
+															<button type="button" id="btn_purchaseOne"  class="btn btn-primary">바로구매</button>
 														</form>
 													</div>
 													<%-- [품절] 시 나타나는 문구 begin --%>
@@ -232,6 +232,27 @@ $(function(){
 												         	
 												         	
 				         				<!-- 해결되면 이 줄 삭제 --><em style="color:red;font-size:14px;font-weight:bold;">(평점 EL 문법으로 표시)</em>
+												         	<!--  
+																
+																<c:set var="ageTotal" value="${0}" />
+																<c:forEach var="person" items="${personList}">
+																  <c:set var="ageTotal" value="${ageTotal + person.age}" />
+																  <tr><td>${person.name}<td><td>${person.age}</td></tr>
+																</c:forEach>
+																
+																
+																-- 리뷰 카운트와 리뷰 score를 상품테이블에 추가 후
+																<c:set var="rvwtotal" value="${0}" />
+																<c:forEach var="vo" items="${vo}">
+																  <c:set var="rvwtotal" value="${rvwtotal + vo.rvw_score}" />
+																  <tr><td>${vo.rvw_score}<td>
+																</c:forEach>
+																${rvwtotal / rvw_score.length}
+																
+																-->
+												         	
+												         	
+												         	
 												         	
 												         	
 														</div>

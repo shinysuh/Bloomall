@@ -39,9 +39,9 @@
 				<div class="row">
 					<!-- left column -->
 					<div class="box" style="border: none;">
-						<form method="post" action="/order/orderChkCart">
+						<form id="orderCartForm" method="post" action="/order/cartChk">
 						<div class="btn-container" style="display: inline-block; float: right; margin:20px 10px 5px 5px;">
-							<button type="button" id="btn_buy_chk"  class="btn btn-primary" >선택 상품 구매</button>
+							<button type="submit" id="btn_buy_chk"  class="btn btn-primary" >선택 상품 구매</button>
 							<button type="button" id="btn_delete_chk"  class="btn btn-default" >선택 상품 삭제</button>
 						</div>
 						<div class="box-body">
@@ -111,7 +111,6 @@
 								</c:forEach>
 							</table>
 						</div>
-						</form>
 						<hr class="dotted_hr" style="margin-left:5%;">
 						<div class="box-body" style="margin: 3% 10%; padding-bottom:10%; min-width: 600px;">
 							<table class="table table-striped text-center">
@@ -132,11 +131,12 @@
 									<td class="col-md-1" style="height:50px;font-size:12px;color:#4e789c;text-align:center;">예상 적립 포인트<br><p id="total_point">0</p></td>
 								</tr>
 							</table>
-						<form id="orderAll" action="/order/orderAll" method="post" style="text-align:center;">
-							<button type="submit" class="btn btn-primary" id="orderAll">전체상품 주문하기</button>
+							<div style="text-align:center;">
+							<button type="button" class="btn btn-primary" id="cartAll">전체상품 주문하기</button>
 							<a href="/product/list?ctgr_cd=all"><button type="button" id="goToListAll" class="btn btn-default">쇼핑 계속하기</button></a>
-						</form>
+							</div>
 						</div>
+						</form>
 					</div>
 				</div>
 				</div>

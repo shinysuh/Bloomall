@@ -10,7 +10,7 @@
 		select seq_ord_idx.nextval from dual
 	</select>
 
-	
+
 	<!-- 주문내역 추가(주문상세테이블) -->
 	<insert id="addOrderDetailInfo" parameterType="OrderDetailVO">
 		insert into ord_detail_tb(ord_idx, prd_idx, ord_amount, ord_price)

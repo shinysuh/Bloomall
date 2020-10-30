@@ -22,6 +22,14 @@ $(function(){
     /* 주문 기능 */
     // 개별 상품 구매  $("button[name='btnOrder']")
 
+    $("button[name='btnOrder']").click(function(){
+
+        var cart_idx = $(this).val();
+		var prd_idx = $("#prd_idx_"+cart_idx).val();
+		var cart_amount = $("input[name='cart_amount_"+ cart_idx +"']").val();
+		
+		location.href = "/order/cartOne?prd_idx=" + prd_idx + "&cart_amount=" + cart_amount;
+	});
 
 
 
@@ -31,8 +39,16 @@ $(function(){
     
 
 	
-	// 전체 상품 구매   $("#orderAll")  -  submit 타입
+	// 전체 상품 구매   $("#cartAll")  -  button 타입     -  누르면 checkAll 활성화  => form.submit();
+	$("#cartAll").click(function(){
+		
+		var form = $("#orderCartForm");
+		
+		form.attr("action", "/order/cartAll");
 	
+		$(".check").prop("checked", this.checked);
+		form.submit();
+	 });
 	
 	
 

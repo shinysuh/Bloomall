@@ -5,7 +5,26 @@
 	color: black;
 	fonr-weight: bold;
 }
-
+#btn_cartChk{
+	color:whitesmoke;
+	border-color:#4f94a0;
+	background-color:#5eb0be;
+}
+#btn_cartChk:hover{
+	color:whitesmoke;
+	border-color:#4f94a0;
+	background-color:#539ca8;
+}
+#btn_buyChk{
+	color:whitesmoke;
+	border-color:#9980bb;
+	background-color:#b195d8;
+}
+#btn_buyChk:hover{
+	color:whitesmoke;
+	border-color:#9980bb;
+	background-color:#9f87c2;
+}
 td{
 	padding: 7px;
 }

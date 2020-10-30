@@ -2,23 +2,34 @@ $(function() {
 
     var replyPage = 1;
 
-    // [장바구니] 버튼 ([바로구매]는 submit으로 전송됨)
+    // [장바구니] 버튼 
     $("#btn_addCart").click(function() {
 
         var prd_idx = $("#prd_idx").val();   // 상품코드
-        var ord_amount = $("#ord_amount").val(); // 구매수량
+        var cart_amount = $("#ord_amount").val(); // 구매수량
 
         // ajax로 장바구니에 전송
-
-
-
-
-
-
-
-
-
+        $.ajax({
+			type	: 'post',
+			url		: '/cart/add/',
+			dataType: 'text',
+			data	: {prd_idx:prd_idx, cart_amount:cart_amount},
+			success	: function(data){
+				if(confirm("상품이 장바구니에 추가되었습니다. \n장바구니로 이동 하시겠습니까?")){
+					location.href = "/cart/list";
+				}else{}
+			}
+		});
     });
+
+    // 바로구매  btn_purchaseOne
+	$("#btn_purchaseOne").click(function(){
+
+		var prd_idx = $("#prd_idx").val();   // 상품코드
+        var ord_amount = $("#ord_amount").val(); // 구매수량
+		
+		location.href = "/order/one?prd_idx=" + prd_idx + "&ord_amount=" + ord_amount;
+	});
 
     // 핸들바 날짜 형식 tidyDate
     Handlebars.registerHelper("tidyDate", function(timeVal) {

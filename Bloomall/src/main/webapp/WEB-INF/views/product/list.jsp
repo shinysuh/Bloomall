@@ -10,25 +10,44 @@
 <script type="text/javascript">
 $(function(){
 	 
-	// 바로구매  btn_purchaseNow
-	$(".btn_purchaseNow").click(function(){
+	// 바로구매  btn_purchaseOne
+	$(".btn_purchaseOne").click(function(){
+		var prd_idx = $(this).val();
+		var ord_amount = $("#count_"+prd_idx).val();
 		
-		
-		
+		location.href = "/order/one?prd_idx=" + prd_idx + "&ord_amount=" + ord_amount;
 	});
 	
-	
+	/*
 	// 체크 상품 바로구매	btn_buyChk
 	$("#btn_buyChk").click(function(){
 		
+		var form = $("#productForm");
 		
+		var checked = $("input[name='check']:checked");
+		
+		var ord_amount =[];
+		
+		checked.each(function(i){
+			var amount = $(this).next().next().val();
+			
+			ord_amount.push(amount);
+		});
+		
+		location.href = "/order/productChk";
+		// form.submit();
 	});
+	*/
+	
+	
+	
+	
 	
 	// 장바구니  btn_addToCart
 	$(".btn_addToCart").click(function(){
 		
 		var prd_idx = $(this).val();
-		var cart_amount = $(this).prev().find("input[name='count_input']").val();
+		var cart_amount = $(this).prev().find("input[name='ord_amount']").val();
 		
 		$.ajax({
 			type	: 'post',
@@ -138,21 +157,13 @@ $(function(){
 			<section class="content container-fluid">
 				<!-- 상품목록 -->
 				<div class="col-md-9">
+				<form id="productForm" method="post" action="/order/productChk">
 					<div>
 					<h5><i class="fa fa-book"></i> ${ctgr_name }</h5>
-
-
-<%-- 베스트셀러 : 데모소스 리스트 형식 가져와서 한번에 4개씩 보이게? --%>
-
-
-
-
-
-
-
 						<div style="display: inline-block; float: right; margin-right:10%;">
+							<span>선택한 상품 &nbsp;</span>
 							<button type="button" id="btn_cartChk" class="btn btn-default">&#9745;장바구니</button>					
-							<button type="button" id="btn_buyChk" class="btn btn-default">&#9745;바로구매</button>					
+							<button type="submit" id="btn_buyChk" class="btn btn-default">&#9745;바로구매</button>					
 						</div>
 					<br><hr class="dotted_hr"><br>
 					</div>
@@ -200,7 +211,7 @@ $(function(){
 									<c:if test="${ctgr_cd == 'all' || !empty prt_name}">
 					            		<!-- 모든상품/2차카테고리 -->
 										<a href="/product/detail${pageMaker.makeQuery(pageMaker.cri.page)}&prd_idx=${prdList.prd_idx}&ctgr_cd=${ctgr_cd}">
-										<strong style="color:black;font-size:17px;">${prdList.prd_title}</strong>
+										<strong style="color:black;font-size:16px;">${prdList.prd_title}</strong>
 										</a>
 					            	</c:if>
 									<c:if test="${empty prt_name && ctgr_cd != 'all'}">
@@ -238,19 +249,22 @@ $(function(){
 								</td>
 								<td class="buttons">
 									<span class="prd_count_edit">
+									
+									
+									<%--<c:set value="${0 }" var="i"> 체크박스 value 바꾸면 다른 기능도 손보기--%>
 										<input type="checkbox" name="check" class="check" value="${prdList.prd_idx }" />
 										<span class="count">수량</span>
-										<input type="text" class="count_input" value="1" id="count_${prdList.prd_idx }" name="count_input" style="width:70%;" />
+										<input type="text" class="count_input" value="1" id="count_${prdList.prd_idx }" name="ord_amount" style="width:70%;margin-bottom:3px;" />
 									</span>
-									<button type="button" class="btn_addToCart btn btn-primary" style="width:100%;" value="${prdList.prd_idx }">장바구니</button>
-									<button type="button" class="btn_purchaseNow btn btn-default" style="width:100%;">바로구매</button>
+									<button type="button" class="btn_addToCart btn btn-primary" style="width:100%;margin-bottom:3px;" value="${prdList.prd_idx }">장바구니</button>
+									<button type="button" class="btn_purchaseOne btn btn-default" style="width:100%;" value="${prdList.prd_idx }">바로구매</button>
 								</td>
 							</tr>     
 							</c:forEach>            
 						</table>
 						<!-- 상품 리스트 테이블 끝 -->
 					</div>
-					
+					</form>
 					<%-- 페이징 --%>
 					<div class="paging">
 						<div class="text-center">
