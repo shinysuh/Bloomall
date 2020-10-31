@@ -23,7 +23,7 @@
 		insert into order_tb(ord_idx, mem_id, ord_recp_name, ord_recp_zip, ord_recp_addr,
 							 ord_recp_addr_d, ord_recp_tel, ord_tot_price, ord_date)
     		values(#{ord_idx},#{mem_id},#{ord_recp_name},#{ord_recp_zip},#{ord_recp_addr},
-    			   #{ord_recp_addr_d},#{ord_recp_tel},#{ord_tot_price},sysdate)
+    			   #{ord_recp_addr_d},#{ord_recp_tel},#{ord_tot_price}, sysdate)
 	</insert>
 	
 	
@@ -35,17 +35,19 @@
 		inner join product_tb p
 		    on p.prd_idx = d.prd_idx
 		where mem_id=#{mem_id}
-		order by o.ord_idx desc and d.prd_idx desc
+		order by o.ord_idx desc, d.prd_idx desc
 	</select>
 	
 	
 	<!-- 주문 상세 내역 (OrderHistoryDetailVO) -->
 	<select id="orderHistoryDetail" resultType="OrderHistoryDetailVO" parameterType="int">
-		select o.ord_idx, d.PRD_IDX, p.PRD_TITLE, p.PRD_IMG, p.PRD_PRICE, d.ORD_AMOUNT, o.ORD_TOT_PRICE
+		select o.ord_idx, d.prd_idx, p.prd_title, p.prd_img, p.prd_price, d.ord_amount, o.ord_tot_price, m.mem_point
 		from order_tb o inner join ord_detail_tb d
 		    on o.ord_idx = d.ord_idx
 		inner join product_tb p
 		    on p.prd_idx = d.prd_idx
+		inner join member_tb m
+		    on m.mem_id=o.mem_id
 		where o.ord_idx=#{ord_idx}
 		order by d.prd_idx desc
 	</select>

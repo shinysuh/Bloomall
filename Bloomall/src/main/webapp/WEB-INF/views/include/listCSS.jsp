@@ -64,4 +64,8 @@ td{
 	font-weight:bold;
 	font-size:20px;
 }
+.print_eBook{
+	font-size:12px;
+	color: #539ca8;
+}
 </style>

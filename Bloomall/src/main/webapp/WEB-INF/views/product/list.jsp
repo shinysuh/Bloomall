@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>  
 <!DOCTYPE html>
 <html>
 <%@include file="/WEB-INF/views/include/header.jsp" %>
@@ -17,31 +18,6 @@ $(function(){
 		
 		location.href = "/order/one?prd_idx=" + prd_idx + "&ord_amount=" + ord_amount;
 	});
-	
-	/*
-	// 체크 상품 바로구매	btn_buyChk
-	$("#btn_buyChk").click(function(){
-		
-		var form = $("#productForm");
-		
-		var checked = $("input[name='check']:checked");
-		
-		var ord_amount =[];
-		
-		checked.each(function(i){
-			var amount = $(this).next().next().val();
-			
-			ord_amount.push(amount);
-		});
-		
-		location.href = "/order/productChk";
-		// form.submit();
-	});
-	*/
-	
-	
-	
-	
 	
 	// 장바구니  btn_addToCart
 	$(".btn_addToCart").click(function(){
@@ -178,20 +154,19 @@ $(function(){
 						    </colgroup>
 						    
 						    
-						    <%-- 검색 조건에 일치하는 상품이 없는 경우 --%>
+						    <%-- 등록된 상품이 없는 경우 --%>
 							<c:if test="${empty productList}">
 							<tr>
 								<p style="padding:50px 0px; text-align: center;border-collapse: collapse;">등록된 상품이 존재하지 않습니다.</p>
 							</tr>
 							</c:if>
-							
-							<%-- 검색 조건에 일치하는 상품이 존재하는 경우 --%>
+							<%-- 등록된 상품이 존재하는 경우 --%>
 					        <!-- 상품 목록 시작-->
+					        <%--<c:set var="i" value="${fn:length(productList)}" ></c:set> <!-- productList : 컬렉션 형태 -->--%>
 					        <c:forEach items="${productList}" var="prdList">	    
 					        <tr>
 					      		<td class="product_img" style="width:13%;height:140%">
 					            	<div class="ico_wrap"></div>
-					            	<input type="hidden" name="prd_idx" value="${prdList.prd_idx}" />
 				            		<%-- 책 이미지 링크 begin --%>
 					            	<c:if test="${ctgr_cd == 'all' || !empty prt_name}">
 					            		<!-- 모든상품/2차카테고리 -->
@@ -213,21 +188,27 @@ $(function(){
 										<a href="/product/detail${pageMaker.makeQuery(pageMaker.cri.page)}&prd_idx=${prdList.prd_idx}&ctgr_cd=${ctgr_cd}">
 										<strong style="color:black;font-size:16px;">${prdList.prd_title}</strong>
 										</a>
+										<c:if test="${prdList.ctgr_prt_cd == '300' }">
+										<span class="print_eBook">&nbsp;[eBook]</span>
+										</c:if>
 					            	</c:if>
 									<c:if test="${empty prt_name && ctgr_cd != 'all'}">
 										<!-- 1차카테고리 -->
 										<a href="/product/detail${pageMaker.makeQuery(pageMaker.cri.page)}&prd_idx=${prdList.prd_idx}&prime_ctgr_cd=${prime_ctgr_cd}">
 										<strong style="color:black;font-size:17px;">${prdList.prd_title}</strong>
 										</a>
+										<c:if test="${prime_ctgr_cd == '300' }">
+										<span class="print_eBook">&nbsp;[eBook]</span>
+										</c:if>
 									</c:if>
 									<%-- 책제목 링크 end --%>
 									<div class="info">
 										${prdList.prd_author} 저 <span class='dim_txt002'>|</span>${prdList.prd_company}
 									</div>
 									<div class="price">
-										판매가: <span class="dc_price">${prdList.prd_dc_price}</span>원 
+										판매가: <span class="dc_price"><fmt:formatNumber value="${prdList.prd_dc_price}" pattern="###,###,###" /></span>원 
 										<br>
-										<span class="org_price">정가: ${prdList.prd_price}원 </span> <em class="divi">|</em>
+										<span class="org_price">정가: <fmt:formatNumber value="${prdList.prd_price}" pattern="###,###,###" />원 </span> <em class="divi">|</em>
 										<span class="point_benefit">포인트 적립: <fmt:formatNumber value="${prdList.prd_price * 0.03}" pattern="###,###,###" /></span>
 									</div>
 									<div class="rating_info">
@@ -249,9 +230,10 @@ $(function(){
 								</td>
 								<td class="buttons">
 									<span class="prd_count_edit">
-									
-									
+										<!-- 상품번호 hidden -->
+						            	<input type="hidden" name="prd_idx" value="${prdList.prd_idx}" />
 									<%--<c:set value="${0 }" var="i"> 체크박스 value 바꾸면 다른 기능도 손보기--%>
+										
 										<input type="checkbox" name="check" class="check" value="${prdList.prd_idx }" />
 										<span class="count">수량</span>
 										<input type="text" class="count_input" value="1" id="count_${prdList.prd_idx }" name="ord_amount" style="width:70%;margin-bottom:3px;" />
@@ -260,6 +242,7 @@ $(function(){
 									<button type="button" class="btn_purchaseOne btn btn-default" style="width:100%;" value="${prdList.prd_idx }">바로구매</button>
 								</td>
 							</tr>     
+							<%-- <c:set var="i" value="${i-1}" ></c:set> --%>
 							</c:forEach>            
 						</table>
 						<!-- 상품 리스트 테이블 끝 -->

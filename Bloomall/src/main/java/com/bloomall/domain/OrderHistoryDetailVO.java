@@ -10,6 +10,7 @@ public class OrderHistoryDetailVO {
 	private int 	prd_price;    	// 상품 가격 - ProductVO
 	private int 	ord_amount;  	// 각 주문수량 - OrderDetailVO
 	private int 	ord_tot_price;  // 총 주문금액 - OrderVO
+	private int 	mem_point;		// 회원 포인트 적립 - MemberVO
 	
 	public int getOrd_idx() {
 		return ord_idx;
@@ -53,12 +54,17 @@ public class OrderHistoryDetailVO {
 	public void setOrd_tot_price(int ord_tot_price) {
 		this.ord_tot_price = ord_tot_price;
 	}
+	public int getMem_point() {
+		return mem_point;
+	}
+	public void setMem_point(int mem_point) {
+		this.mem_point = mem_point;
+	}
 	
 	@Override
 	public String toString() {
 		return "OrderHistoryDetailVO [ord_idx=" + ord_idx + ", prd_idx=" + prd_idx + ", prd_title=" + prd_title
 				+ ", prd_img=" + prd_img + ", prd_price=" + prd_price + ", ord_amount=" + ord_amount
-				+ ", ord_tot_price=" + ord_tot_price + "]";
+				+ ", ord_tot_price=" + ord_tot_price + ", mem_point=" + mem_point + "]";
 	}
-	
 }

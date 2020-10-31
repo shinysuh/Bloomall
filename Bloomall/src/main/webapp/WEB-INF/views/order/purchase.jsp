@@ -6,6 +6,29 @@
 <%@include file="/WEB-INF/views/include/plugin_js.jsp" %>
 <head>
 <script type="text/javascript" src="/js/order/purchase.js"></script>
+<script type="text/javascript">
+$(function(){
+	// [총상품금액]/[총할인금액]/[적립예정포인트]/[최종결제금액] 로드 함수
+	bringTotals();
+	
+	// <form>의 action 세팅 => ${type} 값에 따라 form의 action 달라짐. ${type} => 1:단일상품구매 / 2:여러상품구매
+	formSetting();
+});
+
+function formSetting(){
+	
+	var form = $("#orderForm");
+	// ${type} value 가져오기
+	var type = $("#btnOrder").prev().val();
+	
+	if(type == 1){  // 단일상품 구매
+		form.attr("action", "/order/orderOne");
+	}else if(type == 2){  // 여러상품 구매
+		form.attr("action", "/order/orderChk");
+	}
+}
+
+</script>
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
 	<div class="wrapper">
@@ -33,9 +56,10 @@
 				<div class="col-md-10">
 				<!-- left column -->
 				<div class="box" style="border: none;">			
-					<form id="orderForm" method="post" action=""> <%-- <form>의 action은 [단일][복수]로 나눠서 jquery에서 지정 --%>
+					<form id="orderForm" method="post"> <%-- <form>의 action은 [단일][복수]로 나눠서 jquery에서 지정 --%>
 						<div class="box-body" style="padding:30px 10px 100px 10px;">
 							<%-- 주문내역 상단 버튼 --%>
+							<div class="col-sm-12">
 							<div class="orderList" style="padding: 0px 40px;">
 								<div style="width:100%;">
 									<span style="display: inline-block; float:left; margin:20px 10px 5px 0px;font-weight:bold;font-size:16px;">[상품확인]</span>
@@ -52,7 +76,7 @@
 											<th>정가</th>
 											<th>BLOOMALL 판매가</th>
 											<th>수량</th>
-											<th>합계</th>
+											<th style="font-weight:bold;">합계</th>
 										</tr>
 									
 									<%-- 상품리스트 출력 --%>
@@ -75,14 +99,19 @@
 												<p><fmt:formatNumber value="${productList.prd_price}" pattern="###,###,###" />원</p>
 												<input type="hidden" name="prd_price" value="${productList.prd_price}" />
 											<td class="col-md-2">
-												<p><fmt:formatNumber value="${productList.prd_dc_price}" pattern="###,###,###" />원</p>
+												<p><fmt:formatNumber value="${productList.prd_dc_price}" pattern="###,###,###" />원
+													<br>
+												(<fmt:formatNumber value="${100-(productList.prd_dc_price / productList.prd_price * 100)}" pattern="###,###,###" />%
+												<span style="color:rgb(209, 4, 199);"> &#8681;</span>) <br>
+												<span style="color:#4e789c;font-size:13px;"> P <fmt:formatNumber value="${productList.prd_price *0.03 }" pattern="##,###"/></span>
+												</p>
 												<input type="hidden" name="prd_dc_price" value="${productList.prd_dc_price}" /> 
 											<td class="col-md-1">
 												<p>${amountList[i.index]}</p>
 												<input type="hidden" name="amount" value="${amountList[i.index]}" /> 
 											</td>
 											<td class="col-md-1">
-												<p><fmt:formatNumber value="${productList.prd_dc_price * amountList[i.index]}"  pattern="###,###,###" />원</p>
+												<p style="font-weight:bold;"><fmt:formatNumber value="${productList.prd_dc_price * amountList[i.index]}"  pattern="###,###,###" />원</p>
 											</td>
 										</tr>
 									</c:forEach>
@@ -91,10 +120,11 @@
 								<br><br><br>
 							</div>
 							<hr><br>
+							</div>
 							
 							<%-- 주문 정보 --%>
-							<div class="orderInfo" style="min-width:1000px;" > 
-								<div class="userInfo" style="display:inline-block; float:left; width:60%; padding: 0% 5%;">
+							<div class="col-sm-12 orderInfo" style="min-width:300px;" >
+								<div class="col-xs-8 userInfo" style="display:inline-block; float:left; width:60%; padding: 0% 5%;">
 									<div class="container" style="width:100%;">
 										<span style="font-weight:bold;font-size:16px;">[배송 정보]</span>
 										<div class="form-group" style="width:100%; margin-top:5px;">
@@ -126,43 +156,51 @@
 								</div>
 								
 								<%-- 결제 방식 선택  및 주문 금액 확인 --%>
-								<div class="orderConfirm" style="display:inline-block; width:20%; margin: 0px 5%;">
-								<br>
+								<div class="col-xs-4 orderConfirm" style="display:inline-block; width:30%; margin: 0px 5%;">
 									<%-- 결제 방식 --%>
 									<div>
 										<span style="font-weight:bold;font-size:16px;">[결제 방식]</span><br>
 										<div class="payment" style="margin-top:10px;">
 											<input type="radio" name="payment" value="card" checked="checked">카드 결제
-											<input type="radio" name="payment" value="tcash">실시간 계좌이체<br>
+											<input type="radio" name="payment" value="tcash" style="margin-left:40px;">실시간 계좌이체<br>
 											<input type="radio" name="payment" value="phone">휴대폰 결제
-											<input type="radio" name="payment" value="cash">무통장 입금
+											<input type="radio" name="payment" value="cash" style="margin-left:25px;">무통장 입금
 										</div>
 									</div>
 									<br><br><br>
 									
 									<%-- 주문 금액 --%>
-									<div style="width: 400px;">
-										<span>[결제 금액]</span>
+									<div style="min-width:300px;">
+										<span style="font-weight:bold;font-size:16px;">[결제 금액]</span>
 										<table class="table text-center" style="margin-top:15px;" >
-											<tr>
-												<td class="col-md-1">총 상품금액</td>
-												<td class="col-md-1" style="height:30px; text-align: center;"><p id="total_price">0</p></td>
+											<tr style="height:30px; text-align: center;">
+												<td class="col-xs-2" style="font-weight:bold;">총 상품금액</td>
+												<td class="col-xs-2" style="height:30px; text-align: center;font-weight:bold;"><p id="total_price">0</p></td>
 											</tr>
-											<tr>
-												<td class="col-md-1">총 할인금액</td>
-												<td class="col-md-1" style="height:30px; text-align: center;"><p id="total_discount">0</p></td>
+											<tr style="height:30px; text-align: center;">
+												<td>총 할인금액</td>
+												<td><p id="total_discount">0</p></td>
 											</tr>
-											<tr>
-												<td class="col-md-1"><label>최종 결제 금액</label></td>
-												<td class="col-md-1" style="height:30px; text-align: center;">
-													<label><p id="total_dc_price">0</p></label>
+											<tr style="height:10px; text-align: center;">
+												<td><span style="margin-top:5px;font-size:11px;color:#539ca8;text-align:center;">적립예정포인트</span></td>
+												<td>
+													<p id="total_point" style="font-size:11px;color:#539ca8;text-align:center;">0</p>
+													<input type="hidden" id="mem_point" name="mem_point" />
+												</td>
+											</tr>
+											<tr style="height:30px; text-align: center;">
+												<td>
+													<label style="color:rgb(190, 90, 129);font-weight:bold;font-size:16px;text-align:center;">최종 결제 금액</label>
+												</td>
+												<td class="col-xs-2" style="height:30px; text-align: center;">
+													<p id="total_dc_price" style="color:rgb(190, 90, 129);font-weight:bold;font-size:18px;text-align:center;">0</p>
 													<input type="hidden" id="ord_tot_price" name="ord_tot_price" value="0"/>
 												</td>
 											</tr>
 											<tr>
-												<td class="col-md-1" colspan="2" >
-													<button id="btn_orderOne" class="btn btn-flat" type="button" style="padding: 10px 40px; background-color: grey; color:white;">결제하기</button>     
-													<button id="btn_orderChk" class="btn btn-flat" type="button" style="padding: 10px 40px; background-color: grey; color:white;display:none;">결제하기</button>     
+												<td class="col-xs-1" colspan="2" >
+													<input type="hidden" id="type" name="type" value="${type}" />
+													<button id="btnOrder" class="btn btn-flat" type="submit" style="padding: 10px 40px; background-color: grey; color:white;">결제하기</button>     
 												</td>
 											</tr>
 										</table>

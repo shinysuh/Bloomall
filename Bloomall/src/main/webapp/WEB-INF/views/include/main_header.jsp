@@ -121,7 +121,7 @@
 						<a href="/member/login"><span class="hidden-xs">로그인</span></a>
 					</li>
 					<li class="dropdown user user-menu">
-						<a href="/order/orderHistory" class="dropdown-toggle" data-toggle="dropdown">
+						<a href="/order/orderHistory" class="toggle">
 						  <span class="hidden-xs">주문내역</span>
 						</a>
 					</li>

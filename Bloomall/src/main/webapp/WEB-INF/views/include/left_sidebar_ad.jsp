@@ -10,12 +10,10 @@
 		<!-- Sidebar user panel (optional) -->
 		<div class="user-panel">
 			<div class="pull-left image">
-				<img src="/dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
+				<img src="/dist/img/anonymous_user.png" class="img-circle" alt="User Image">
 			</div>
 			<div class="pull-left info">
-				<p>Alexander Pierce</p>
-				<!-- Status -->
-				<a href="#"><i class="fa fa-circle text-success"></i> Online</a>
+				<p>관리자</p>
 			</div>
 		</div>
 
@@ -45,7 +43,7 @@
 			</li>
 			 -->
 			 <li class="treeview">
-				<a href="#"><i class="fa fa-book"></i> <span>Product</span> <span class="pull-right-container">
+				<a href="#"><i class="fa fa-book"></i> <span>상품관리</span> <span class="pull-right-container">
 						<i class="fa fa-angle-left pull-right"></i>
 					</span> </a>
 				<ul class="treeview-menu">
@@ -58,20 +56,7 @@
 				</ul>
 			</li>
 			<li class="treeview">
-				<a href="#"><i class="fa fa-book"></i> <span>Category</span> <span class="pull-right-container">
-						<i class="fa fa-angle-left pull-right"></i>
-					</span> </a>
-				<ul class="treeview-menu">
-					<li>
-						<a href="/admin/category/register"><i class="fa fa-bookmark"></i>카테고리 등록</a>
-					</li>
-					<li>
-						<a href="/admin/category/manage"><i class="fa fa-bookmark"></i>카테고리 리스트</a>
-					</li>
-				</ul>
-			</li>
-			<li class="treeview">
-				<a href="#"><i class="fa fa-book"></i> <span>Order</span> <span class="pull-right-container">
+				<a href="#"><i class="fa fa-book"></i> <span>주문관리</span> <span class="pull-right-container">
 						<i class="fa fa-angle-left pull-right"></i>
 					</span> </a>
 				<ul class="treeview-menu">
@@ -81,7 +66,20 @@
 				</ul>
 			</li>
 			<li class="treeview">
-				<a href="#"><i class="fa fa-book"></i> <span>Communuity</span> <span class="pull-right-container">
+				<a href="#"><i class="fa fa-book"></i> <span>회원관리</span> <span class="pull-right-container">
+						<i class="fa fa-angle-left pull-right"></i>
+					</span> </a>
+				<ul class="treeview-menu">
+					<li>
+						<a href="/admin/category/register"><i class="fa fa-bookmark"></i>회원관리</a>
+					</li>
+					<li>
+						<a href="/admin/category/manage"><i class="fa fa-bookmark"></i>회원관리</a>
+					</li>
+				</ul>
+			</li>
+			<li class="treeview">
+				<a href="#"><i class="fa fa-book"></i> <span>커뮤니티</span> <span class="pull-right-container">
 						<i class="fa fa-angle-left pull-right"></i>
 					</span> </a>
 				<ul class="treeview-menu">

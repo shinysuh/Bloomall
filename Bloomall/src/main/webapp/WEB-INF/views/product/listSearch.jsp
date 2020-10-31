@@ -18,13 +18,6 @@ $(function(){
 		location.href = "/order/one?prd_idx=" + prd_idx + "&ord_amount=" + ord_amount;
 	});
 	
-	
-	// 체크 상품 바로구매	btn_buyChk
-	$("#btn_buyChk").click(function(){
-		
-		
-	});
-	
 	// 장바구니  btn_addToCart
 	$(".btn_addToCart").click(function(){
 		
@@ -109,22 +102,13 @@ $(function(){
 			<section class="content container-fluid">
 				<!-- 상품목록 -->
 				<div class="col-md-9">
-				<div>
+					<form id="productForm" method="post" action="/order/productChk">
+					<div>
 					<h5><i class="fa fa-book"></i> 검색 결과 > "${scri.keyword }"</h5>
-
-
-<%-- 베스트셀러 : 데모소스 리스트 형식 가져와서 한번에 4개씩 보이게? --%>
-
-
-
-
-
-
-
 						<div style="display: inline-block; float: right; margin-right:10%;">
 							<span>선택한 상품 &nbsp;</span>
 							<button type="button" id="btn_cartChk" class="btn btn-default">&#9745;장바구니</button>					
-							<button type="button" id="btn_buyChk" class="btn btn-default">&#9745;바로구매</button>					
+							<button type="submit" id="btn_buyChk" class="btn btn-default">&#9745;바로구매</button>					
 						</div>
 					<br><hr class="dotted_hr"><br>
 					</div>
@@ -161,13 +145,16 @@ $(function(){
 									<a href="/product/detailSearch${pageMaker.makeSearch(pageMaker.cri.page)}&prd_idx=${prdList.prd_idx}">
 										<strong style="color:black;font-size:16px;">${prdList.prd_title}</strong>
 									</a>
+									<c:if test="${prdList.ctgr_prt_cd == '300' }">
+										<span class="print_eBook">&nbsp;[eBook]</span>
+										</c:if>
 									<div class="info">
 										${prdList.prd_author} 저 <span class='dim_txt002'>|</span>${prdList.prd_company}
 									</div>
 									<div class="price">
-										판매가: <span class="dc_price">${prdList.prd_dc_price}</span>원 
+										판매가: <span class="dc_price"><fmt:formatNumber value="${prdList.prd_dc_price}" pattern="###,###,###" /></span>원 
 										<br>
-										<span class="org_price">정가: ${prdList.prd_price}원 </span> <em class="divi">|</em>
+										<span class="org_price">정가: <fmt:formatNumber value="${prdList.prd_price}" pattern="###,###,###" />원 </span> <em class="divi">|</em>
 										<span class="point_benefit">포인트 적립: <fmt:formatNumber value="${prdList.prd_price * 0.03}" pattern="###,###,###" /></span>
 									</div>
 									<div class="rating_info">
@@ -191,7 +178,7 @@ $(function(){
 									<span class="prd_count_edit">
 										<input type="checkbox" name="check" class="check" value="${prdList.prd_idx }" />
 										<span class="count">수량</span>
-										<input type="text" class="count_input" value="1" id="count_${prdList.prd_idx }" name="count_input" style="width:70%;margin-bottom:3px;" />
+										<input type="text" class="count_input" value="1" id="count_${prdList.prd_idx }" name="ord_amount" style="width:70%;margin-bottom:3px;" />
 									</span>
 									<button type="button" class="btn_addToCart btn btn-primary" style="width:100%;margin-bottom:3px;" value="${prdList.prd_idx }">장바구니</button>
 									<button type="button" class="btn_purchaseOne btn btn-default" style="width:100%;" value="${prdList.prd_idx }">바로구매</button>
@@ -229,6 +216,7 @@ $(function(){
 								</ul>
 						</div>
 					</div>
+					</form>
 				</div>
 			</section>
 			<!-- /.content -->

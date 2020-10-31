@@ -175,11 +175,11 @@ $(function(){
 													<table style="width:70%;margin-bottom:10px;">
 														<tr class="org_price">
 															<td style="width:50%">정가</td>
-															<td>${vo.prd_price}원</td>
+															<td><fmt:formatNumber value="${vo.prd_price}" pattern="###,###,###" />원</td>
 														</tr>
 														<tr class="dc_price">
 															<td style="font-weight:bold; height:60px;">판매가</td>
-															<td><span style="font-weight:bold; font-size:32px; color:rgb(255, 130, 113);">${vo.prd_dc_price}</span>원 </td>
+															<td><span style="font-weight:bold; font-size:30px; color:rgb(255, 130, 113);"><fmt:formatNumber value="${vo.prd_dc_price}" pattern="###,###,###" /></span>원 </td>
 														</tr>
 														<tr class="point_benefit">
 															<td>BLOOM 포인트</td>
@@ -232,7 +232,7 @@ $(function(){
 												         	
 												         	
 				         				<!-- 해결되면 이 줄 삭제 --><em style="color:red;font-size:14px;font-weight:bold;">(평점 EL 문법으로 표시)</em>
-												         	<!--  
+												         	<%--  
 																
 																<c:set var="ageTotal" value="${0}" />
 																<c:forEach var="person" items="${personList}">
@@ -249,7 +249,7 @@ $(function(){
 																</c:forEach>
 																${rvwtotal / rvw_score.length}
 																
-																-->
+																--%>
 												         	
 												         	
 												         	

@@ -69,11 +69,14 @@ public class OrderController {
 		productList.add(productService.productDetail(prd_idx));
 		amountList.add(ord_amount);
 		
+		// jsp에서 [단일] or [복수] 상품 구매여부를 구별하기 위한 값 (단일:1 / 복수:2)
+		int type = 1;
+		
 		MemberDTO dto = (MemberDTO) session.getAttribute("user");
 		model.addAttribute("user", memberService.getUserInfo(dto.getMem_id()));
-		
 		model.addAttribute("productList", productList);
 		model.addAttribute("amountList", amountList);
+		model.addAttribute("type", type);
 		
 		return "/order/purchase";
 	}
@@ -86,12 +89,12 @@ public class OrderController {
 		logger.info(orderVO.toString());
 		logger.info(detailVO.toString());
 
-		// 구매
-		service.orderOne(orderVO, detailVO);
-		
 		// 주문번호 저장
 		int ord_idx = orderVO.getOrd_idx();
 		rttr.addAttribute("ord_idx", ord_idx);
+		
+		// 구매
+		service.orderOne(orderVO, detailVO);
 		
 		return "redirect:/order/complete";
 	}
@@ -100,12 +103,9 @@ public class OrderController {
 	// [복수]
 	// 상품리스트 => [바로구매] 여러 상품	
 	/* Param : chkArr[], ord_amount[], httpsession, model  */
-	
-	
 	// 체크박스의 value를 인덱스로 주면 for문 안에 if(chkArr.get(i) == prd_idxArr.get(i))로 사용가능
 	// https://jetalog.net/20  forEach index 문법
 	// 아니면 ajax
-	
 	@RequestMapping(value = "/productChk", method=RequestMethod.POST)
 	public String productChk(@RequestParam("check") List<Integer> chkArr,
 									 @RequestParam("prd_idx") List<Integer> prd_idxArr,
@@ -118,17 +118,27 @@ public class OrderController {
 		List<ProductVO> productList = new ArrayList<ProductVO>();
 		List<Integer> amountList = new ArrayList<Integer>();
 		
-		logger.info("check" + chkArr);
+		// jsp에서 [단일] or [복수] 상품 구매여부를 구별하기 위한 값 (단일:1 / 복수:2)
+		int type = 2;
+		
+		logger.info("check : " + chkArr);
+		logger.info("prd_idx : " + prd_idxArr);
+		
 		// 상품리스트에서 체크된 값만 선택하여 List 추가
-		for(int i=0; i < chkArr.size(); i++) {		// if(chkArr.get(i) == prd_idxArr.get(i))
-			productList.add(productService.productDetail((int)prd_idxArr.get(i)));
-			amountList.add(ord_amtArr.get(i));
+		for(int i=0; i < prd_idxArr.size(); i++) {		// if(chkArr.get(i) == prd_idxArr.get(i))
+			for(int j=0; j<chkArr.size();j++) {
+				if(chkArr.get(j) == prd_idxArr.get(i)) {
+				productList.add(productService.productDetail((int)prd_idxArr.get(i)));
+				amountList.add(ord_amtArr.get(i));
+				}
+			}
 		}
 		
 		MemberDTO dto = (MemberDTO) session.getAttribute("user");
 		model.addAttribute("user", memberService.getUserInfo(dto.getMem_id()));
 		model.addAttribute("productList", productList);
 		model.addAttribute("amountList", amountList);
+		model.addAttribute("type", type);
 		
 		return "/order/purchase";
 	}
@@ -165,11 +175,14 @@ public class OrderController {
 			productList.add(productService.productDetail(prd_idx));
 			amountList.add(cart_amount);
 			
+			// jsp에서 [단일] or [복수] or [전체] 상품 구매여부를 구별하기 위한 값 (단일:1 / 복수:2 / 전체:3)
+			int type = 1;
+			
 			MemberDTO dto = (MemberDTO) session.getAttribute("user");
 			model.addAttribute("user", memberService.getUserInfo(dto.getMem_id()));
-
 			model.addAttribute("productList", productList);
 			model.addAttribute("amountList", amountList);
+			model.addAttribute("type", type);
 		
 			return "/order/purchaseCart";
 		}
@@ -198,7 +211,8 @@ public class OrderController {
 	// 카트 => [선택상품주문] 여러 상품
 	/* Param : chkArr[], prd_idxArr[], cart_amtArr[], httpsession, model  */
 	@RequestMapping(value = "/cartChk", method=RequestMethod.POST)
-	public String cartChk(@RequestParam("check") List<Integer> chkArr,
+	public String cartChk(@RequestParam("cart_idx") List<Integer> cart_idxArr, 
+								  @RequestParam("check") List<Integer> chkArr,
 								  @RequestParam("prd_idx") List<Integer> prd_idxArr,
 								  @RequestParam("cart_amount") List<Integer> cart_amtArr,
 								  HttpSession session, Model model) throws Exception{
@@ -210,15 +224,23 @@ public class OrderController {
 		List<Integer> amountList = new ArrayList<Integer>();
 		
 		// 카트 목록에서 체크된 값만 선택하여 List 추가
-		for(int i=0; i < chkArr.size(); i++) {
-			productList.add(productService.productDetail((int)prd_idxArr.get(i)));
-			amountList.add(cart_amtArr.get(i));
+		for(int i=0; i < cart_idxArr.size(); i++) {		// if(chkArr.get(i) == prd_idxArr.get(i))
+			for(int j=0; j<chkArr.size();j++) {
+				if(chkArr.get(j) == cart_idxArr.get(i)) {
+				productList.add(productService.productDetail((int)prd_idxArr.get(i)));
+				amountList.add(cart_amtArr.get(i));
+				}
+			}
 		}
+		
+		// jsp에서 [단일] or [복수] or [전체] 상품 구매여부를 구별하기 위한 값 (단일:1 / 복수:2 / 전체:3)
+		int type = 2;
 		
 		MemberDTO dto = (MemberDTO) session.getAttribute("user");
 		model.addAttribute("user", memberService.getUserInfo(dto.getMem_id()));
 		model.addAttribute("productList", productList);
 		model.addAttribute("amountList", amountList);
+		model.addAttribute("type", type);
 
 		return "/order/purchaseCart";
 	}
@@ -261,10 +283,14 @@ public class OrderController {
 			amountList.add(cart_amtArr.get(i));
 		}
 		
+		// jsp에서 [단일] or [복수] or [전체] 상품 구매여부를 구별하기 위한 값 (단일:1 / 복수:2 / 전체:3)
+		int type = 3;
+		
 		MemberDTO dto = (MemberDTO) session.getAttribute("user");
 		model.addAttribute("user", memberService.getUserInfo(dto.getMem_id()));
 		model.addAttribute("productList", productList);
 		model.addAttribute("amountList", amountList);
+		model.addAttribute("type", type);
 
 		return "/order/purchaseCart";
 	}

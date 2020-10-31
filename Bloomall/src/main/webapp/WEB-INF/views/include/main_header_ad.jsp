@@ -135,15 +135,6 @@
 						<a href="/admin/logout" onclick="return confirm('로그아웃 하시겠습니까?');"><span class="hidden-xs">로그아웃</span></a>
 					</li>
 					<li class="dropdown user user-menu">
-						<a href="/admin/category/manage" class="dropdown-toggle" data-toggle="dropdown">
-						  <span class="hidden-xs">카테고리 관리</span>
-						</a>
-						<ul class="dropdown-menu" id="myPage">
-							<li><a href="/admin/category/register">카테고리 등록</a></li>
-							<li><a href="/admin/category/manage">카테고리 리스트</a></li>
-						</ul>
-					</li>
-					<li class="dropdown user user-menu">
 						<a href="/admin/product/list" class="dropdown-toggle" data-toggle="dropdown">
 						  <span class="hidden-xs">상품관리</span>
 						</a>
