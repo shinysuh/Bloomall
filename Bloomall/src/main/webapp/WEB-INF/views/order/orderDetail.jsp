@@ -51,7 +51,7 @@
 								<table class="table  text-center" id="ordertbl">
 									<thead id="thead">
 										<tr style="background-color: aliceBlue;" >
-											<td colspan="6" style="text-align:left;">
+											<td colspan="5" style="text-align:left;">
 												<b>주문날짜: <fmt:formatDate value="${buyer.ord_date}" pattern="yyyy/MM/dd HH:mm"/>
 												(주문번호: ${buyer.ord_idx} )</b>
 											</td>
@@ -63,6 +63,7 @@
 											<td>주문가격</td>
 											<td>주문수량</td>	
 											<td>합계</td> 
+											<td style="font-size:12px;color:#539ca8;">포인트</td> 
 										</tr>
 									<thead>
 									
@@ -70,6 +71,7 @@
 									<tbody>
 									<c:forEach items="${orderDetail}" var="orderDetail" varStatus="status">
 									<c:set var="totalPrice" value="${totalPrice + orderDetail[status.index].prd_price * orderDetail[status.index].odr_amount}"></c:set>
+									<c:set var="totalPoint" value="${totalPoint + ${orderDetail[status.index].prd_price * 0.03 * orderDetail[status.index].odr_amount}"></c:set>
 										<tr id="row">
 											<td class="col-md-2">
 												<a href="/product/detail?prd_idx=${orderDetail.prd_idx}">
@@ -88,6 +90,9 @@
 											</td>
 											<td class="col-md-1">
 												<p ><fmt:formatNumber value="${orderDetail.odr_price * orderDetail.odr_amount}"  pattern="###,###,###" />원</p>
+											</td>
+											<td class="col-md-1">
+												<p style="font-size:12px;color:#539ca8;"><fmt:formatNumber value="${orderDetail.prd_price * 0.03 * orderDetail.odr_amount}"  pattern="###,###,###" />원</p>
 											</td>
 										</tr>
 									</c:forEach>
@@ -144,6 +149,11 @@
 												<td class="col-md-1">총 할인금액(-)</td>
 												<td class="col-md-1" style="height:30px; text-align: center;">
 													<fmt:formatNumber value="${totalPrice - buyer.ord_tot_price}" pattern="###,###,###" />원</td>
+											</tr>
+											<tr style="font-size:12px;color:#539ca8;">
+												<td class="col-md-1">총 적립포인트</td>
+												<td class="col-md-1" style="text-align: center;">
+													<fmt:formatNumber value="${totalPoint}" pattern="###,###,###" />원</td>
 											</tr>
 											<tr>
 												<td class="col-md-1"><label>최종결제금액</label></td>
