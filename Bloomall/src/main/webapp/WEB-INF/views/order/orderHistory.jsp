@@ -49,55 +49,74 @@
 								</c:if>
 								
 								<%-- 주문내역이 존재하는 경우, 리스트 출력 --%>
-								<c:forEach items="${orderHistory}" var="orderHistory" varStatus="i">
-									<c:set var="idx" value="${orderHistory.ord_idx}"></c:set>
-									<c:if test="${i.index == 0 || orderHistory.ord_idx != idx })">
-									<tr style="font-size:12px;">
-										<th>주문번호</th>
-										<th>주문일자</th>
-										<th>주문자</th>
-										<th>수령자</th>
-										<th>상품명</th>
-										<th>수량</th>
-									</tr>
-									</c:if>
+								<c:forEach items="${orderHistory}" var="orderHistory" varStatus="status">
+								<c:set var="idx" value="${orderHistory.ord_idx}"></c:set>
+								<c:if test="${status.index == 0 || orderHistory.ord_idx != idx })">
 									<tr>
-										<td class="col-md-1">
-											<input id="ord_idx" name="ord_idx" value="${orderHistory.ord_idx }" />
-											<a href="/order/orderDetail?ord_idx${orderHistory.ord_idx}">${orderHistory.ord_idx }</a>
+										<td colspan="4" style="text-aligh:right;">
+											<a href="/order/orderDetail?ord_idx=${orderHistory.ord_idx}">
+												<button class="btn btn-primary">주문상세보기</button>
+											</a>
 										</td>
-										<td class="col-md-2">
-											<span><fmt:formatDate value="${orderHistory.ord_date }" pattern="yyyy/MM/dd  HH:mm"/></span>
-										</td>
-										<td class="col-md-1">${orderHistory.mem_id }</td>
-										<td class="col-md-1">${orderHistory.ord_recp_name }</td>
-										
-										
-										<td class="col-md-2">
-											<p>${orderHistory[i.index].prd_title}</p>
-										</td>
-									
-										<td>${orderHistory[i.index].ord_amount }</td>
 									</tr>
-									
-									
-									
-									
-									
-									
-									
-									
-									
-									
-									
-									
-									
-									
-									
-									
+									<tr style="font-size:12px;">
+										<td class="col-sm-3">주문번호 : ${orderHistory.ord_idx}</td>
+										<td class="col-sm-1"></td>
+										<td class="col-sm-1"></td>
+										<td class="col-sm-2" style="text-align:right;">주문자: ${user.mem_name } / 수령자: ${orderHistory.ord_recp_name }</td>
+									</tr>
+									<tr style="font-size:12px;">
+										<td class="col-sm-3">주문날짜: ${orderHistory.ord_date }</td>
+										<td class="col-sm-1"></td>
+										<td class="col-sm-1"></td>
+										<td class="col-sm-2" style="text-align:right;font-weight:bold;font-size:16px;">
+											총 주문금액: <fmt:formatNumber value="${orderHistory.ord_tot_price}" pattern="###,###,###"/>원
+										</td>
+									</tr>
+										<hr>
+									<tr>
+										<td>상품명</td>
+										<td>가격</td>
+										<td>주문수량</td>
+										<td style="font-weight:bold;">합계</td>
+									</tr>
+								</c:if>
+									<tr>
+										<td>${orderHistory.prd_title}</td>
+										<td><fmt:formatNumber value="${orderHistory.prd_price}" pattern="###,###,###"/>원</td>
+										<td>${orderHistory.ord_amount}</td>
+										<td style="font-weight:bold;"><fmt:formatNumber value="${orderHistory.prd_price * orderHistory.ord_amount}" pattern="###,###,###"/>원</td>
 									</tr>
 								</c:forEach>
 							</table>
+						</div>
+						
+						<%-- 페이징 --%>
+						<div class="paging">
+							<div class="text-center">
+								<ul class="pagination">
+										<%-- [이전] 표시 --%>
+										<c:if test="${pageMaker.prev }">
+											<li>
+												<a href="/order/orderHistory${pageMaker.makeQuery(pageMaker.startPage - 1)}">[이전]</a>
+											</li>
+										</c:if>
+										<%-- 페이지 번호 표시 --%>
+										<c:forEach begin="${pageMaker.startPage }" end="${pageMaker.endPage }" var="idx" >
+											<li <c:out value="${pageMaker.cri.page == idx?'class=active':'' }" />>
+												<a 
+												 href="/order/orderHistory${pageMaker.makeQuery(idx) }">${idx }</a>
+											</li>
+										</c:forEach>
+									
+										<%-- [다음] 표시 --%>
+										<c:if test="${pageMaker.next }">
+											<li>
+												<a href="/order/orderHistory${pageMaker.makeQuery(pageMaker.endPage + 1)}">[다음]</a>
+											</li>
+										</c:if>
+									</ul>
+							</div>
 						</div>
 					</div>
 				</div>

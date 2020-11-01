@@ -160,10 +160,16 @@ public class OrderServiceImpl implements OrderService {
 
 	// 주문내역리스트 (OrderHistoryVO)
 	@Override
-	public List<OrderHistoryVO> orderHistoryList(String mem_id) throws Exception {
-		return dao.orderHistoryList(mem_id);
+	public List<OrderHistoryVO> orderHistoryList(Map<String, Object> map) throws Exception {
+		return dao.orderHistoryList(map);
 	}
 
+	// 주문내역 개수 가져오기
+	@Override
+	public int orderCount(String mem_id) throws Exception {
+		return dao.orderCount(mem_id);
+	}
+	
 	// 주문 상세 내역 (OrderHistoryDetailVO)
 	@Override
 	public List<OrderHistoryDetailVO> orderHistoryDetail(int ord_idx) throws Exception {
@@ -175,5 +181,6 @@ public class OrderServiceImpl implements OrderService {
 	public OrderVO recipientInfo(int ord_idx) throws Exception {
 		return dao.recipientInfo(ord_idx);
 	}
+
 
 }

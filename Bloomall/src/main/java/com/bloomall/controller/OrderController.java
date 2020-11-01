@@ -1,7 +1,9 @@
 package com.bloomall.controller;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
@@ -10,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -24,6 +27,8 @@ import com.bloomall.dto.MemberDTO;
 import com.bloomall.service.MemberService;
 import com.bloomall.service.OrderService;
 import com.bloomall.service.UserProductService;
+import com.bloomall.util.Criteria;
+import com.bloomall.util.PageMaker;
 
 @Controller
 @RequestMapping("/order/*")
@@ -317,14 +322,25 @@ public class OrderController {
 	/* 주문관련 페이지s 기능 */
 	// 주문 조회 (GET) - 주문 내역 리스트		/order/orderHistory		service.orderHistoryList()
 	@RequestMapping(value = "/orderHistory", method=RequestMethod.GET)
-	public String orderHistory(Model model, HttpSession session) throws Exception{
+	public String orderHistory(@ModelAttribute("cri") Criteria cri, Model model, HttpSession session) throws Exception{
 		
 		logger.info("======== orderHistory() called ========");
 		
 		MemberDTO dto = (MemberDTO) session.getAttribute("user");
-		List<OrderHistoryVO> orderHistory = service.orderHistoryList(dto.getMem_id());
+		String mem_id = dto.getMem_id();
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("mem_id", mem_id);
+		map.put("cri", cri);
+		
+		List<OrderHistoryVO> orderHistory = service.orderHistoryList(map);
+		
+		PageMaker pageMaker = new PageMaker();
+		pageMaker.setCri(cri);
+		pageMaker.setTotalCount(service.orderCount(mem_id));
 		
 		model.addAttribute("orderHistory", orderHistory);
+		model.addAttribute("pageMaker", pageMaker);
 		
 		return "/order/orderHistory";
 	}
@@ -334,15 +350,19 @@ public class OrderController {
 	
 	// 주문 상세 조회 (GET) - 주문 내역 상세 페이지		/order/orderDetail		service.orderHistoryDetail() / recipientInfo()
 	@RequestMapping(value = "/orderDetail", method=RequestMethod.GET)
-	public String orderDetail(int ord_idx, Model model, HttpSession session) throws Exception{
+	public String orderDetail(@ModelAttribute Criteria cri, int ord_idx, Model model, HttpSession session) throws Exception{
 		
 		logger.info("======== orderDetail() called ========");
 		
 		List<OrderHistoryDetailVO> orderDetail = service.orderHistoryDetail(ord_idx);
 		OrderVO buyer = service.recipientInfo(ord_idx);
 		
+		PageMaker pageMaker = new PageMaker();
+		pageMaker.setCri(cri);
+		
 		model.addAttribute("orderDetail", orderDetail);
 		model.addAttribute("buyer", buyer);
+		model.addAttribute("pageMaker", pageMaker);
 		
 		return "/order/orderDetail";
 	}

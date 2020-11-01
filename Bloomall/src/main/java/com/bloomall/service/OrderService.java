@@ -1,6 +1,7 @@
 package com.bloomall.service;
 
 import java.util.List;
+import java.util.Map;
 
 import com.bloomall.domain.OrderDetailVO;
 import com.bloomall.domain.OrderHistoryDetailVO;
@@ -25,7 +26,10 @@ public interface OrderService {
 	public void orderCartAll(String mem_id, OrderVO orderVO, List<OrderDetailVO> detailList) throws Exception;
 	
 	// 주문내역리스트 (OrderHistoryVO)
-	public List<OrderHistoryVO> orderHistoryList(String mem_id) throws Exception;
+	public List<OrderHistoryVO> orderHistoryList(Map<String, Object> map) throws Exception;
+	
+	// 주문내역 개수 가져오기
+	public int orderCount(String mem_id) throws Exception;
 		
 	// 주문 상세 내역 (OrderHistoryDetailVO) 
 	public List<OrderHistoryDetailVO> orderHistoryDetail(int ord_idx) throws Exception;

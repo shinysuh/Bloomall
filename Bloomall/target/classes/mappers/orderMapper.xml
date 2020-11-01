@@ -28,26 +28,35 @@
 	
 	
 	<!-- 주문내역리스트 (OrderHistoryVO) -->
-	<select id="orderHistoryList" resultType="OrderHistoryVO" parameterType="String">
-		select o.ord_idx, p.prd_title, o.ord_tot_price, d.ord_amount, o.mem_id, o.ord_recp_name, o.ord_date
-		from order_tb o inner join ord_detail_tb d
-		    on o.ord_idx = d.ord_idx
-		inner join product_tb p
-		    on p.prd_idx = d.prd_idx
+	<select id="orderHistoryList" resultType="OrderHistoryVO" parameterType="Map">
+		select ord_idx, prd_title, prd_price, ord_tot_price, ord_amount, mem_id, ord_recp_name, ord_date
+		from (select o.ord_idx, p.prd_title, p.prd_price, o.ord_tot_price, d.ord_amount, o.mem_id, o.ord_recp_name, o.ord_date,
+		             row_number() over(order by o.ord_idx desc) o_seq
+		        from order_tb o inner join ord_detail_tb d
+		            on o.ord_idx = d.ord_idx
+		        inner join product_tb p
+		            on p.prd_idx = d.prd_idx
+		        where mem_id=#{mem_id}
+		        order by o.ord_idx desc, d.prd_idx desc
+		        )
+		where o_seq between #{cri.rowStart} and #{cri.rowEnd}
+	</select>
+	
+	<!-- 주문내역 개수 가져오기 -->
+	<select id="orderCount" resultType="int" parameterType="String">
+		select count(ord_idx)
+		from order_tb
 		where mem_id=#{mem_id}
-		order by o.ord_idx desc, d.prd_idx desc
 	</select>
 	
 	
 	<!-- 주문 상세 내역 (OrderHistoryDetailVO) -->
 	<select id="orderHistoryDetail" resultType="OrderHistoryDetailVO" parameterType="int">
-		select o.ord_idx, d.prd_idx, p.prd_title, p.prd_img, p.prd_price, d.ord_amount, o.ord_tot_price, m.mem_point
+		select o.ord_idx, d.prd_idx, p.prd_title, p.prd_img, p.prd_price, d.ord_amount, d.ord_price
 		from order_tb o inner join ord_detail_tb d
 		    on o.ord_idx = d.ord_idx
 		inner join product_tb p
 		    on p.prd_idx = d.prd_idx
-		inner join member_tb m
-		    on m.mem_id=o.mem_id
 		where o.ord_idx=#{ord_idx}
 		order by d.prd_idx desc
 	</select>

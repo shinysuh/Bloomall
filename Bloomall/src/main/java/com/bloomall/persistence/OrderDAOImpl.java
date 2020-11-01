@@ -1,6 +1,7 @@
 package com.bloomall.persistence;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -46,8 +47,14 @@ public class OrderDAOImpl implements OrderDAO {
 
 	// 주문내역리스트 (OrderHistoryVO)
 	@Override
-	public List<OrderHistoryVO> orderHistoryList(String mem_id) throws Exception {
-		return session.selectList(NS + ".orderHistoryList", mem_id);
+	public List<OrderHistoryVO> orderHistoryList(Map<String, Object> map) throws Exception {
+		return session.selectList(NS + ".orderHistoryList", map);
+	}
+
+	// 주문내역 개수 가져오기
+	@Override
+	public int orderCount(String mem_id) throws Exception {
+		return session.selectOne(NS + ".orderCount", mem_id);
 	}
 
 	// 주문 상세 내역 (OrderHistoryDetailVO)
@@ -61,5 +68,4 @@ public class OrderDAOImpl implements OrderDAO {
 	public OrderVO recipientInfo(int ord_idx) throws Exception {
 		return session.selectOne(NS + ".recipientInfo", ord_idx);
 	}
-
 }
