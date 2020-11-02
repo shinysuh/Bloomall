@@ -5,7 +5,31 @@
 <html>
 <%@include file="/WEB-INF/views/include/header.jsp" %>
 <%@include file="/WEB-INF/views/include/plugin_js.jsp" %>
+<head>
+<style type="text/css">
+.item{
+	width:300px;
+	height: 100px;
+	border: 1px solid rgb(221, 220, 220);
+	border-collapse: collapse;
+	margin: 2% 5%;
+	display:inline-block;
+	text-align:center;
 
+}
+a:link, a:visited {
+	color:rgb(83, 83, 83);
+}
+a:hover {
+	color:black;
+	font-weight:bold;
+}
+a:active {
+	color: rgb(100, 161, 202);
+	font-weight: bold;
+}
+</style>
+</head>
 <body class="hold-transition skin-blue sidebar-mini">
 	<div class="wrapper">
 		<!-- Main Header -->
@@ -38,11 +62,30 @@
 				</c:if>		
 				<%-- 로그인 한 상태 --%>
 				<c:if test="${sessionScope.user != null }">
-					<ul>
-						<li><a href="/member/checkPW?url=modify">회원정보 수정</a></li>
-						<li><a href="/member/checkPW?url=updatePW">비밀번호 변경</a></li>
-						<li><a href="/member/checkPW?url=delete">회원 탈퇴</a></li>
+				<div class="row">
+				<div class="col-md-10" style="width:80%; min-width:300px; background-color:white; padding: 50px 180px;" class="container text-center">
+					<div class="col-sm-12 member_info">
+						<table style="text-align:left;">
+							<tr>
+								<td style="font-size:16px;">${user.mem_name }님의 회원등급은 <b>[Member]</b>입니다.</td>
+							</tr>					
+							<tr>
+								<td>가용 포인트 : ${user.mem_point }</td>
+							</tr>					
+						</table>
+					</div>
+					<br><br><br><br>
+					<div class="col-sm-1"></div>
+					<ul class="col-sm-10 items" style="list-style:none;">
+						<li class="item"><a href="/order/orderHistory"><br><br>주문내역</a></li>
+						<li class="item"><a href="/member/checkPW?url=modify"><br><br>회원정보 수정</a></li>
+						<br>
+						<li class="item"><a href="/member/checkPW?url=updatePW"><br><br>비밀번호 변경</a></li>
+						<li class="item"><a href="/member/checkPW?url=delete"><br><br>회원 탈퇴</a></li>
 					</ul>
+					<div class="col-sm-1"></div>
+				</div>
+				</div>
 				</c:if>		
 				
 				

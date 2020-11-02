@@ -40,7 +40,7 @@
 							<button type="button" id="btn_toHistoryList" class="btn btn-default">목록으로</button>	
 							<input type="hidden" name="ord_idx" value="${buyer.ord_idx}" />
 							<input type="hidden" name="page" value="${cri.page}" /> 
-							<input type="hidden" name="page" value="${cri.perPageNum}" />
+							<input type="hidden" name="perPageNum" value="${cri.perPageNum}" />
 						</a>
 						</div>
 				<div class="box" style="border: none;">

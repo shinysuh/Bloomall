@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -57,6 +58,12 @@ public class OrderController {
 			[여러상품(선택상품)] - orderCartChk(), cartService.emptyCart() 
 			[장바구니전체] - orderCartAll(), cartService.emptyCartAll()  
 	 */
+	
+	// 주문 완료 페이지
+	@RequestMapping(value = "/complete", method=RequestMethod.GET)
+	public void orderComplete() {
+		
+	}
 	 
 	
 	// [단일]
@@ -88,18 +95,29 @@ public class OrderController {
 	
 	// 구매
 	@RequestMapping(value = "/orderOne", method=RequestMethod.POST)
-	public String orderOne(OrderVO orderVO, OrderDetailVO detailVO, RedirectAttributes rttr) throws Exception{
+	public String orderOne(OrderVO orderVO, OrderDetailVO detailVO, @RequestParam int mem_point, RedirectAttributes rttr, HttpSession session) throws Exception{
 		
 		logger.info("======== orderOne() called ========");
 		logger.info(orderVO.toString());
 		logger.info(detailVO.toString());
+		
+		MemberDTO dto = (MemberDTO) session.getAttribute("user");
+		String mem_id = dto.getMem_id();
 
 		// 주문번호 저장
 		int ord_idx = orderVO.getOrd_idx();
 		rttr.addAttribute("ord_idx", ord_idx);
+
+//		rttr 넘어가는지 확인용 코드
+//		rttr.addAttribute("ord_idx", orderVO.getMem_id());
 		
 		// 구매
 		service.orderOne(orderVO, detailVO);
+		
+		// 포인트 업데이트
+//		int point = service.getPoint(ord_idx);
+//		dto.setMem_point(point);
+		service.updatePoint(mem_id, mem_point);
 		
 		return "redirect:/order/complete";
 	}
@@ -150,16 +168,21 @@ public class OrderController {
 	
 	// 구매
 	@RequestMapping(value = "/orderChk", method=RequestMethod.POST)
-	public String orderChk(OrderVO orderVO, List<OrderDetailVO> detailList, RedirectAttributes rttr) throws Exception{
+	public String orderChk(OrderVO orderVO, List<OrderDetailVO> detailList, @RequestParam int mem_point, RedirectAttributes rttr, HttpSession session) throws Exception{
 		
 		logger.info("======== orderChk() called ========");
 		logger.info(orderVO.toString());
+		logger.info("detailList.size() : " + detailList.size());
 				
 		// 구매
 		service.orderChk(orderVO, detailList);
 		// 주문번호 저장
 		int ord_idx = orderVO.getOrd_idx();
 		rttr.addAttribute("ord_idx", ord_idx);
+		
+		// 포인트 업데이트
+		MemberDTO dto = (MemberDTO) session.getAttribute("user");
+		service.updatePoint(dto.getMem_id(), mem_point);
 		
 		return "redirect:/order/complete";
 	}
@@ -194,7 +217,7 @@ public class OrderController {
 		
 		// 구매
 		@RequestMapping(value = "/orderCartOne", method=RequestMethod.POST)
-		public String orderCartOne(OrderVO orderVO, OrderDetailVO detailVO, HttpSession session, RedirectAttributes rttr) throws Exception{
+		public String orderCartOne(OrderVO orderVO, OrderDetailVO detailVO, @RequestParam int mem_point, HttpSession session, RedirectAttributes rttr) throws Exception{
 			
 			logger.info("======== orderOne() called ========");
 			logger.info(orderVO.toString());
@@ -202,10 +225,16 @@ public class OrderController {
 			
 			// 구매 - 현재 세션의 아이디 파라미터로 가져옴
 			MemberDTO dto = (MemberDTO) session.getAttribute("user");
-			service.orderCartOne(dto.getMem_id(), orderVO, detailVO);
+			String mem_id = dto.getMem_id();
+			service.orderCartOne(mem_id, orderVO, detailVO);
 			// 주문번호 저장
 			int ord_idx = orderVO.getOrd_idx();
 			rttr.addAttribute("ord_idx", ord_idx);
+			
+			// 포인트 업데이트
+//			int point = service.getPoint(ord_idx);
+//			dto.setMem_point(point);
+			service.updatePoint(mem_id, mem_point);
 			
 			return "redirect:/order/complete";
 		}
@@ -252,17 +281,21 @@ public class OrderController {
 	
 	// 구매
 	@RequestMapping(value = "/orderCartChk", method=RequestMethod.POST)
-	public String orderCartChk(OrderVO orderVO, List<OrderDetailVO> detailList, HttpSession session, RedirectAttributes rttr) throws Exception{
+	public String orderCartChk(OrderVO orderVO, List<OrderDetailVO> detailList, @RequestParam int mem_point, HttpSession session, RedirectAttributes rttr) throws Exception{
 		
 		logger.info("======== orderCartChk() called ========");
 		
 		// 구매 - 현재 세션의 아이디 파라미터로 가져옴
 		MemberDTO dto = (MemberDTO) session.getAttribute("user");
-		service.orderCartChk(dto.getMem_id(), orderVO, detailList);
+		String mem_id = dto.getMem_id();
+		service.orderCartChk(mem_id, orderVO, detailList);
 		
 		// 주문번호 저장
 		int ord_idx = orderVO.getOrd_idx();
 		rttr.addAttribute("ord_idx", ord_idx);
+		
+		// 포인트 업데이트
+		service.updatePoint(mem_id, mem_point);
 		
 		return "redirect:/order/complete";
 	}
@@ -302,17 +335,21 @@ public class OrderController {
 	
 	// 구매
 	@RequestMapping(value = "/orderCartAll", method=RequestMethod.POST)
-	public String orderCartAll(OrderVO orderVO, List<OrderDetailVO> detailList, HttpSession session, RedirectAttributes rttr) throws Exception{
+	public String orderCartAll(OrderVO orderVO, List<OrderDetailVO> detailList, @RequestParam int mem_point, HttpSession session, RedirectAttributes rttr) throws Exception{
 		
 		logger.info("======== orderCartAll() called ========");
 		
 		// 구매 - 현재 세션의 아이디 파라미터로 가져옴
 		MemberDTO dto = (MemberDTO) session.getAttribute("user");
-		service.orderCartAll(dto.getMem_id(),orderVO, detailList);
+		String mem_id = dto.getMem_id();
+		service.orderCartAll(mem_id,orderVO, detailList);
 
 		// 주문번호 저장
 		int ord_idx = orderVO.getOrd_idx();
 		rttr.addAttribute("ord_idx", ord_idx);
+		
+		// 포인트 업데이트
+		service.updatePoint(mem_id, mem_point);
 		
 		return "redirect:/order/complete";
 	}
@@ -325,19 +362,23 @@ public class OrderController {
 	public String orderHistory(@ModelAttribute("cri") Criteria cri, Model model, HttpSession session) throws Exception{
 		
 		logger.info("======== orderHistory() called ========");
-		
+
+		// map 작업 전에 perPageNum 작업부터 먼저 => 아니면 자꾸 perPageNum 5개로 시작됨
+		PageMaker pageMaker = new PageMaker();
+		pageMaker.setCri(cri);
+		pageMaker.getCri().setPerPageNum(10);
+
+		logger.info(cri.toString());
+
 		MemberDTO dto = (MemberDTO) session.getAttribute("user");
 		String mem_id = dto.getMem_id();
+		pageMaker.setTotalCount(service.orderCount(mem_id));
 		
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("mem_id", mem_id);
 		map.put("cri", cri);
 		
 		List<OrderHistoryVO> orderHistory = service.orderHistoryList(map);
-		
-		PageMaker pageMaker = new PageMaker();
-		pageMaker.setCri(cri);
-		pageMaker.setTotalCount(service.orderCount(mem_id));
 		
 		model.addAttribute("orderHistory", orderHistory);
 		model.addAttribute("pageMaker", pageMaker);
@@ -359,6 +400,7 @@ public class OrderController {
 		
 		PageMaker pageMaker = new PageMaker();
 		pageMaker.setCri(cri);
+		pageMaker.getCri().setPerPageNum(10);
 		
 		model.addAttribute("orderDetail", orderDetail);
 		model.addAttribute("buyer", buyer);

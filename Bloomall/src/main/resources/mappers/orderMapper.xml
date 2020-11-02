@@ -10,6 +10,22 @@
 		select seq_ord_idx.nextval from dual
 	</select>
 
+	<!-- 주문당 포인트
+	<select id="getPoint" resultType="int" parameterType="int">
+		select sum(trunc(point,0))
+		from (select ord_price * 0.03 * ord_amount as point
+		      from ord_detail_tb
+		        where ord_idx = #{ord_idx}
+		      )
+	</select>
+	 -->
+	
+	<!-- 회원 포인트 적립 -->
+	<update id="updatePoint" parameterType="Map">
+		update member_tb set mem_point= mem_point + #{mem_point}
+		where mem_id=#{mem_id}
+	</update>
+	
 
 	<!-- 주문내역 추가(주문상세테이블) -->
 	<insert id="addOrderDetailInfo" parameterType="OrderDetailVO">

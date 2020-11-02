@@ -182,5 +182,20 @@ public class OrderServiceImpl implements OrderService {
 		return dao.recipientInfo(ord_idx);
 	}
 
+//	// 적립 포인트
+//	@Override
+//	public int getPoint(int ord_idx) throws Exception {
+//		return dao.getPoint(ord_idx);
+//	}
 
+	// 회원 포인트 적립
+	@Override
+	public void updatePoint(String mem_id, int mem_point) throws Exception {
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("mem_id",mem_id);
+		map.put("mem_point",mem_point);
+		
+		dao.updatePoint(map);
+	}
 }

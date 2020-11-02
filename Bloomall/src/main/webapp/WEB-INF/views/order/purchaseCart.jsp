@@ -12,7 +12,7 @@ $(function(){
 	bringTotals();
 	
 	// <form>의 action 세팅 => ${type} 값에 따라 form의 action 달라짐. ${type} => 1:단일상품구매 / 2:여러상품구매
-	formSetting()
+	formSetting();
 });
 
 function formSetting(){
@@ -86,9 +86,9 @@ function formSetting(){
 									<c:forEach items="${productList}" var="productList" varStatus="i"> <!-- i는 리스트 컬렉션의 인덱스 역할 -->
 										<tr id="productList_${productList.prd_idx}" class="productRow">
 											<td class="col-md-1">
-												<input type="hidden" id="amount_${productList.prd_idx}" name="detailList[${i.index}].ord_amount" value="${amountList[i.index]}" />
-												<input type="hidden" name="detailList[${i.index}].prd_idx" value="${productList.prd_idx}" />
-												<input type="hidden" name="detailList[${i.index}].odr_price" value="${productList.prd_dc_price}" />
+												<input type="hidden" id="amount_${productList.prd_idx}" name="ord_amount" value="${amountList[i.index]}" />
+												<input type="hidden" name="prd_idx" value="${productList.prd_idx}" />
+												<input type="hidden" name="ord_price" value="${productList.prd_dc_price}" />
 												<a href="/product/detail?prd_idx=${productList.prd_idx}&ctgr_cd=${ctgr_cd}">
 													<img src="/product/fileDisplay?fileName=${productList.prd_img }" style="width:100px;">
 												</a>
