@@ -35,9 +35,6 @@ public interface OrderDAO {
 	// 주문자 정보(주문테이블)
 	public OrderVO recipientInfo(int ord_idx) throws Exception;
 	
-//	// 적립 포인트
-//	public int getPoint(int ord_idx) throws Exception;
-	
 	// 회원 포인트 적립
 	public void updatePoint(Map<String, Object> map) throws Exception;
 }

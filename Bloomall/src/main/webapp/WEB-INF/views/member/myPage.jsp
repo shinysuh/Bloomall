@@ -12,7 +12,7 @@
 	height: 100px;
 	border: 1px solid rgb(221, 220, 220);
 	border-collapse: collapse;
-	margin: 2% 5%;
+	margin: 2%;
 	display:inline-block;
 	text-align:center;
 
@@ -67,23 +67,22 @@ a:active {
 					<div class="col-sm-12 member_info">
 						<table style="text-align:left;">
 							<tr>
-								<td style="font-size:16px;">${user.mem_name }님의 회원등급은 <b>[Member]</b>입니다.</td>
+								<td style="font-size:16px;">${vo.mem_name }님의 회원등급은 <b>[Member]</b>입니다.</td>
 							</tr>					
 							<tr>
-								<td>가용 포인트 : ${user.mem_point }</td>
+								<td>가용 포인트 : ${vo.mem_point }</td>
 							</tr>					
 						</table>
 					</div>
 					<br><br><br><br>
 					<div class="col-sm-1"></div>
-					<ul class="col-sm-10 items" style="list-style:none;">
-						<li class="item"><a href="/order/orderHistory"><br><br>주문내역</a></li>
-						<li class="item"><a href="/member/checkPW?url=modify"><br><br>회원정보 수정</a></li>
+					<ul class="col-sm-11 items" style="list-style:none;">
+						<a href="/order/orderHistory"><li class="item"><br><br>주문내역</li></a>
+						<a href="/member/checkPW?url=modify"><li class="item"><br><br>회원정보 수정</li></a>
 						<br>
-						<li class="item"><a href="/member/checkPW?url=updatePW"><br><br>비밀번호 변경</a></li>
-						<li class="item"><a href="/member/checkPW?url=delete"><br><br>회원 탈퇴</a></li>
+						<a href="/member/checkPW?url=updatePW"><li class="item"><br><br>비밀번호 변경</li></a>
+						<a href="/member/checkPW?url=delete"><li class="item"><br><br>회원 탈퇴</li></a>
 					</ul>
-					<div class="col-sm-1"></div>
 				</div>
 				</div>
 				</c:if>		

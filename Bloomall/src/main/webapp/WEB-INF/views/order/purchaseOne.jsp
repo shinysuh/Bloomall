@@ -24,7 +24,7 @@ function formSetting(){
 	if(type == 1){  // 단일상품 구매
 		form.attr("action", "/order/orderOne");
 	}else if(type == 2){  // 여러상품 구매
-		form.attr("action", "/order/orderChk");
+		form.attr("action", "/order/orderCartOne");
 	}
 }
 
@@ -81,40 +81,38 @@ function formSetting(){
 									
 									<%-- 상품리스트 출력 --%>
 									<tbody>
-									<c:forEach items="${productList}" var="productList" varStatus="i"> <!-- i는 리스트 컬렉션의 인덱스 역할 -->
-										<tr id="productList_${productList.prd_idx}" class="productRow">
+										<tr id="product" class="productRow">
 											<td class="col-md-1">
-												<input type="hidden" id="amount_${productList.prd_idx}" name="ord_amount" value="${amountList[i.index]}" />
-												<input type="hidden" name="prd_idx" value="${productList.prd_idx}" />
-												<input type="hidden" name="ord_price" value="${productList.prd_dc_price}" />
-												<a href="/product/detail?prd_idx=${productList.prd_idx}&ctgr_cd=${ctgr_cd}">
-													<img src="/product/fileDisplay?fileName=${productList.prd_img }" style="width:100px;">
+												<input type="hidden" id="amount_${product.prd_idx}" name="ord_amount" value="${amount}" />
+												<input type="hidden" name="prd_idx" value="${product.prd_idx}" />
+												<input type="hidden" name="ord_price" value="${product.prd_dc_price}" />
+												<a href="/product/detail?prd_idx=${product.prd_idx}&ctgr_cd=${ctgr_cd}">
+													<img src="/product/fileDisplay?fileName=${product.prd_img }" style="width:100px;">
 												</a>
 											</td>
 											<td class="col-md-2">
-												<a href="/product/detail?prd_idx=${productList.prd_idx}&ctgr_cd=${ctgr_cd}"
-													style="color: black;"> ${productList.prd_title} </a>
+												<a href="/product/detail?prd_idx=${product.prd_idx}&ctgr_cd=${ctgr_cd}"
+													style="color: black;"> ${product.prd_title} </a>
 											</td>
 											<td class="col-md-1">
-												<p><fmt:formatNumber value="${productList.prd_price}" pattern="###,###,###" />원</p>
-												<input type="hidden" name="prd_price" value="${productList.prd_price}" />
+												<p><fmt:formatNumber value="${product.prd_price}" pattern="###,###,###" />원</p>
+												<input type="hidden" name="prd_price" value="${product.prd_price}" />
 											<td class="col-md-2">
-												<p><fmt:formatNumber value="${productList.prd_dc_price}" pattern="###,###,###" />원
+												<p><fmt:formatNumber value="${product.prd_dc_price}" pattern="###,###,###" />원
 													<br>
-												(<fmt:formatNumber value="${100-(productList.prd_dc_price / productList.prd_price * 100)}" pattern="###,###,###" />%
+												(<fmt:formatNumber value="${100-(product.prd_dc_price / product.prd_price * 100)}" pattern="###,###,###" />%
 												<span style="color:rgb(209, 4, 199);"> &#8681;</span>) <br>
-												<span style="color:#4e789c;font-size:13px;"> P <fmt:formatNumber value="${productList.prd_price *0.03 }" pattern="##,###"/></span>
+												<span style="color:#4e789c;font-size:13px;"> P <fmt:formatNumber value="${product.prd_price *0.03 }" pattern="##,###"/></span>
 												</p>
-												<input type="hidden" name="prd_dc_price" value="${productList.prd_dc_price}" /> 
+												<input type="hidden" name="prd_dc_price" value="${product.prd_dc_price}" /> 
 											<td class="col-md-1">
-												<p>${amountList[i.index]}</p>
-												<input type="hidden" name="amount" value="${amountList[i.index]}" /> 
+												<p>${amount}</p>
+												<input type="hidden" name="amount" value="${amount}" /> 
 											</td>
 											<td class="col-md-1">
-												<p style="font-weight:bold;"><fmt:formatNumber value="${productList.prd_dc_price * amountList[i.index]}"  pattern="###,###,###" />원</p>
+												<p style="font-weight:bold;"><fmt:formatNumber value="${product.prd_dc_price * amount}"  pattern="###,###,###" />원</p>
 											</td>
 										</tr>
-									</c:forEach>
 									</tbody>
 								</table>
 								<br><br><br>

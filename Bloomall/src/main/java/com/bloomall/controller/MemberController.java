@@ -154,7 +154,14 @@ public class MemberController {
 	
 	// 마이페이지 뷰
 	@RequestMapping(value = "/myPage", method = RequestMethod.GET)
-	public void myPage() {
+	public void myPage(HttpSession session, Model model) throws Exception {
+		MemberDTO dto = (MemberDTO) session.getAttribute("user");
+		
+		String mem_id = dto.getMem_id();
+		
+		MemberVO vo = service.getUserInfo(mem_id);
+		
+		model.addAttribute("vo", vo);
 		
 	}
 	

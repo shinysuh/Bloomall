@@ -27,7 +27,7 @@ public class OrderServiceImpl implements OrderService {
 	// [단일상품] - 상품상세/상품리스트
 	@Transactional
 	@Override
-	public void orderOne(OrderVO orderVO, OrderDetailVO detailVO) throws Exception {
+	public int orderOne(OrderVO orderVO, OrderDetailVO detailVO) throws Exception {
 		
 		// 주문정보, 주문상세정보에 동일한 주문번호 적용을 위해 주문번호를 먼저 따로 가져옴
 		int ord_idx = dao.getOrderCode();
@@ -40,12 +40,14 @@ public class OrderServiceImpl implements OrderService {
 		// 2)주문상세 정보 저장(주문상세테이블)
 		detailVO.setOrd_idx(ord_idx);
 		dao.addOrderDetailOne(detailVO);
+		
+		return ord_idx;
 	}
 
 	// [여러상품(선택상품)] - 상품리스트/카트(선택)/카트(전체)
 	@Transactional
 	@Override
-	public void orderChk(OrderVO orderVO, List<OrderDetailVO> detailList) throws Exception {
+	public int orderChk(OrderVO orderVO, List<OrderDetailVO> detailList) throws Exception {
 		
 		// 시퀀스 가져오기
 		int ord_idx = dao.getOrderCode();
@@ -67,13 +69,15 @@ public class OrderServiceImpl implements OrderService {
 		}
 		// 주문상세정보 리스트로 저장
 		dao.addOrderDetailList(detailList);
+		
+		return ord_idx;
 	}
 	
 	
 	// [단일상품] - 카트
 	@Transactional
 	@Override
-	public void orderCartOne(String mem_id, OrderVO orderVO, OrderDetailVO detailVO) throws Exception {
+	public int orderCartOne(String mem_id, OrderVO orderVO, OrderDetailVO detailVO) throws Exception {
 		
 		// 주문정보, 주문상세정보에 동일한 주문번호 적용을 위해 주문번호를 먼저 따로 가져옴
 		int ord_idx = dao.getOrderCode();
@@ -93,12 +97,14 @@ public class OrderServiceImpl implements OrderService {
 		
 		// 장바구니에서 해당 상품 삭제
 		cartService.emptyCart(map);
+		
+		return ord_idx;
 	}
 	
 	// [여러상품(선택)] - 카트
 	@Transactional
 	@Override
-	public void orderCartChk(String mem_id, OrderVO orderVO, List<OrderDetailVO> detailList) throws Exception {
+	public int orderCartChk(String mem_id, OrderVO orderVO, List<OrderDetailVO> detailList) throws Exception {
 		
 		// 주문번호 시퀀스
 		int ord_idx = dao.getOrderCode();
@@ -130,12 +136,14 @@ public class OrderServiceImpl implements OrderService {
 		}
 		// 주문상세정보 리스트로 저장
 		dao.addOrderDetailList(detailList);
+		
+		return ord_idx;
 	}
 	
 	// [전체상품] - 카트
 	@Transactional
 	@Override
-	public void orderCartAll(String mem_id, OrderVO orderVO, List<OrderDetailVO> detailList) throws Exception {
+	public int orderCartAll(String mem_id, OrderVO orderVO, List<OrderDetailVO> detailList) throws Exception {
 		
 		int ord_idx = dao.getOrderCode();
 		
@@ -155,6 +163,8 @@ public class OrderServiceImpl implements OrderService {
 
 		// 장바구니 전체 비우기
 		cartService.emptyCartAll(mem_id);
+		
+		return ord_idx;
 	}
 	
 
@@ -181,12 +191,6 @@ public class OrderServiceImpl implements OrderService {
 	public OrderVO recipientInfo(int ord_idx) throws Exception {
 		return dao.recipientInfo(ord_idx);
 	}
-
-//	// 적립 포인트
-//	@Override
-//	public int getPoint(int ord_idx) throws Exception {
-//		return dao.getPoint(ord_idx);
-//	}
 
 	// 회원 포인트 적립
 	@Override

@@ -49,31 +49,29 @@
 								</c:if>
 								
 								<%-- 주문내역이 존재하는 경우, 리스트 출력 --%>
+
 								<c:forEach items="${orderHistory}" var="orderHistory" varStatus="status">
-								<c:set var="idx" value="${orderHistory.ord_idx}"></c:set>
-								<c:if test="${status.index == 0 || orderHistory.ord_idx != idx })">
-									<tr>
-										<td colspan="4" style="text-aligh:right;">
+								<c:if test="${status.index == 0 || orderHistory.ord_idx != idx}">
+									<tr style="background-color: rgb(229, 217, 236);">
+										<td class="col-sm-3" style="padding-top:15px;">
+											주문번호 : ${orderHistory.ord_idx} / 주문날짜: <fmt:formatDate value="${orderHistory.ord_date }" pattern="yyyy/MM/dd HH:mm"/> 
+										</td>
+										<td class="col-sm-1"></td>
+										<td class="col-sm-1"></td>
+										<td class="col-sm-2" style="text-align:right;">
 											<a href="/order/orderDetail?ord_idx=${orderHistory.ord_idx}">
-												<button class="btn btn-primary">주문상세보기</button>
+												<button class="btn btn-primary" style="float:right;height:5%;font-size:12px;">주문상세보기</button>
 											</a>
 										</td>
 									</tr>
-									<tr style="font-size:12px;">
-										<td class="col-sm-3">주문번호 : ${orderHistory.ord_idx}</td>
+									<tr>
+										<td class="col-sm-3">주문자: ${user.mem_name } / 수령자: ${orderHistory.ord_recp_name }</td>
 										<td class="col-sm-1"></td>
 										<td class="col-sm-1"></td>
-										<td class="col-sm-2" style="text-align:right;">주문자: ${user.mem_name } / 수령자: ${orderHistory.ord_recp_name }</td>
-									</tr>
-									<tr style="font-size:12px;">
-										<td class="col-sm-3">주문날짜: ${orderHistory.ord_date }</td>
-										<td class="col-sm-1"></td>
-										<td class="col-sm-1"></td>
-										<td class="col-sm-2" style="text-align:right;font-weight:bold;font-size:16px;">
+										<td class="col-sm-2" style="text-align:right;font-weight:bold;font-size:15px;">
 											총 주문금액: <fmt:formatNumber value="${orderHistory.ord_tot_price}" pattern="###,###,###"/>원
 										</td>
 									</tr>
-										<hr>
 									<tr>
 										<td>상품명</td>
 										<td>가격</td>
@@ -87,6 +85,7 @@
 										<td>${orderHistory.ord_amount}</td>
 										<td style="font-weight:bold;"><fmt:formatNumber value="${orderHistory.prd_price * orderHistory.ord_amount}" pattern="###,###,###"/>원</td>
 									</tr>
+								<c:set var="idx" value="${orderHistory.ord_idx}"></c:set>
 								</c:forEach>
 							</table>
 						</div>

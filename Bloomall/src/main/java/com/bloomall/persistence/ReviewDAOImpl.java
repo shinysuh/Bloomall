@@ -42,11 +42,16 @@ public class ReviewDAOImpl implements ReviewDAO {
 		session.delete(NS + ".deleteRvw", rvw_idx);
 	}
 
+	//리뷰 평균(평점)
+	@Override
+	public double rvwAverage(int prd_idx) throws Exception {
+		return session.selectOne(NS + ".rvwAverage", prd_idx);
+	}
+
 	// 리뷰 리스트
 	@Override
 	public List<ReviewVO> rvwList(Map<String, Object> map) throws Exception {
 		return session.selectList(NS + ".rvwList", map);
 	}
 
-	
 }

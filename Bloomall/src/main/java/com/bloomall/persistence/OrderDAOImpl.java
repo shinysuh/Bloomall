@@ -69,12 +69,6 @@ public class OrderDAOImpl implements OrderDAO {
 		return session.selectOne(NS + ".recipientInfo", ord_idx);
 	}
 
-//	// 적립 포인트
-//	@Override
-//	public int getPoint(int ord_idx) throws Exception {
-//		return session.selectOne(NS + ".getPoint", ord_idx);
-//	}
-
 	// 회원 포인트 적립
 	@Override
 	public void updatePoint(Map<String, Object> map) throws Exception {

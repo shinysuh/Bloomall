@@ -31,11 +31,11 @@
 			<section class="content container-fluid">
 				<div class="box" style="border: none; padding:200px 50px; text-align: center;">
 					<div class="box-body"  >
-						<h3>주문번호 ${ord_idx}의 주문이 완료되었습니다.</h3><br>
-						<form id="orderHistory" action="/order/orderDetail?ord_idx=${ord_idx}" method="post" style="text-align:center;">
-							<button type="button" class="btn btn-default" id="orderAll">주문내역 확인하기</button>
+						<h3>주문번호 <b>${ord_idx}</b>의 주문이 완료되었습니다.</h3><br>
+						<div id="orderHistory" style="text-align:center;">
+							<a href="/order/orderDetail?ord_idx=${ord_idx}"><button type="button" class="btn btn-default" id="orderAll">주문내역 확인하기</button></a>
 							<a href="/product/list?ctgr_cd=all"><button type="button" id="goToListAll" class="btn btn-default">쇼핑 계속하기</button></a>
-						</form>
+						</div>
 					</div>
 				</div>
 			</section>

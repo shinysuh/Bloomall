@@ -69,6 +69,8 @@ $(function() {
         return stars;
     });
 
+    
+    
 
     // 별점 클릭 시, 색상 변경
     $("#star_score a").click(function() {
@@ -319,6 +321,9 @@ function getStars(starInfo) {
             $("#more_rvw").remove();
         }
     });
+
+    // 별점 평균 출력
+    avg_rating();
 }
 
 // 핸들바 함수 : 후기 있을 경우
@@ -365,4 +370,48 @@ function printPage(pageMaker, target) {
 
     target.html(str);
 }
+
+// 별점 평균 출력 함수
+function avg_rating(){
+
+    var average = $("#avg_rating").val();
+
+    var star1 = $("#star1");
+    var star2 = $("#star2");
+    var star3 = $("#star3");
+    var star4 = $("#star4");
+    var star5 = $("#star5");
+
+    star1.attr("class", "fa fa-star text-default");
+    star2.attr("class", "fa fa-star text-default");
+    star3.attr("class", "fa fa-star text-default");
+    star4.attr("class", "fa fa-star text-default");
+    star5.attr("class", "fa fa-star text-default");
+
+    if(average >= 0 && average < 1){
+
+    }else if(average >= 1 && average < 3){
+        star1.attr("class", "fa fa-star text-primary");
+    }else if(average >= 3 && average < 5){
+        star1.attr("class", "fa fa-star text-primary");
+        star2.attr("class", "fa fa-star text-primary");
+    }else if(average >= 5 && average < 7){
+        star1.attr("class", "fa fa-star text-primary");
+        star2.attr("class", "fa fa-star text-primary");
+        star3.attr("class", "fa fa-star text-primary");
+    }else if(average >= 7 && average < 9){
+        star1.attr("class", "fa fa-star text-primary");
+        star2.attr("class", "fa fa-star text-primary");
+        star3.attr("class", "fa fa-star text-primary");
+        star4.attr("class", "fa fa-star text-primary");
+    }else if(average >= 9){
+        star1.attr("class", "fa fa-star text-primary");
+        star2.attr("class", "fa fa-star text-primary");
+        star3.attr("class", "fa fa-star text-primary");
+        star4.attr("class", "fa fa-star text-primary");
+        star5.attr("class", "fa fa-star text-primary");
+    }
+
+}
+
 

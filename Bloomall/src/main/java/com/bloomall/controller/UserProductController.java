@@ -202,6 +202,8 @@ public class UserProductController {
 		model.addAttribute("pageMaker", pageMaker);
 		// 해당 상품에 달린 리뷰 개수 -> 모델로 jsp에 보냄
 		model.addAttribute("rvwCount", reviewService.reviewCount(vo.getPrd_idx()));
+		// 해당 상품의 리뷰 평점
+		model.addAttribute("rvwAverage", reviewService.rvwAverage(prd_idx));
 		
 		return "product/detail";
 	}
@@ -244,6 +246,8 @@ public class UserProductController {
 		model.addAttribute("pageMaker", pageMaker);
 		// 해당 상품에 달린 리뷰 개수 -> 모델로 jsp에 보냄
 		model.addAttribute("rvwCount", reviewService.reviewCount(vo.getPrd_idx()));		
+		// 해당 상품의 리뷰 평점
+		model.addAttribute("rvwAverage", reviewService.rvwAverage(prd_idx));
 		
 		return "product/detailSearch";
 	}

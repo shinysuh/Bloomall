@@ -223,38 +223,13 @@ $(function(){
 												<div style="margin-top: 25px;">
 													<div class="form-group">
 														<div class="stars">
-													        <label for="stars-rating-5"><i class="fa fa-star text-primary"></i></label>
-												    	    <label for="stars-rating-4"><i class="fa fa-star text-primary"></i></label>
-												        	<label for="stars-rating-3"><i class="fa fa-star text-primary"></i></label>
-												        	<label for="stars-rating-2"><i class="fa fa-star text-primary"></i></label>
-												         	<label for="stars-rating-1"><i class="fa fa-star text-default"></i></label>
-												         	<b style="color:black; font-size:22px">9.3 <br></b>
-												         	
-												         	
-				         				<!-- 해결되면 이 줄 삭제 --><em style="color:red;font-size:14px;font-weight:bold;">(평점 EL 문법으로 표시)</em>
-												         	<%--  
-																
-																<c:set var="ageTotal" value="${0}" />
-																<c:forEach var="person" items="${personList}">
-																  <c:set var="ageTotal" value="${ageTotal + person.age}" />
-																  <tr><td>${person.name}<td><td>${person.age}</td></tr>
-																</c:forEach>
-																
-																
-																-- 리뷰 카운트와 리뷰 score를 상품테이블에 추가 후
-																<c:set var="rvwtotal" value="${0}" />
-																<c:forEach var="vo" items="${vo}">
-																  <c:set var="rvwtotal" value="${rvwtotal + vo.rvw_score}" />
-																  <tr><td>${vo.rvw_score}<td>
-																</c:forEach>
-																${rvwtotal / rvw_score.length}
-																
-																--%>
-												         	
-												         	
-												         	
-												         	
-												         	
+												         	<label><i id="star1"></i></label>
+												        	<label><i id="star2"></i></label>
+												        	<label><i id="star3"></i></label>
+												    	    <label><i id="star4"></i></label>
+													        <label><i id="star5"></i></label>
+												         	<input type="hidden" id="avg_rating"  value="${rvwAverage}" />
+												         	<b style="color:black; font-size:22px" ><fmt:formatNumber value="${rvwAverage}" pattern=".##" /> <br></b>
 														</div>
 														<div class="rvwCount">
 															판매지수 <span style="color:red;"> (판매count 넣기)</span>

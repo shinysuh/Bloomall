@@ -31,6 +31,13 @@
 		where rvw_idx=#{rvw_idx}
 	</delete>
 	
+	<!-- 리뷰 평균(평점) -->
+	<select id="rvwAverage" resultType="double" parameterType="int">
+		select avg(rvw_rating)*2
+		from review_tb
+		where prd_idx=#{prd_idx}
+	</select>
+	
 	<!-- 리뷰 리스트 (페이징 포함) -->
 	<select id="rvwList" resultType="ReviewVO" parameterType="Map">
 		select rvw_idx, mem_id, prd_idx, rvw_content, rvw_rating, rvw_regdate

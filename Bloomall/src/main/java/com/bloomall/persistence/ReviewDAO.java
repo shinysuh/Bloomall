@@ -19,6 +19,9 @@ public interface ReviewDAO {
 	// 리뷰 삭제
 	public void deleteRvw(int rvw_idx) throws Exception;
 	
+	// 리뷰 평균(평점)
+	public double rvwAverage(int prd_idx) throws Exception;
+	
 	// 리뷰 리스트
 	public List<ReviewVO> rvwList(Map<String, Object> map) throws Exception;
 	

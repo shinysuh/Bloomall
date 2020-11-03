@@ -74,23 +74,20 @@ public class OrderController {
 		
 		logger.info("======== purchaseOne() called ========");
 		
-		// 모델 attribute명 - 여러상품 메소드 attribute명과 일치시켜 줌
-		List<ProductVO> productList = new ArrayList<ProductVO>();
-		List<Integer> amountList = new ArrayList<Integer>();
+		// 모델 attribute명 - 카트 메소드 attribute명과 일치시켜 줌
+		ProductVO product = productService.productDetail(prd_idx);
+		int amount = ord_amount;
 		
-		productList.add(productService.productDetail(prd_idx));
-		amountList.add(ord_amount);
-		
-		// jsp에서 [단일] or [복수] 상품 구매여부를 구별하기 위한 값 (단일:1 / 복수:2)
+		// jsp에서 [리스트] or [카트] 상품 구매여부를 구별하기 위한 값 (리스트단일:1 / 카트단일:2)
 		int type = 1;
 		
 		MemberDTO dto = (MemberDTO) session.getAttribute("user");
 		model.addAttribute("user", memberService.getUserInfo(dto.getMem_id()));
-		model.addAttribute("productList", productList);
-		model.addAttribute("amountList", amountList);
+		model.addAttribute("product", product);
+		model.addAttribute("amount", amount);
 		model.addAttribute("type", type);
 		
-		return "/order/purchase";
+		return "/order/purchaseOne";
 	}
 	
 	// 구매
@@ -103,25 +100,65 @@ public class OrderController {
 		
 		MemberDTO dto = (MemberDTO) session.getAttribute("user");
 		String mem_id = dto.getMem_id();
-
-		// 주문번호 저장
-		int ord_idx = orderVO.getOrd_idx();
-		rttr.addAttribute("ord_idx", ord_idx);
-
-//		rttr 넘어가는지 확인용 코드
-//		rttr.addAttribute("ord_idx", orderVO.getMem_id());
 		
-		// 구매
-		service.orderOne(orderVO, detailVO);
-		
+		// 구매 & 주문번호 저장
+		int ord_idx = service.orderOne(orderVO, detailVO);
+		rttr.addFlashAttribute("ord_idx", ord_idx);
+
 		// 포인트 업데이트
-//		int point = service.getPoint(ord_idx);
-//		dto.setMem_point(point);
 		service.updatePoint(mem_id, mem_point);
 		
 		return "redirect:/order/complete";
 	}
 	
+	//-------------------------------------------------------------------------------------------
+	// [단일]
+	// 카트 - [주문하기] 단일상품
+	/* Param : prd_idx, ord_amount, httpsession, model  */
+	@RequestMapping(value = "/cartOne", method=RequestMethod.GET)
+	public String cartOne(@RequestParam int prd_idx, @RequestParam int cart_amount, HttpSession session, Model model) throws Exception{
+		
+		logger.info("======== cartOne() called ========");
+		
+		// 모델 attribute명 - 리스트 메소드 attribute명과 일치시켜 줌
+		ProductVO product = productService.productDetail(prd_idx);
+		int amount = cart_amount;
+		
+		// jsp에서 [리스트] or [카트] 상품 구매여부를 구별하기 위한 값 (리스트단일:1 / 카트단일:2)
+		int type = 2;
+		
+		MemberDTO dto = (MemberDTO) session.getAttribute("user");
+		model.addAttribute("user", memberService.getUserInfo(dto.getMem_id()));
+		model.addAttribute("product", product);
+		model.addAttribute("amount", amount);
+		model.addAttribute("type", type);
+	
+		return "/order/purchaseOne";
+	}
+	
+	// 구매
+	@RequestMapping(value = "/orderCartOne", method=RequestMethod.POST)
+	public String orderCartOne(OrderVO orderVO, OrderDetailVO detailVO, @RequestParam int mem_point, HttpSession session, RedirectAttributes rttr) throws Exception{
+		
+		logger.info("======== orderOne() called ========");
+		logger.info(orderVO.toString());
+		logger.info(detailVO.toString());
+		
+		// 구매 - 현재 세션의 아이디 파라미터로 가져옴
+		MemberDTO dto = (MemberDTO) session.getAttribute("user");
+		String mem_id = dto.getMem_id();
+		
+		// 구매 & 주문번호 저장
+		int ord_idx = service.orderCartOne(mem_id, orderVO, detailVO);
+		rttr.addFlashAttribute("ord_idx", ord_idx);
+		
+		// 포인트 업데이트
+		service.updatePoint(mem_id, mem_point);
+		
+		return "redirect:/order/complete";
+	}
+		
+
 	//-------------------------------------------------------------------------------------------
 	// [복수]
 	// 상품리스트 => [바로구매] 여러 상품	
@@ -141,8 +178,8 @@ public class OrderController {
 		List<ProductVO> productList = new ArrayList<ProductVO>();
 		List<Integer> amountList = new ArrayList<Integer>();
 		
-		// jsp에서 [단일] or [복수] 상품 구매여부를 구별하기 위한 값 (단일:1 / 복수:2)
-		int type = 2;
+		// jsp에서 <form>태그의 action을 구별하기 위한 값 (리스트:1 / 카트선택:2 / 카트전체:3)
+		int type = 1;
 		
 		logger.info("check : " + chkArr);
 		logger.info("prd_idx : " + prd_idxArr);
@@ -163,7 +200,7 @@ public class OrderController {
 		model.addAttribute("amountList", amountList);
 		model.addAttribute("type", type);
 		
-		return "/order/purchase";
+		return "/order/purchaseMultiple";
 	}
 	
 	// 구매
@@ -174,11 +211,9 @@ public class OrderController {
 		logger.info(orderVO.toString());
 		logger.info("detailList.size() : " + detailList.size());
 				
-		// 구매
-		service.orderChk(orderVO, detailList);
-		// 주문번호 저장
-		int ord_idx = orderVO.getOrd_idx();
-		rttr.addAttribute("ord_idx", ord_idx);
+		// 구매 & 주문번호 저장
+		int ord_idx = service.orderChk(orderVO, detailList);
+		rttr.addFlashAttribute("ord_idx", ord_idx);
 		
 		// 포인트 업데이트
 		MemberDTO dto = (MemberDTO) session.getAttribute("user");
@@ -186,60 +221,7 @@ public class OrderController {
 		
 		return "redirect:/order/complete";
 	}
-	
-	//-------------------------------------------------------------------------------------------
-		// [단일]
-		// 카트 - [주문하기] 단일상품
-		/* Param : prd_idx, ord_amount, httpsession, model  */
-		@RequestMapping(value = "/cartOne", method=RequestMethod.GET)
-		public String cartOne(@RequestParam int prd_idx, @RequestParam int cart_amount, HttpSession session, Model model) throws Exception{
-			
-			logger.info("======== cartOne() called ========");
-			
-			// 모델 attribute명 - 여러상품 메소드 attribute명과 일치시켜 줌
-			List<ProductVO> productList = new ArrayList<ProductVO>();
-			List<Integer> amountList = new ArrayList<Integer>();
-			
-			productList.add(productService.productDetail(prd_idx));
-			amountList.add(cart_amount);
-			
-			// jsp에서 [단일] or [복수] or [전체] 상품 구매여부를 구별하기 위한 값 (단일:1 / 복수:2 / 전체:3)
-			int type = 1;
-			
-			MemberDTO dto = (MemberDTO) session.getAttribute("user");
-			model.addAttribute("user", memberService.getUserInfo(dto.getMem_id()));
-			model.addAttribute("productList", productList);
-			model.addAttribute("amountList", amountList);
-			model.addAttribute("type", type);
-		
-			return "/order/purchaseCart";
-		}
-		
-		// 구매
-		@RequestMapping(value = "/orderCartOne", method=RequestMethod.POST)
-		public String orderCartOne(OrderVO orderVO, OrderDetailVO detailVO, @RequestParam int mem_point, HttpSession session, RedirectAttributes rttr) throws Exception{
-			
-			logger.info("======== orderOne() called ========");
-			logger.info(orderVO.toString());
-			logger.info(detailVO.toString());
-			
-			// 구매 - 현재 세션의 아이디 파라미터로 가져옴
-			MemberDTO dto = (MemberDTO) session.getAttribute("user");
-			String mem_id = dto.getMem_id();
-			service.orderCartOne(mem_id, orderVO, detailVO);
-			// 주문번호 저장
-			int ord_idx = orderVO.getOrd_idx();
-			rttr.addAttribute("ord_idx", ord_idx);
-			
-			// 포인트 업데이트
-//			int point = service.getPoint(ord_idx);
-//			dto.setMem_point(point);
-			service.updatePoint(mem_id, mem_point);
-			
-			return "redirect:/order/complete";
-		}
-		
-	
+
 	//-------------------------------------------------------------------------------------------
 	// [복수]
 	// 카트 => [선택상품주문] 여러 상품
@@ -267,7 +249,7 @@ public class OrderController {
 			}
 		}
 		
-		// jsp에서 [단일] or [복수] or [전체] 상품 구매여부를 구별하기 위한 값 (단일:1 / 복수:2 / 전체:3)
+		// jsp에서 <form>태그의 action을 구별하기 위한 값 (리스트:1 / 카트선택:2 / 카트전체:3)
 		int type = 2;
 		
 		MemberDTO dto = (MemberDTO) session.getAttribute("user");
@@ -276,7 +258,7 @@ public class OrderController {
 		model.addAttribute("amountList", amountList);
 		model.addAttribute("type", type);
 
-		return "/order/purchaseCart";
+		return "/order/purchaseMultiple";
 	}
 	
 	// 구매
@@ -288,11 +270,12 @@ public class OrderController {
 		// 구매 - 현재 세션의 아이디 파라미터로 가져옴
 		MemberDTO dto = (MemberDTO) session.getAttribute("user");
 		String mem_id = dto.getMem_id();
-		service.orderCartChk(mem_id, orderVO, detailList);
 		
-		// 주문번호 저장
-		int ord_idx = orderVO.getOrd_idx();
-		rttr.addAttribute("ord_idx", ord_idx);
+		// 구매 & 주문번호 저장
+		int ord_idx = service.orderCartChk(mem_id, orderVO, detailList);
+		rttr.addFlashAttribute("ord_idx", ord_idx);
+		
+		logger.info("ord_idx : " + ord_idx);
 		
 		// 포인트 업데이트
 		service.updatePoint(mem_id, mem_point);
@@ -321,7 +304,7 @@ public class OrderController {
 			amountList.add(cart_amtArr.get(i));
 		}
 		
-		// jsp에서 [단일] or [복수] or [전체] 상품 구매여부를 구별하기 위한 값 (단일:1 / 복수:2 / 전체:3)
+		// jsp에서 <form>태그의 action을 구별하기 위한 값 (리스트:1 / 카트선택:2 / 카트전체:3)
 		int type = 3;
 		
 		MemberDTO dto = (MemberDTO) session.getAttribute("user");
@@ -330,7 +313,7 @@ public class OrderController {
 		model.addAttribute("amountList", amountList);
 		model.addAttribute("type", type);
 
-		return "/order/purchaseCart";
+		return "/order/purchaseMultiple";
 	}
 	
 	// 구매
@@ -342,11 +325,12 @@ public class OrderController {
 		// 구매 - 현재 세션의 아이디 파라미터로 가져옴
 		MemberDTO dto = (MemberDTO) session.getAttribute("user");
 		String mem_id = dto.getMem_id();
-		service.orderCartAll(mem_id,orderVO, detailList);
 
-		// 주문번호 저장
-		int ord_idx = orderVO.getOrd_idx();
-		rttr.addAttribute("ord_idx", ord_idx);
+		// 구매 & 주문번호 저장
+		int ord_idx = service.orderCartAll(mem_id, orderVO, detailList);
+		rttr.addFlashAttribute("ord_idx", ord_idx);
+		
+		logger.info("ord_idx : " + ord_idx);
 		
 		// 포인트 업데이트
 		service.updatePoint(mem_id, mem_point);
