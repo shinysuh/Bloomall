@@ -50,7 +50,10 @@
 		</interceptor>	
 		
 		<interceptor>
-			<mapping path="/admin/menu"/>
+			<mapping path="/admin/*"/>
+			<exclude-mapping path="/admin/main"/>
+			<exclude-mapping path="/admin/login"/>
+			<exclude-mapping path="/admin/logout"/>
 			<beans:ref bean="authInterceptor"/>
 		</interceptor>
 	</interceptors>

@@ -143,21 +143,25 @@
 						<a href="/admin/product/list" class="dropdown-toggle" data-toggle="dropdown">
 						  <span class="hidden-xs">상품관리</span>
 						</a>
-						<ul class="dropdown-menu" id="myPage">
+						<ul class="dropdown-menu" id="product">
 							<li><a href="/admin/product/register">상품등록</a></li>
 							<li><a href="/admin/product/list">상품리스트</a></li>
 						</ul>
 					</li>
-					<li class="user user-menu">
-						<a href="#" class="toggle">
+					<li class="dropdown user user-menu">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown">
 						  <span class="hidden-xs">주문관리</span>
 						</a>
+						<ul class="dropdown-menu" id="order">
+							<li><a href="#">주문목록</a></li>
+							<li><a href="#">주문통계</a></li>
+						</ul>
 					</li>
 					<li class="dropdown user user-menu">
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown">
 						  <span class="hidden-xs">커뮤니티</span>
 						</a>
-						<ul class="dropdown-menu" id="myPage">
+						<ul class="dropdown-menu" id="community">
 							<li><a href="#">공지사항</a></li>
 							<li><a href="#">게시판</a></li>
 							<li><a href="#">QnA</a></li>

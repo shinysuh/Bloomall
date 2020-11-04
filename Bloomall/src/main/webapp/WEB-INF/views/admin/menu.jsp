@@ -21,6 +21,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 	margin: 2%;
 	display:inline-block;
 	text-align:center;
+	background-color:white;
 
 }
 a:link, a:visited {
@@ -74,13 +75,13 @@ a:active {
 				<c:if test="${sessionScope.admin != null }">
 				<div class="row">
 					<h4>관리할 메뉴를 선택하세요.</h4><br>
-				<div class="col-md-9" style="width:50%; min-width:300px; background-color:white; padding: 50px 180px;" class="container text-center">
+				<div class="col-md-9" style="width:70%; min-width:300px; padding: 50px 180px;" class="container text-center">
 					<div class="col-sm-1"></div>
 					<ul class="col-sm-11 items" style="list-style:none;">
-						<a href="/admin/product/list"><li class="item"><br><br>상품관리</li></a>
+						<a href="/admin/product/list"><li class="item"><br><br>상품관리</li></a><br>
 						<a href="#"><li class="item"><br><br>주문관리</li></a>
 						<br>
-						<a href="#"><li class="item"><br><br>회원관리</li></a>
+						<a href="#"><li class="item"><br><br>회원관리</li></a><br>
 						<a href="#"><li class="item"><br><br>게시판 관리</li></a>
 					</ul>
 				</div>

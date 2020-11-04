@@ -61,7 +61,10 @@
 					</span> </a>
 				<ul class="treeview-menu">
 					<li>
-						<a href="#"><i class="fa fa-bookmark"></i>주문관리</a>
+						<a href="#"><i class="fa fa-bookmark"></i>주문목록</a>
+					</li>
+					<li>
+						<a href="#"><i class="fa fa-bookmark"></i>주문통계</a>
 					</li>
 				</ul>
 			</li>
@@ -71,10 +74,10 @@
 					</span> </a>
 				<ul class="treeview-menu">
 					<li>
-						<a href="/admin/category/register"><i class="fa fa-bookmark"></i>회원관리</a>
+						<a href="#"><i class="fa fa-bookmark"></i>회원관리</a>
 					</li>
 					<li>
-						<a href="/admin/category/manage"><i class="fa fa-bookmark"></i>회원관리</a>
+						<a href="#"><i class="fa fa-bookmark"></i>회원통계</a>
 					</li>
 				</ul>
 			</li>
