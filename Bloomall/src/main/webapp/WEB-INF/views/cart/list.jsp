@@ -46,7 +46,7 @@
 						</div>
 						<div class="box-body">
 							<table class="table table-striped text-center">
-								<tr style="font-size:12px;">
+								<tr style="font-size:12px;background-color: rgb(229, 217, 236);">
 									<th><input type="checkbox" id="checkAll" checked="checked"/></th>
 									<th><!-- 상품이미지 --></th>
 									<th>상품명</th>

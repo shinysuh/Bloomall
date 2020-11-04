@@ -71,7 +71,7 @@ function formSetting(){
 								<%-- 주문 테이블 --%>
 								<table class="table table-striped text-center" id="ordertbl">
 									<thead id="thead">
-										<tr style="background-color: rgb(229, 217, 236);">
+										<tr>
 										<%-- 선택삭제 기능 없앰(체크박스 삭제) --%>
 											<th><!-- 상품이미지 --></th>
 											<th>상품명</th>
@@ -86,9 +86,9 @@ function formSetting(){
 									<c:forEach items="${productList}" var="productList" varStatus="i"> <!-- i는 리스트 컬렉션의 인덱스 역할 -->
 										<tr id="productList_${productList.prd_idx}" class="productRow">
 											<td class="col-md-1">
-												<input type="hidden" id="amount_${productList.prd_idx}" name="orderDetailList[${i.index }].ord_amount" value="${amountList[i.index]}" />
-												<input type="hidden" name="orderDetailList[${i.index }].prd_idx" value="${productList.prd_idx}" />
-												<input type="hidden" name="orderDetailList[${i.index }].ord_price" value="${productList.prd_dc_price}" />
+												<input type="hidden" id="amount_${productList.prd_idx}" name="detailList[${i.index }].ord_amount" value="${amountList[i.index]}" />
+												<input type="hidden" name="detailList[${i.index }].prd_idx" value="${productList.prd_idx}" />
+												<input type="hidden" name="detailList[${i.index }].ord_price" value="${productList.prd_dc_price}" />
 												<a href="/product/detail?prd_idx=${productList.prd_idx}&ctgr_cd=${ctgr_cd}">
 													<img src="/product/fileDisplay?fileName=${productList.prd_img }" style="width:100px;">
 												</a>

@@ -60,7 +60,7 @@ public class OrderDAOImpl implements OrderDAO {
 	// 주문 상세 내역 (OrderHistoryDetailVO)
 	@Override
 	public List<OrderHistoryDetailVO> orderHistoryDetail(int ord_idx) throws Exception {
-		return session.selectOne(NS + ".orderHistoryDetail", ord_idx);
+		return session.selectList(NS + ".orderHistoryDetail", ord_idx);
 	}
 
 	// 주문자 정보(주문테이블)

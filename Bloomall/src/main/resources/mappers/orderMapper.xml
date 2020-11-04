@@ -58,12 +58,11 @@
 	
 	<!-- 주문 상세 내역 (OrderHistoryDetailVO) -->
 	<select id="orderHistoryDetail" resultType="OrderHistoryDetailVO" parameterType="int">
-		select o.ord_idx, d.prd_idx, p.prd_title, p.prd_img, p.prd_price, d.ord_amount, d.ord_price
-		from order_tb o inner join ord_detail_tb d
-		    on o.ord_idx = d.ord_idx
+		select d.ord_idx, d.prd_idx, p.prd_title, p.prd_img, p.prd_price, d.ord_amount, d.ord_price
+		from ord_detail_tb d
 		inner join product_tb p
 		    on p.prd_idx = d.prd_idx
-		where o.ord_idx=#{ord_idx}
+		where d.ord_idx=#{ord_idx}
 		order by d.prd_idx desc
 	</select>
 	

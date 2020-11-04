@@ -13,12 +13,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.bloomall.domain.OrderDetailListVO;
 import com.bloomall.domain.OrderDetailVO;
 import com.bloomall.domain.OrderHistoryDetailVO;
 import com.bloomall.domain.OrderHistoryVO;
@@ -205,11 +205,11 @@ public class OrderController {
 	
 	// 구매
 	@RequestMapping(value = "/orderChk", method=RequestMethod.POST)
-	public String orderChk(OrderVO orderVO, List<OrderDetailVO> detailList, @RequestParam int mem_point, RedirectAttributes rttr, HttpSession session) throws Exception{
+	public String orderChk(OrderVO orderVO, OrderDetailListVO detailList, @RequestParam int mem_point, RedirectAttributes rttr, HttpSession session) throws Exception{
 		
 		logger.info("======== orderChk() called ========");
 		logger.info(orderVO.toString());
-		logger.info("detailList.size() : " + detailList.size());
+		logger.info("detailList.size() : " + detailList.toString());
 				
 		// 구매 & 주문번호 저장
 		int ord_idx = service.orderChk(orderVO, detailList);
@@ -263,7 +263,7 @@ public class OrderController {
 	
 	// 구매
 	@RequestMapping(value = "/orderCartChk", method=RequestMethod.POST)
-	public String orderCartChk(OrderVO orderVO, List<OrderDetailVO> detailList, @RequestParam int mem_point, HttpSession session, RedirectAttributes rttr) throws Exception{
+	public String orderCartChk(OrderVO orderVO, OrderDetailListVO detailList, @RequestParam int mem_point, HttpSession session, RedirectAttributes rttr) throws Exception{
 		
 		logger.info("======== orderCartChk() called ========");
 		
@@ -318,7 +318,7 @@ public class OrderController {
 	
 	// 구매
 	@RequestMapping(value = "/orderCartAll", method=RequestMethod.POST)
-	public String orderCartAll(OrderVO orderVO, List<OrderDetailVO> detailList, @RequestParam int mem_point, HttpSession session, RedirectAttributes rttr) throws Exception{
+	public String orderCartAll(OrderVO orderVO, OrderDetailListVO detailList, @RequestParam int mem_point, HttpSession session, RedirectAttributes rttr) throws Exception{
 		
 		logger.info("======== orderCartAll() called ========");
 		
@@ -378,6 +378,7 @@ public class OrderController {
 	public String orderDetail(@ModelAttribute Criteria cri, int ord_idx, Model model, HttpSession session) throws Exception{
 		
 		logger.info("======== orderDetail() called ========");
+		logger.info("ord_idx : " + ord_idx);
 		
 		List<OrderHistoryDetailVO> orderDetail = service.orderHistoryDetail(ord_idx);
 		OrderVO buyer = service.recipientInfo(ord_idx);

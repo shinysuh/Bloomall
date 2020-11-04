@@ -43,14 +43,15 @@
 							<input type="hidden" name="perPageNum" value="${cri.perPageNum}" />
 						</a>
 						</div>
-				<div class="box" style="border: none;">
+					<div class="box" style="border: none;">
 						<div class="box-body" style="padding:30px 10px 100px 10px;">
 							<%-- 주문내역 상단 버튼 --%>
+							<div class="col-sm-12">
 							<div class="orderDetail" style="padding: 0px 40px;">
 								<%-- 주문내역 테이블 --%>
 								<table class="table  text-center" id="ordertbl">
 									<thead id="thead">
-										<tr style="background-color: aliceBlue;" >
+										<tr style="background-color: rgb(229, 217, 236);" >
 											<td colspan="5" style="text-align:left;">
 												<b>주문날짜: <fmt:formatDate value="${buyer.ord_date}" pattern="yyyy/MM/dd HH:mm"/>
 												(주문번호: ${buyer.ord_idx} )</b>
@@ -70,8 +71,8 @@
 									<%-- 상품이 존재하는 경우,  리스트 출력 --%>
 									<tbody>
 									<c:forEach items="${orderDetail}" var="orderDetail" varStatus="status">
-									<c:set var="totalPrice" value="${totalPrice + orderDetail[status.index].prd_price * orderDetail[status.index].odr_amount}"></c:set>
-									<c:set var="totalPoint" value="${totalPoint + ${orderDetail[status.index].prd_price * 0.03 * orderDetail[status.index].odr_amount}"></c:set>
+									<c:set var="totalPrice" value="${totalPrice + orderDetail.prd_price * orderDetail.ord_amount}"></c:set>
+									<c:set var="totalPoint" value="${totalPoint + orderDetail.prd_price * 0.03 * orderDetail.ord_amount}"></c:set>
 										<tr id="row">
 											<td class="col-md-2">
 												<a href="/product/detail?prd_idx=${orderDetail.prd_idx}">
@@ -83,16 +84,16 @@
 													style="color: black;"> ${orderDetail.prd_title} </a>
 											</td>
 											<td class="col-md-1">
-												<p><fmt:formatNumber value="${orderDetail.odr_price}" pattern="###,###,###" />원</p>
+												<p><fmt:formatNumber value="${orderDetail.ord_price}" pattern="###,###,###" />원</p>
 											</td>
 											<td class="col-md-1">
-												<p>${orderDetail.odr_amount}</p>
+												<p>${orderDetail.ord_amount}</p>
 											</td>
 											<td class="col-md-1">
-												<p ><fmt:formatNumber value="${orderDetail.odr_price * orderDetail.odr_amount}"  pattern="###,###,###" />원</p>
+												<p ><fmt:formatNumber value="${orderDetail.ord_price * orderDetail.ord_amount}"  pattern="###,###,###" />원</p>
 											</td>
 											<td class="col-md-1">
-												<p style="font-size:12px;color:#539ca8;"><fmt:formatNumber value="${orderDetail.prd_price * 0.03 * orderDetail.odr_amount}"  pattern="###,###,###" />원</p>
+												<p style="font-size:12px;color:#539ca8;"><fmt:formatNumber value="${orderDetail.prd_price * 0.03 * orderDetail.ord_amount}"  pattern="###,###,###" />원</p>
 											</td>
 										</tr>
 									</c:forEach>
@@ -101,10 +102,11 @@
 								<br><br><br>
 							</div>
 							<hr><br>
+							</div>
 							
 							<%-- 주문 정보 --%>
-							<div class="orderInfo" style="min-width:1000px;" > 
-								<div class="userInfo" style="display:inline-block; float:left; width:60%; padding: 0% 5%;">
+							<div class="col-sm-12 orderInfo" style="min-width:300px;" > 
+								<div class="col-xs-8 userInfo" style="display:inline-block; float:left; width:60%; padding: 0% 5%;">
 									<div class="container" style="width:100%;">
 										<span>[주문 정보]</span>
 										<div class="form-group">
@@ -134,10 +136,10 @@
 								</div>
 								
 								<%-- 주문 금액 확인 --%>
-								<div class="orderConfirm" style="display:inline-block; width:20%; margin: 0px 5%;">
+								<div class="col-xs-4 orderConfirm" style="display:inline-block; width:20%; margin: 0px 5%;">
 								<br>
 									<%-- 주문 금액 --%>
-									<div style="width: 400px;">
+									<div style="min-width: 300px;">
 										<span>[결제 금액]</span>
 										<table class="table text-center" style="margin-top:15px;" >
 											<tr>

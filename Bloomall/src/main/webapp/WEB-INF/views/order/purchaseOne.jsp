@@ -58,7 +58,7 @@ function formSetting(){
 				<div class="box" style="border: none;">			
 					<form id="orderForm" method="post"> <%-- <form>의 action은 [단일][복수]로 나눠서 jquery에서 지정 --%>
 						<div class="box-body" style="padding:30px 10px 100px 10px;">
-							<%-- 주문내역 상단 버튼 --%>
+							<%-- 주문 상단 버튼 --%>
 							<div class="col-sm-12">
 							<div class="orderList" style="padding: 0px 40px;">
 								<div style="width:100%;">
@@ -66,10 +66,10 @@ function formSetting(){
 									<div class="btn-container" style="display: inline-block; float: right; margin:20px 10px 5px 5px;">
 									</div>
 								</div>
-								<%-- 주문내역 테이블 --%>
+								<%-- 주문 테이블 --%>
 								<table class="table table-striped text-center" id="ordertbl">
 									<thead id="thead">
-										<tr>
+										<tr style="background-color: rgb(229, 217, 236);">
 										<%-- 선택삭제 기능 없앰(체크박스 삭제) --%>
 											<th><!-- 상품이미지 --></th>
 											<th>상품명</th>

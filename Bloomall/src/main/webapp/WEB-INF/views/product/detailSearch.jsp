@@ -217,7 +217,7 @@ $(function(){
 												    	    <label><i class="fa fa-star text-primary" id="star4"></i></label>
 													        <label><i class="fa fa-star text-default" id="star5"></i></label>
 															<input type="hidden" id="avg_rating"  value="${rvwAverage}" />
-												         	<b style="color:black; font-size:22px" ><fmt:formatNumber value="${rvwAverage}" pattern=".##" /> <br></b>														</div>
+												         	<b style="color:black; font-size:22px" ><fmt:formatNumber value="${rvwAverage}" pattern="#.##" /> <br></b>														</div>
 														<div class="rvwCount">
 															판매지수 <span style="color:red;"> (판매count 넣기)</span>
 															<span class='divi'>&nbsp;|&nbsp;</span>

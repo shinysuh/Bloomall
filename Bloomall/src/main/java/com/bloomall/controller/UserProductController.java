@@ -195,15 +195,24 @@ public class UserProductController {
 			on_sale = "품절";
 		}
 		
+		int rvwCount = reviewService.reviewCount(vo.getPrd_idx());
+		double rvwAverage = 0.00;
+		
+		if(rvwCount > 0) {
+			// 리뷰가 있을 때, 해당 상품의 리뷰 평점
+			rvwAverage = reviewService.rvwAverage(prd_idx);
+		}else {
+			rvwAverage = 0.00;
+		}
+		
 		model.addAttribute("on_sale", on_sale);
 		model.addAttribute("ctgr_name", ctgr_name);
 		model.addAttribute("prt_name", prt_name);
 		model.addAttribute("vo", vo);
 		model.addAttribute("pageMaker", pageMaker);
 		// 해당 상품에 달린 리뷰 개수 -> 모델로 jsp에 보냄
-		model.addAttribute("rvwCount", reviewService.reviewCount(vo.getPrd_idx()));
-		// 해당 상품의 리뷰 평점
-		model.addAttribute("rvwAverage", reviewService.rvwAverage(prd_idx));
+		model.addAttribute("rvwCount", rvwCount);
+		model.addAttribute("rvwAverage", rvwAverage);
 		
 		return "product/detail";
 	}
@@ -239,15 +248,25 @@ public class UserProductController {
 			on_sale = "품절";
 		}
 		
+		int rvwCount = reviewService.reviewCount(vo.getPrd_idx());
+		double rvwAverage = 0.00;
+		
+		if(rvwCount > 0) {
+			// 리뷰가 있을 때, 해당 상품의 리뷰 평점
+			rvwAverage = reviewService.rvwAverage(prd_idx);
+		}else {
+			rvwAverage = 0.00;
+		}
+		
 		model.addAttribute("on_sale", on_sale);
 		model.addAttribute("ctgr_name", ctgr_name);
 		model.addAttribute("prt_name", prt_name);
 		model.addAttribute("vo", vo);
 		model.addAttribute("pageMaker", pageMaker);
 		// 해당 상품에 달린 리뷰 개수 -> 모델로 jsp에 보냄
-		model.addAttribute("rvwCount", reviewService.reviewCount(vo.getPrd_idx()));		
+		model.addAttribute("rvwCount", rvwCount);		
 		// 해당 상품의 리뷰 평점
-		model.addAttribute("rvwAverage", reviewService.rvwAverage(prd_idx));
+		model.addAttribute("rvwAverage", rvwAverage);
 		
 		return "product/detailSearch";
 	}
