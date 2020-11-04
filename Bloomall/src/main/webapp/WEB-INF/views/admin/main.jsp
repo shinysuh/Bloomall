@@ -44,7 +44,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 				</h1>
 				<ol class="breadcrumb">
 					<li>
-						<a href="/"><i class="fa fa-dashboard"></i> Admin Home</a>
+						<a href="/admin/menu"><i class="fa fa-dashboard"></i> Admin Home</a>
 					</li>
 				</ol>
 			</section>

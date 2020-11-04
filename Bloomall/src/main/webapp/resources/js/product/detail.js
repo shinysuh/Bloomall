@@ -315,6 +315,15 @@ function getStars(starInfo) {
         // 별점 후기 존재
         if (data.rvwList.length > 0) {
             printData(data.rvwList, $("#starRvwList"), $("#starTemplate"));
+            if(data.rvwList.length == 1){
+                $(".starList").after("<br><br><br><br><br><br><br><br>");
+            } else if (data.rvwList.length == 2 ){
+                $(".starList").last().after("<br><br><br><br><br><br>");
+            } else if (data.rvwList.length == 3 ){
+                $(".starList").last().after("<br><br><br><br>");
+            } else if (data.rvwList.length == 4 ){
+                $(".starList").last().after("<br><br>");
+            }
         } else { // 별점 후기 존재 X
             $("#starRvwList").remove();
             $(".noStarRvw").show();

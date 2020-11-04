@@ -11,7 +11,31 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <%@include file="/WEB-INF/views/include/header.jsp" %>
 <!-- REQUIRED JS SCRIPTS -->
 <%@include file="/WEB-INF/views/include/plugin_js.jsp" %>
+<head>
+<style type="text/css">
+.item{
+	width:300px;
+	height: 100px;
+	border: 1px solid rgb(221, 220, 220);
+	border-collapse: collapse;
+	margin: 2%;
+	display:inline-block;
+	text-align:center;
 
+}
+a:link, a:visited {
+	color:rgb(83, 83, 83);
+}
+a:hover {
+	color:black;
+	font-weight:bold;
+}
+a:active {
+	color: rgb(100, 161, 202);
+	font-weight: bold;
+}
+</style>
+</head>
 <body class="hold-transition skin-blue sidebar-mini">
 	<div class="wrapper">
 
@@ -27,11 +51,11 @@ scratch. This page gets rid of all links and provides the needed markup only.
 			<!-- Content Header (Page header) -->
 			<section class="content-header">
 				<h1>
-					Admin Menu
+					Admin Menu <small>관리자 메뉴</small>
 				</h1>
 				<ol class="breadcrumb">
 					<li>
-						<a href="/"><i class="fa fa-dashboard"></i> Admin Menu</a>
+						<a href="/admin/menu"><i class="fa fa-dashboard"></i> Admin Menu</a>
 					</li>
 				</ol>
 			</section>
@@ -39,16 +63,32 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
 			<!-- Main content -->
 			<section class="content container-fluid">
+				<section class="content container-fluid">
+				<%-- 로그인 안된 상태 --%>
 				<div style="margin-top:80px;">
-					<h4>관리자 페이지</h4><br>
-					<h5>관리할 메뉴를 클릭해주세요</h5>
-					
-					<br><br><br>
-					<h5> 카테고리 관리 / 상품관리 / 주문관리 / 공지사항 / 게시판 관리  </h5>
-					
-					
+				<c:if test="${sessionScope.admin == null }">
+					<h4>쇼핑몰 이용을 위해 로그인 해주세요</h4><br>
+					<h5><a href="/admin/main">로그인 페이지로 이동</a></h5>
+				</c:if>		
+				<%-- 로그인 한 상태 --%>
+				<c:if test="${sessionScope.admin != null }">
+				<div class="row">
+					<h4>관리할 메뉴를 선택하세요.</h4><br>
+				<div class="col-md-9" style="width:50%; min-width:300px; background-color:white; padding: 50px 180px;" class="container text-center">
+					<div class="col-sm-1"></div>
+					<ul class="col-sm-11 items" style="list-style:none;">
+						<a href="/admin/product/list"><li class="item"><br><br>상품관리</li></a>
+						<a href="#"><li class="item"><br><br>주문관리</li></a>
+						<br>
+						<a href="#"><li class="item"><br><br>회원관리</li></a>
+						<a href="#"><li class="item"><br><br>게시판 관리</li></a>
+					</ul>
 				</div>
-
+				</div>
+				</c:if>		
+				</div>
+				
+			</section>
 			</section>
 			<!-- /.content -->
 		</div>

@@ -46,7 +46,7 @@
 <%-- 핸들바: 별점 리스트 --%>
 <script id="starTemplate" type="text/x-handlebars-template">
 	{{#each .}}
-		<li class="rvwList" data-rvw_idx={{rvw_idx}}>
+		<li class="rvwList starList" data-rvw_idx={{rvw_idx}}>
 			<div class="stars_div">
 				<div class="star_title">
 					<span style="float:left;">{{tidyDate rvw_regdate}}</span>

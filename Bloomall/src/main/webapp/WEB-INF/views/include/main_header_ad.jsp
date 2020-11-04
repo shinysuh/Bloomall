@@ -7,7 +7,7 @@
 <header class="main-header">
 
 	<!-- Logo -->
-	<a href="/admin/main" class="logo"> <!-- mini logo for sidebar mini 50x50 pixels --> <span class="logo-mini">
+	<a href="/admin/menu" class="logo"> <!-- mini logo for sidebar mini 50x50 pixels --> <span class="logo-mini">
 			<b>BLOOMALL</b>
 		</span>
 		<!-- logo for regular state and mobile devices --> 
@@ -133,6 +133,11 @@
 					</li>
 					<li class="dropdown user user-menu">
 						<a href="/admin/logout" onclick="return confirm('로그아웃 하시겠습니까?');"><span class="hidden-xs">로그아웃</span></a>
+					</li>
+					<li class="user user-menu">
+						<a href="/admin/menu" class="toggle">
+						  <span class="hidden-xs">관리자메뉴</span>
+						</a>
 					</li>
 					<li class="dropdown user user-menu">
 						<a href="/admin/product/list" class="dropdown-toggle" data-toggle="dropdown">

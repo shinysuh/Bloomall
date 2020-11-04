@@ -37,8 +37,8 @@
 		<beans:constructor-arg value="D:\\dev\\upload"></beans:constructor-arg>
 	</beans:bean>
 
-	<beans:bean id="authInterceptor" class="com.bloomall.interceptor.AuthInterceptor"></beans:bean>
 	<beans:bean id="loginInterceptor" class="com.bloomall.interceptor.LoginInterceptor"></beans:bean>
+	<beans:bean id="authInterceptor" class="com.bloomall.interceptor.AuthInterceptor"></beans:bean>
 
 	<interceptors>
 		<interceptor>
@@ -48,6 +48,11 @@
 			<mapping path="/cart/*"/>
 			<beans:ref bean="loginInterceptor"/>
 		</interceptor>	
+		
+		<interceptor>
+			<mapping path="/admin/menu"/>
+			<beans:ref bean="authInterceptor"/>
+		</interceptor>
 	</interceptors>
 
 
