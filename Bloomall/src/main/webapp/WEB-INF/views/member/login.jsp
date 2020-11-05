@@ -38,17 +38,6 @@ if ('${msg}' == "LOGIN_FAIL") {
 				</ol>
 			</section>
 		
-		
-		<!-- Carousel -->
-		<div class="container">
-		    <div class="row">
-		      	<div class="col-lg">
-				<%@include file="/WEB-INF/views/include/crousel.jsp" %>
-				</div>
-			</div>
-		</div>
-		
-		
 			<!-- Main content -->
 			<section class="content container-fluid">
 				<div class="container" style="width: 450px; height:420px; background-color: white; margin-top:30px;">

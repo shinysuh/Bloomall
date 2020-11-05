@@ -61,7 +61,7 @@
 					</span> </a>
 				<ul class="treeview-menu">
 					<li>
-						<a href="#"><i class="fa fa-bookmark"></i>주문목록</a>
+						<a href="/admin/order/orderList"><i class="fa fa-bookmark"></i>주문목록</a>
 					</li>
 					<li>
 						<a href="#"><i class="fa fa-bookmark"></i>주문통계</a>

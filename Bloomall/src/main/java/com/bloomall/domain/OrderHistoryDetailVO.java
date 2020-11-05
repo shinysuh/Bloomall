@@ -10,6 +10,7 @@ public class OrderHistoryDetailVO {
 	private int 	prd_price;    	// 상품 가격 - ProductVO
 	private int 	ord_amount;  	// 각 주문수량 - OrderDetailVO
 	private int 	ord_price;  	// 각 상품 주문금액 - OrderDetailVO
+	private int 	ord_state;		// 주문처리 현황
 	
 	public int getOrd_idx() {
 		return ord_idx;
@@ -53,11 +54,17 @@ public class OrderHistoryDetailVO {
 	public void setOrd_price(int ord_price) {
 		this.ord_price = ord_price;
 	}
+	public int getOrd_state() {
+		return ord_state;
+	}
+	public void setOrd_state(int ord_state) {
+		this.ord_state = ord_state;
+	}
 	
 	@Override
 	public String toString() {
 		return "OrderHistoryDetailVO [ord_idx=" + ord_idx + ", prd_idx=" + prd_idx + ", prd_title=" + prd_title
 				+ ", prd_img=" + prd_img + ", prd_price=" + prd_price + ", ord_amount=" + ord_amount + ", ord_price="
-				+ ord_price + "]";
+				+ ord_price + ", ord_state=" + ord_state + "]";
 	}
 }

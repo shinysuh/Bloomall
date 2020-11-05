@@ -50,9 +50,12 @@
 	
 	<!-- 주문내역 개수 가져오기 -->
 	<select id="orderCount" resultType="int" parameterType="String">
-		select count(ord_idx)
-		from order_tb
-		where mem_id=#{mem_id}
+		select count(o.ord_idx)
+		from order_tb o inner join ord_detail_tb d
+		            on o.ord_idx = d.ord_idx
+		        inner join product_tb p
+		            on p.prd_idx = d.prd_idx
+        where o.mem_id=#{mem_id}
 	</select>
 	
 	

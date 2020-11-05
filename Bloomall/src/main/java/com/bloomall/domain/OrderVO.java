@@ -13,7 +13,8 @@ public class OrderVO {
     ord_recp_addr_d     varchar2(50)            not null,
     ord_recp_tel        varchar2(15)            not null,
     ord_tot_price       number                  not null,
-    ord_date            date default sysdate
+    ord_date            date default sysdate	not null,
+    ord_state			number
 	 */
 	
 	private int 	ord_idx;
@@ -25,6 +26,7 @@ public class OrderVO {
 	private String 	ord_recp_tel;
 	private int 	ord_tot_price;
 	private Timestamp ord_date;
+	private int 	ord_state;		// 주문처리 현황
 	
 	public int getOrd_idx() {
 		return ord_idx;
@@ -80,12 +82,18 @@ public class OrderVO {
 	public void setOrd_date(Timestamp ord_date) {
 		this.ord_date = ord_date;
 	}
+	public int getOrd_state() {
+		return ord_state;
+	}
+	public void setOrd_state(int ord_state) {
+		this.ord_state = ord_state;
+	}
 	
 	@Override
 	public String toString() {
 		return "OrderVO [ord_idx=" + ord_idx + ", mem_id=" + mem_id + ", ord_recp_name=" + ord_recp_name
 				+ ", ord_recp_zip=" + ord_recp_zip + ", ord_recp_addr=" + ord_recp_addr + ", ord_recp_addr_d="
 				+ ord_recp_addr_d + ", ord_recp_tel=" + ord_recp_tel + ", ord_tot_price=" + ord_tot_price
-				+ ", ord_date=" + ord_date + "]";
+				+ ", ord_date=" + ord_date + ", ord_state=" + ord_state + "]";
 	}
 }

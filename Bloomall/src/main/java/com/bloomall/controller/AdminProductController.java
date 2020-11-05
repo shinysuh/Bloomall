@@ -168,10 +168,13 @@ public class AdminProductController {
 		
 		PageMaker pageMaker = new PageMaker();
 		pageMaker.setCri(cri);
+		pageMaker.getCri().setPerPageNum(10);
 		
 		int count = service.searchCount(cri);
 		pageMaker.setTotalCount(count);
+
 		
+		logger.info(pageMaker.toString());
 		logger.info("======== 일치하는 상품 개수 : " + count);
 		
 		model.addAttribute("productList", productList);
@@ -192,7 +195,7 @@ public class AdminProductController {
 		ProductVO vo = service.productDetail(prd_idx);
 		logger.info("=====상품기존정보 : " + vo.toString());
 		
-		// 썸네일 파일 이름 수정 - 설정 시, 상세페이지에서  썸네일 대신 원본이름 display
+		// 썸네일 파일 이름 수정 - 설정 시, 상세페이지에서  썸네일 대신 원본이름 display. BUT 원본 너무 큼. 썸네일로 유지
 //		vo.setPrd_img(vo.getPrd_img().substring(vo.getPrd_img().lastIndexOf("_") + 1));
 		logger.info("=====변경된 정보 : " + vo.toString());
 				

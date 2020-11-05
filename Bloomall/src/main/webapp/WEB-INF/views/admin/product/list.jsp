@@ -42,9 +42,6 @@ $(function(){
 		var amtArr =[];
 		var inStockArr = [];
 		
-		var prd_amount = $("#prd_amount").val();
-		var prd_in_stock = $("#prd_in_stock:selected").val();
-		
 		// 선택된 상품의 prd_idx를 가져옴
 		$("input[name='check']:checked").each(function(i){
 			var prd_idx = $(this).val();

@@ -347,7 +347,7 @@ public class OrderController {
 		
 		logger.info("======== orderHistory() called ========");
 
-		// map 작업 전에 perPageNum 작업부터 먼저 => 아니면 자꾸 perPageNum 5개로 시작됨
+		// map 작업 전에 perPageNum 작업부터 먼저 => 먼저 작업 안하면 자꾸 perPageNum 5개로 시작됨
 		PageMaker pageMaker = new PageMaker();
 		pageMaker.setCri(cri);
 		pageMaker.getCri().setPerPageNum(10);

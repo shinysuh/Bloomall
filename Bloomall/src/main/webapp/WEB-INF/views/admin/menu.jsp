@@ -79,7 +79,7 @@ a:active {
 					<div class="col-sm-1"></div>
 					<ul class="col-sm-11 items" style="list-style:none;">
 						<a href="/admin/product/list"><li class="item"><br><br>상품관리</li></a><br>
-						<a href="#"><li class="item"><br><br>주문관리</li></a>
+						<a href="/admin/order/orderList"><li class="item"><br><br>주문관리</li></a>
 						<br>
 						<a href="#"><li class="item"><br><br>회원관리</li></a><br>
 						<a href="#"><li class="item"><br><br>게시판 관리</li></a>
@@ -89,7 +89,6 @@ a:active {
 				</c:if>		
 				</div>
 				
-			</section>
 			</section>
 			<!-- /.content -->
 		</div>

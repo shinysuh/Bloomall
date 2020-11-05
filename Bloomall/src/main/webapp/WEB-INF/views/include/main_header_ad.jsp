@@ -153,7 +153,7 @@
 						  <span class="hidden-xs">주문관리</span>
 						</a>
 						<ul class="dropdown-menu" id="order">
-							<li><a href="#">주문목록</a></li>
+							<li><a href="/admin/order/orderList">주문목록</a></li>
 							<li><a href="#">주문통계</a></li>
 						</ul>
 					</li>
