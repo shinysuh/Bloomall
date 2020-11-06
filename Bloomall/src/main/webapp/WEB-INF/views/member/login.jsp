@@ -45,9 +45,9 @@ if ('${msg}' == "LOGIN_FAIL") {
 						<h2 class="form-signin-heading">Sign in</h2>
 						<br><br>
 						<input type="text" id="mem_id" name="mem_id" class="form-control" style="margin-bottom: 15px"
-							placeholder="User Name" required autofocus> 
+							placeholder="User Name" required autofocus		value="user02"> 
 						<input type="password" id="mem_pw" name="mem_pw" class="form-control"
-							placeholder="Password" required>
+							placeholder="Password" required		value="1234">
 						<br><br>
 						<button type="button" id="btnLogin" class="btn btn-lg btn-primary btn-block">
 							로그인

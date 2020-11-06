@@ -17,8 +17,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.bloomall.domain.AdminOrderDetailVO;
 import com.bloomall.domain.AdminOrderListVO;
-import com.bloomall.domain.OrderHistoryDetailVO;
 import com.bloomall.domain.OrderVO;
 import com.bloomall.service.AdminOrderService;
 import com.bloomall.service.OrderService;
@@ -34,8 +34,8 @@ public class AdminOrderController {
 	@Inject
 	private AdminOrderService service;
 	
-	@Inject
-	private OrderService orderService;
+//	@Inject
+//	private OrderService orderService;
 	
 	// 주문목록 - /admin/order/orderList		- SearchCriteria
 	@RequestMapping(value = "/orderList", method=RequestMethod.GET)
@@ -92,37 +92,33 @@ public class AdminOrderController {
 		return entity;
 	}
 	
-	// 주문처리상태 [선택] 변경
+	// 주문처리상태 [선택] 개별 변경
 	@ResponseBody
 	@RequestMapping(value = "/updateStateChk", method=RequestMethod.POST)
 	public ResponseEntity<String> updateStateChk(@RequestParam("chkArr[]") List<Integer> chkArr,
-												 @RequestParam("stateArr[]") List<String> stateArr, Model model){
+												 @RequestParam("stateArr[]") List<Integer> stateArr, Model model){
 		
 		logger.info("======== updateStateChk() called ========");
-		
-		
-		// stateArr 를 String으로 가져와서 형변환 시켜주기 => 파라미터는 String 리스트로 미리 바꿈. 주의
-		
 		
 		ResponseEntity<String> entity = null;
 		
 		logger.info("chkArr :" + chkArr);
 		logger.info("stateArr :" + stateArr);
-//		try {
-//			int ord_idx = 0;
-//			int ord_state = 0;
-//			
-//			for(int i=0; i < chkArr.size(); i++) {
-//				ord_idx = chkArr.get(i);
-//				ord_state = stateArr.get(i);
-//				
-//				service.updateState(ord_idx, ord_state);
-//			}
-//			entity = new ResponseEntity<String>(HttpStatus.OK);
-//		}catch(Exception e) {
-//			e.printStackTrace();
-//			entity = new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
-//		}
+		try {
+			int ord_idx = 0;
+			int ord_state = 0;
+			
+			for(int i=0; i < chkArr.size(); i++) {
+				ord_idx = chkArr.get(i);
+				ord_state = stateArr.get(i);
+				
+				service.updateState(ord_idx, ord_state);
+			}
+			entity = new ResponseEntity<String>(HttpStatus.OK);
+		}catch(Exception e) {
+			e.printStackTrace();
+			entity = new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
+		}
 		return entity;
 	}
 	
@@ -160,15 +156,15 @@ public class AdminOrderController {
 		logger.info("======== orderDetail() called ========");
 		logger.info("ord_idx : " + ord_idx);
 		
-		List<OrderHistoryDetailVO> orderDetail = service.orderDetail(ord_idx);
-		OrderVO buyer = orderService.recipientInfo(ord_idx);
+		List<AdminOrderDetailVO> orderDetail = service.orderDetail(ord_idx);
+//		OrderVO buyer = orderService.recipientInfo(ord_idx);		// AdminOrderDetailVO 에 주문자 정보도 다 들어있음
 		
 		PageMaker pageMaker = new PageMaker();
 		pageMaker.setCri(cri);
 		pageMaker.getCri().setPerPageNum(20);
 		
 		model.addAttribute("orderDetail", orderDetail);
-		model.addAttribute("buyer", buyer);
+//		model.addAttribute("buyer", buyer);
 		model.addAttribute("pageMaker", pageMaker);
 		
 		return "/admin/order/orderDetail";
@@ -176,7 +172,11 @@ public class AdminOrderController {
 	
 	
 	
-	// 주문 통계 - /admin/order/orderStat
+	// 주문상세정보 페이지 - 수정
+	
+	
+	
+	// 주문상세정보 페이지 - 주문 삭제
 	
 	
 }

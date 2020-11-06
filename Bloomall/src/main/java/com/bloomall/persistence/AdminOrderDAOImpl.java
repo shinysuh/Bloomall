@@ -8,8 +8,8 @@ import javax.inject.Inject;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 
+import com.bloomall.domain.AdminOrderDetailVO;
 import com.bloomall.domain.AdminOrderListVO;
-import com.bloomall.domain.OrderHistoryDetailVO;
 import com.bloomall.util.SearchCriteria;
 
 @Repository
@@ -46,7 +46,7 @@ public class AdminOrderDAOImpl implements AdminOrderDAO {
 
 	// 주문 상세 정보 페이지
 	@Override
-	public List<OrderHistoryDetailVO> orderDetail(int ord_idx) throws Exception {
+	public List<AdminOrderDetailVO> orderDetail(int ord_idx) throws Exception {
 		return session.selectList(NS + ".orderDetail", ord_idx);
 	}
 

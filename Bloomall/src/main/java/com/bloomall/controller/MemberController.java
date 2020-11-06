@@ -121,13 +121,21 @@ public class MemberController {
 		// DB에서 암호화된 비밀번호 저장
 		MemberDTO memDto = service.login(dto);
 		
+		String url = "";
+		
 		if(memDto != null) {	// 로그인 성공
 			logger.info("로그인 성공");
 			
 			session.setAttribute("user", memDto);	// 세션에 사용자 정보 저장
 			rttr.addFlashAttribute("msg", "LOGIN_SUCCESS");
 			
-			return "redirect:/";	// 루트
+			// 로그인 전에 요청된 주소의 존재 유무 확인
+			// 존재하면 해당 주소로 이동
+			String destination = (String) session.getAttribute("dest");
+			
+			url = destination != null ? (String) destination : "/";
+			
+			return "redirect:" + url;	// 루트
 		}else {	// 로그인 실패
 			logger.info("로그인 실패");
 			

@@ -72,11 +72,16 @@
 	
 	
 	<!-- 주문정보 상세 페이지 OrderHistoryDetailVO -->
-	<select id="orderDetail" resultType="OrderHistoryDetailVO" parameterType="int">
-		select d.ord_idx, d.prd_idx, p.prd_title, p.prd_img, p.prd_price, d.ord_amount, d.ord_price, d.ord_state
-		from ord_detail_tb d
+	<select id="orderDetail" resultType="AdminOrderDetailVO" parameterType="int">
+		select o.ord_idx, o.ord_state, d.prd_idx, d.ord_amount, p.prd_title, p.prd_price, p.prd_dc_price,
+			   m.mem_id, m.mem_name, m.mem_tel, m.mem_email, o.ord_tot_price, o.ord_date, o.ord_recp_name,
+			   o.ord_recp_tel, o.ord_recp_zip, o.ord_recp_addr, o.ord_recp_addr_d
+		from order_tb o inner join ord_detail_tb d
+		    on o.ord_idx = d.ord_idx
 		inner join product_tb p
 		    on p.prd_idx = d.prd_idx
+		inner join member_tb m
+		    on m.mem_id = o.mem_id
 		where d.ord_idx=#{ord_idx}
 		order by d.prd_idx desc
 	</select>

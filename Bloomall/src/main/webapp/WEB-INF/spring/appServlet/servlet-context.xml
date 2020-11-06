@@ -40,6 +40,8 @@
 	<beans:bean id="loginInterceptor" class="com.bloomall.interceptor.LoginInterceptor"></beans:bean>
 	<beans:bean id="authInterceptor" class="com.bloomall.interceptor.AuthInterceptor"></beans:bean>
 
+
+
 	<interceptors>
 		<interceptor>
 			<mapping path="/member/myPage"/>
@@ -56,8 +58,20 @@
 			<exclude-mapping path="/admin/logout"/>
 			<beans:ref bean="authInterceptor"/>
 		</interceptor>
+		
+		<!-- 
+		<interceptor>
+			<mapping path="/member/loginOk"/>
+			<beans:ref bean="loginInterceptor"/>
+		</interceptor>	
+	
+		<interceptor>
+			<mapping path="/admin/login"/>
+			<beans:ref bean="authInterceptor"/>
+		</interceptor>	
+ 		-->
+	
 	</interceptors>
-
 
 	<!-- Resolves views selected for rendering by @Controllers to .jsp resources in the /WEB-INF/views directory -->
 	<beans:bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">

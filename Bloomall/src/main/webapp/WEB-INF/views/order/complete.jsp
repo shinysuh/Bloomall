@@ -34,6 +34,7 @@
 						<h3>주문번호 <b>${ord_idx}</b>의 주문이 완료되었습니다.</h3><br>
 						<div id="orderHistory" style="text-align:center;">
 							<a href="/order/orderDetail?ord_idx=${ord_idx}"><button type="button" class="btn btn-default" id="orderAll">주문내역 확인하기</button></a>
+							<a href="/cart/list"><button type="button" class="btn btn-default" id="goToCart">장바구니 가기</button></a>
 							<a href="/product/list?ctgr_cd=all"><button type="button" id="goToListAll" class="btn btn-default">쇼핑 계속하기</button></a>
 						</div>
 					</div>

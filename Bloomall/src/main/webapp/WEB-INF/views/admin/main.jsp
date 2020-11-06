@@ -61,9 +61,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
 						<h2 class="form-signin-heading">Sign in</h2>
 						<br><br>
 						<input type="text" id="ad_id" name="ad_id" class="form-control" style="margin-bottom: 15px"
-							placeholder="Admin Name" required autofocus> 
+							placeholder="Admin Name" required autofocus			value="admin"> 
 						<input type="password" id="ad_pw" name="ad_pw" class="form-control"
-							placeholder="Password" required>
+							placeholder="Password" required			value="1111">
 						<br><br>
 						<button type="button" id="btnLogin" class="btn btn-lg btn-primary btn-block">
 							로그인

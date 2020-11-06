@@ -130,6 +130,11 @@
 						  <span class="hidden-xs">마이페이지</span>
 						</a>
 					</li>
+					<li class="user user-menu">
+						<a href="/cart/list" class="toggle" >
+						  <span class="hidden-xs">장바구니</span>
+						</a>
+					</li>
 				</c:if>
 				
 				

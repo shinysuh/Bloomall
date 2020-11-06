@@ -44,18 +44,30 @@ public class AdminController {
 		
 		AdminVO adVO = service.adminLogin(vo);
 		
+		String url = "";
+		
 		if(adVO != null) {
 			logger.info("관리자 로그인 성공");
 			
-			session.setAttribute("admin", adVO);
+			session.setAttribute("admin", adVO);	// 세션에 관리자 정보 저장
 			rttr.addFlashAttribute("msg", "ADMIN_LOGIN_SUCCESS");
+			
+			// 로그인 전에 요청된 주소의 존재 유무 확인
+			// 존재하면 해당 주소로 이동
+			String destination = (String) session.getAttribute("destination");
+			if(destination != null) {
+				url= destination;
+			}else {
+				url="/admin/menu";
+			}			
+			
 		}else {
 			logger.info("관리자 로그인 실패");
 
 			rttr.addFlashAttribute("msg", "ADMIN_LOGIN_FAIL");
 		}
 		
-		return "redirect:/admin/menu";
+		return "redirect:" + url;
 	}
 		
 	

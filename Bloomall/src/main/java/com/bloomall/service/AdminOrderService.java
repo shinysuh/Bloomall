@@ -2,8 +2,8 @@ package com.bloomall.service;
 
 import java.util.List;
 
+import com.bloomall.domain.AdminOrderDetailVO;
 import com.bloomall.domain.AdminOrderListVO;
-import com.bloomall.domain.OrderHistoryDetailVO;
 import com.bloomall.util.SearchCriteria;
 
 public interface AdminOrderService {
@@ -21,7 +21,7 @@ public interface AdminOrderService {
 	public void updateState(int ord_idx, int ord_state) throws Exception;
 	
 	// 주문 상세 정보 페이지
-	public List<OrderHistoryDetailVO> orderDetail(int ord_idx) throws Exception;
+	public List<AdminOrderDetailVO> orderDetail(int ord_idx) throws Exception;
 	
 	
 }

@@ -8,8 +8,8 @@ import javax.inject.Inject;
 
 import org.springframework.stereotype.Service;
 
+import com.bloomall.domain.AdminOrderDetailVO;
 import com.bloomall.domain.AdminOrderListVO;
-import com.bloomall.domain.OrderHistoryDetailVO;
 import com.bloomall.persistence.AdminOrderDAO;
 import com.bloomall.util.SearchCriteria;
 
@@ -50,7 +50,7 @@ public class AdminOrderServiceImpl implements AdminOrderService {
 
 	// 주문 상세 정보 페이지
 	@Override
-	public List<OrderHistoryDetailVO> orderDetail(int ord_idx) throws Exception {
+	public List<AdminOrderDetailVO> orderDetail(int ord_idx) throws Exception {
 		return dao.orderDetail(ord_idx);
 	}
 }

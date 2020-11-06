@@ -9,6 +9,14 @@
 <head>
 <script type="text/javascript">
 $(function(){
+	
+	// 검색 버튼
+	$("#btnSearch").click(function(){
+		self.location = "/admin/order/orderList" + "${pageMaker.makeQuery(1)}"
+					  + "&searchType=" + $("#search").val()
+					  + "&keyword=" + $("#keyword").val();
+	});
+	
 	// 주문상태 변경 버튼(개별)
 	$("button[name='btnUpdate']").click(function(){
 		var ord_idx = $(this).val();
@@ -20,7 +28,7 @@ $(function(){
 			dataType: 'text',
 			data	: {ord_idx : ord_idx, ord_state : ord_state},
 			success	: function(data){
-				alet("주문상태가 변경되었습니다.");
+				alert("주문상태가 변경되었습니다.");
 				location.href = "/admin/order/orderList${pageMaker.makeSearch(pageMaker.cri.page)}";
 			}
 		});
@@ -120,7 +128,7 @@ $(function(){
 			<section class="content container-fluid">
 				<div class="col-md-12">
 					<div style="display: inline-block; float: left; margin-left:15px;">
-						<select name="searchType" style="width:150px; height:26px;">
+						<select name="searchType" id="search" style="width:150px; height:26px;">
 							<option value="null" <c:out value="${cri.searchType == null?'selected':''}" />>
 								[검색 구분]</option>
 							<option value="orderNum" <c:out value="${cri.searchType eq 'orderNum'?'selected':''}" />>
@@ -147,13 +155,12 @@ $(function(){
 							<option value="2">배송준비중</option>
 							<option value="3">배송중</option>
 							<option value="4">배송완료</option>
+							<option value="5">취소/반품</option>
 						</select>				
 						<button type="button" id="btnUpdateChk" class="btn btn-primary">변경</button>
 					</div>
 				</div>
 				<br><br><br>
-				선택(check) / 번호(?) / 주문날짜 / 주문번호(주문상품) / 주문자 / 주문자아이디 / 결제(수단) / 금액 / [처리상태(주문접수(1) / 배송준비중(2) / 배송중(3) / 배송완료(4))]
-
 				<div class="box" style="border: none;">
 					<div class="box-body">
 						<!-- 상품 리스트 테이블 -->
@@ -177,18 +184,36 @@ $(function(){
 								</td>
 							</tr>
 						  </c:if>
-						  <c:set var="count" value="1"></c:set>	
+
+
+						  <c:set var="count" value="1"></c:set>	  <!-- rowspan 적용 변수 -->
+
 						  <c:forEach items="${orderList }" var="orderList" varStatus="i" >
-						  <c:if test="${i.index == 0 || orderList.ord_idx != idx}">
-							<tr>
-								<td><input type="checkbox" name="check" class="check" value="${orderList.ord_idx }" /></td>
+						  
+						  		<%--=========================================== 
+								  <table>
+								<c:if> ord_idx가 이전 idx와 [일치 X] 때, 왼쪽 <td> 출력 
+									
+										<c:if> - <c:set>으로 카운트 변수 1 지정해주고 
+											ord_idx가 이전 idx와 [일치]할때, 1씩 누적시켜주기
+											=> 왼쪽 rowspan에 넣어줄 것 
+							   	===============================================--%>
+						  
+							<%-- <c:if> ord_idx가 이전 idx와 [일치 X] 때, 왼쪽 <td> 출력 --%>
+							<c:if test="${i.index == 0 || orderList.ord_idx != idx}">
+						  	  <tr>
+								<td ><input type="checkbox" name="check" class="check" value="${orderList.ord_idx }" /></td>
 								<td><c:out value="${count }"/></td>
 								<td class="col-md-1"><fmt:formatDate value="${orderList.ord_date }" pattern="yyyy-MM-dd HH:mm"/></td>
-								<td class="col-md-1" style="font-weight:bold;">
-									<a href="/admin/orderList/detail?${pageMaker.makeSearch(pageMaker.cri.page)}&ord_idx=${orderList.ord_idx}" style="color:black;">
+								<td  class="col-md-1" style="font-weight:bold;">
+									<input type="hidden" name="ord_idx" value="${orderList.ord_idx }">
+									<a href="/admin/order/orderDetail${pageMaker.makeSearch(pageMaker.cri.page)}&ord_idx=${orderList.ord_idx}" style="color:black;">
 									${orderList.ord_idx }</a></td>
+									
+								<!-- =================================================================== -->
+							
 								<td class="col-md-2">
-									<a href="/admin/orderList/detail?${pageMaker.makeSearch(pageMaker.cri.page)}&ord_idx=${orderList.ord_idx}" style="color:black;">
+									<a href="/admin/order/orderDetail${pageMaker.makeSearch(pageMaker.cri.page)}&ord_idx=${orderList.ord_idx}" style="color:black;">
 									<c:if test="${productCount[i.index] > 1 }">
 										${orderList.prd_title } 외 ${productCount[i.index] - 1}건
 									</c:if>
@@ -197,6 +222,9 @@ $(function(){
 									</c:if>
 									</a>
 								</td>
+								
+								<!-- =================================================================== -->
+								
 								<td class="col-md-1">${orderList.mem_id }</td>
 								<td class="col-md-1">${orderList.mem_name }</td>
 								<td class="col-md-1">결제수단</td>
@@ -205,16 +233,32 @@ $(function(){
 								</td>
 								<td class="col-md-3">
 									<select class="form-control" name="ord_state_${orderList.ord_idx }" style="width: 130px; display: inline-block;">
-										<option <c:out value="${orderList.ord_state == null ? 'selected':''}" />>[주문상태]</option>
-										<option <c:out value="${orderList.ord_state == 1 ? 'selected':''}" />>주문접수</option>
-										<option <c:out value="${orderList.ord_state == 2 ? 'selected':''}" />>배송준비중</option>
-										<option <c:out value="${orderList.ord_state == 3 ? 'selected':''}" />>배송중</option>
-										<option <c:out value="${orderList.ord_state == 4 ? 'selected':''}" />>배송완료</option>
+										<option value="99" <c:out value="${orderList.ord_state == null ? 'selected':''}" />>[주문상태]</option>
+										<option value="1" <c:out value="${orderList.ord_state == 1 ? 'selected':''}" />>주문접수</option>
+										<option value="2" <c:out value="${orderList.ord_state == 2 ? 'selected':''}" />>배송준비중</option>
+										<option value="3" <c:out value="${orderList.ord_state == 3 ? 'selected':''}" />>배송중</option>
+										<option value="4" <c:out value="${orderList.ord_state == 4 ? 'selected':''}" />>배송완료</option>
+										<option value="4" <c:out value="${orderList.ord_state == 5 ? 'selected':''}" />>취소/반품</option>
 									</select>				
 									<button type="button" name="btnUpdate" value="${orderList.ord_idx }" class="btn btn-primary">변경</button>
 								</td>
 							</tr>
-						  <c:set var="count" value="${count+1 }"></c:set>
+						  </c:if>
+						  <c:if test="${orderList.ord_idx == idx }">
+						  	<c:set var="count" value="${count+1 }"></c:set>
+						  	
+						  	<c:if test="${cri.page != 1 }">
+						  	
+						  	<!-- 다시 생각하기 --><%--
+						  			<c:set var="count" value="${count + (page -1) * 20 }"></c:set>
+						  			 --%>
+									
+									<!-- 강사님 조언 -->
+									<%-- 일련번호 : ((현재page - 1) * pageSize) + 1 변수에 담아 forEach 구문에서 1씩 증가해서 처리 --%>
+									
+									
+														  	
+						  	</c:if>
 						  </c:if>
 						  <c:set var="idx" value="${orderList.ord_idx}" />
 						  </c:forEach>
@@ -229,21 +273,21 @@ $(function(){
 								<!-- [이전] 표시 -->
 								<c:if test="${pageMaker.prev }">
 									<li>
-										<a href="${pageMaker.makeSearch(pageMaker.cri.page - 1)}">[이전]</a>
+										<a href="${pageMaker.makeSearch(pageMaker.cri.page - 1)}&count=${count}">[이전]</a>
 									</li>
 								</c:if>
 								<!-- 페이지 번호 표시 -->
 								<c:forEach begin="${pageMaker.startPage }" end="${pageMaker.endPage }" var="idx" >
 									<li <c:out value="${pageMaker.cri.page == idx?'class=active':'' }" />>
 										<a 
-										 href="/admin/order/orderList${pageMaker.makeSearch(idx) }">${idx }</a>
+										 href="/admin/order/orderList${pageMaker.makeSearch(idx) }&count=${count}">${idx }</a>
 									</li>
 								</c:forEach>
 							
 								<!-- [다음] 표시 -->
 								<c:if test="${pageMaker.next }">
 									<li>
-										<a href="${pageMaker.makeSearch(pageMaker.cri.page + 1 )}">[다음]</a>
+										<a href="${pageMaker.makeSearch(pageMaker.cri.page + 1 )}&count=${count}">[다음]</a>
 									</li>
 								</c:if>
 							</ul>

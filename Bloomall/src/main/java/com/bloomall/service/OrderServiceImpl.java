@@ -159,7 +159,7 @@ public class OrderServiceImpl implements OrderService {
 			// 이때, 구매 상품의 상품번호 필요
 			Map<String, Object> map = new HashMap<String, Object>();
 			map.put("mem_id", mem_id);
-			map.put("prd_idx", detailVO);
+			map.put("prd_idx", detailVO.getPrd_idx());
 			
 			// 장바구니에서 주문한 상품들 지우기
 			cartService.emptyCart(map);
