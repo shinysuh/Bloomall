@@ -10,7 +10,7 @@ public class OrderHistoryDetailVO {
 	private int 	prd_price;    	// 상품 가격 - ProductVO
 	private int 	ord_amount;  	// 각 주문수량 - OrderDetailVO
 	private int 	ord_price;  	// 각 상품 주문금액 - OrderDetailVO
-	private int 	ord_state;		// 주문처리 현황
+	private int 	ord_state;		// 주문처리 현황 - OrderVO
 	
 	public int getOrd_idx() {
 		return ord_idx;

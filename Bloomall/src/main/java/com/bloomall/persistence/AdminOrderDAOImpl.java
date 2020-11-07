@@ -8,7 +8,6 @@ import javax.inject.Inject;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 
-import com.bloomall.domain.AdminOrderDetailVO;
 import com.bloomall.domain.AdminOrderListVO;
 
 @Repository
@@ -47,12 +46,6 @@ public class AdminOrderDAOImpl implements AdminOrderDAO {
 	@Override
 	public void updateState(Map<String, Object> map) throws Exception {
 		session.update(NS + ".updateState", map);
-	}
-
-	// 주문 상세 정보 페이지
-	@Override
-	public List<AdminOrderDetailVO> orderDetail(int ord_idx) throws Exception {
-		return session.selectList(NS + ".orderDetail", ord_idx);
 	}
 
 }

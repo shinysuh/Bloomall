@@ -48,12 +48,13 @@
 						</div>
 						<!-- 상품 리스트 테이블 -->
 						<div>
-							<h5>주문번호 : ${orderDetail.ord_idx }</h5>
+							<h5>주문번호 : ${buyer.ord_idx }</h5>
 						</div>
-						<table class="table table-striped text-center">
+						<table class="table table-striped text-center" id="table_1">
 							<tr>
 								<th>선택</th>
 								<th>번호</th>
+								<th>상품이미지</th>
 								<th>상품명</th>
 								<th>수량</th>
 								<th>상품가격</th>
@@ -61,12 +62,22 @@
 								<th>소계</th>
 								<th>처리상태</th>
 							</tr>
-						  
+						  	<tr>
+						  		<td><input type="checkbox" name="check" class="check" /></td>
+						  		<td></td>
+						  		<td></td>
+						  		<td></td>
+						  		<td></td>
+						  		<td></td>
+						  		<td></td>
+						  		<td></td>
+						  		<td></td>
+						  	</tr>
 							<!--
 								(수정가능) 항목들은 input으로 => 맨아래 수정버튼으로 수정 제출
 								
 								[1번 테이블(상품정보)]
-								선택 / 번호 / 상품명 / 수량(수정가능) / 정가 / 판매가격(수정가능) / 소계(가격*수량) / 처리상태 (readonly)(아래에 수정 dropdown)
+								선택 / 번호 / 상품이미지 / 상품명 / 수량(수정가능) / 정가 / 판매가격(수정가능) / 소계(가격*수량) / 처리상태 (readonly)(아래에 수정 dropdown)
 								
 								
 								[div]
@@ -76,7 +87,7 @@
 								[2번 테이블(결제정보)]
 								총 주문금액
 								총 할인금액
-								결제금액 - 쿠폰이나 포인트 사용에 따라 달라질 수 있는 항목
+								결제금액 - 쿠폰이나 포인트 사용에 따라 달라질 수 있는 항목  (buyer.ord_tot_price)
 								결제수단 
 								
 								
@@ -85,30 +96,30 @@
 								이메일							연락처(ord_recp_tel)(수정가능)
 								연락처(user.mem_tel)(수정가능)		주소/우편번호(수정가능)
 								주문날짜							상세주소(수정가능)
-								
+								-> 주문자 정보(session에서 user로 가져오기)
 								
 								
 								
 										[수정] / [목록]
 															
 							 -->
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 						</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 					</div>
 				</div>
 			</section>

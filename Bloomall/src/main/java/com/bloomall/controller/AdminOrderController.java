@@ -19,8 +19,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.bloomall.domain.AdminOrderDetailVO;
 import com.bloomall.domain.AdminOrderListVO;
+import com.bloomall.domain.OrderHistoryDetailVO;
 import com.bloomall.domain.OrderVO;
 import com.bloomall.service.AdminOrderService;
 import com.bloomall.service.OrderService;
@@ -36,8 +36,8 @@ public class AdminOrderController {
 	@Inject
 	private AdminOrderService service;
 	
-//	@Inject
-//	private OrderService orderService;
+	@Inject
+	private OrderService orderService;		// 주문정보 상세 페이지
 	
 	// 주문목록 - /admin/order/orderList		- SearchCriteria
 	@RequestMapping(value = "/orderList", method=RequestMethod.GET)
@@ -50,9 +50,8 @@ public class AdminOrderController {
 		cri.setPerPageNum(20);
 		pageMaker.setCri(cri);
 		
-		// 주문번호도 리스트로 가져와서 for문 돌려서 하나씩 집어넣기?
+		// 주문번호도 리스트로 가져와서 for문 돌려서 하나씩 집어넣기
 		List<Integer> idxList = service.getOrdIDX();
-		
 		// 주문목록 리스트
 		List<AdminOrderListVO> orderList = new ArrayList<AdminOrderListVO>();
 		// 주문 당 주문 상품 종류 개수
@@ -171,15 +170,15 @@ public class AdminOrderController {
 		logger.info("======== orderDetail() called ========");
 		logger.info("ord_idx : " + ord_idx);
 		
-		List<AdminOrderDetailVO> orderDetail = service.orderDetail(ord_idx);
-//		OrderVO buyer = orderService.recipientInfo(ord_idx);		// AdminOrderDetailVO 에 주문자 정보도 다 들어있음
+		List<OrderHistoryDetailVO> orderDetail = orderService.orderHistoryDetail(ord_idx);
+		OrderVO buyer = orderService.recipientInfo(ord_idx);
 		
 		PageMaker pageMaker = new PageMaker();
 		pageMaker.setCri(cri);
 		pageMaker.getCri().setPerPageNum(20);
 		
 		model.addAttribute("orderDetail", orderDetail);
-//		model.addAttribute("buyer", buyer);
+		model.addAttribute("buyer", buyer);
 		model.addAttribute("pageMaker", pageMaker);
 		
 		return "/admin/order/orderDetail";
