@@ -1,7 +1,9 @@
 package com.bloomall.controller;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -48,21 +50,34 @@ public class AdminOrderController {
 		cri.setPerPageNum(20);
 		pageMaker.setCri(cri);
 		
-		List<AdminOrderListVO> orderList = service.orderList(cri);
+		// 주문번호도 리스트로 가져와서 for문 돌려서 하나씩 집어넣기?
+		List<Integer> idxList = service.getOrdIDX();
 		
-		int count = service.orderTotal();
+		// 주문목록 리스트
+		List<AdminOrderListVO> orderList = new ArrayList<AdminOrderListVO>();
+		// 주문 당 주문 상품 종류 개수
+		List<Integer> productCount = new ArrayList<Integer>();
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("cri", cri);
+		
+		int ord_idx = 0;
+		
+		for(int i = 0; i < idxList.size(); i++) {
+			ord_idx = idxList.get(i);
+			map.put("ord_idx", ord_idx);
+			// 주문내역 리스트에 저장
+			orderList.addAll(service.orderList(map));
+			productCount.add(service.productCount(idxList.get(i)));
+		}
+		
+		// 페이징에 적용될 카운트 개수는 주문번호 리스트의 크기. 매퍼쿼리 노 필요
+		int count = idxList.size();
 		pageMaker.setTotalCount(count);
 		
 		logger.info("===========총 주문 개수 : " + count);
 		logger.info(pageMaker.toString());
-		
-		// 주문 당 주문 상품 종류 개수
-		List<Integer> productCount = new ArrayList<Integer>();
 
-		for(int i =0; i < orderList.size(); i ++) {
-			productCount.add(service.productCount(orderList.get(i).getOrd_idx()));
-		}
-		
 		model.addAttribute("orderList", orderList);
 		model.addAttribute("productCount", productCount);
 		model.addAttribute("pageMaker", pageMaker);

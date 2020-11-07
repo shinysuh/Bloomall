@@ -9,8 +9,11 @@ import com.bloomall.util.SearchCriteria;
 
 public interface AdminOrderDAO {
 
+	// 존재하는 주문번호 가져오기
+	public List<Integer> getOrdIDX() throws Exception;
+	
 	// 주문 목록
-	public List<AdminOrderListVO> orderList(SearchCriteria cri) throws Exception;
+	public List<AdminOrderListVO> orderList(Map<String, Object> map) throws Exception;
 	
 	// 주문 총 개수
 	public int orderTotal() throws Exception;

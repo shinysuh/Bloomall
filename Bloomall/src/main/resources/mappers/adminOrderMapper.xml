@@ -5,8 +5,16 @@
   
 <mapper namespace="com.bloomall.mappers.AdminOrderMapper">
 
+	<!-- 존재하는 주문번호 가져오기(목록) -->
+	<select id="getOrdIDX" resultType="int">
+		select ord_idx from order_tb
+		order by ord_idx desc
+	</select>
+
 	<!-- 주문목록 OrderHistoryVO -->
-	<select id="orderList" resultType="AdminOrderListVO" parameterType="SearchCriteria">
+	<!-- 어차피 주문목록에는 해당주문 중 한개의 상품명만 표시할 것. 따라서 모든 상품 데이터를 가져갈 필요는 없다.
+		 상품번호가 가장 큰 상품명만 노출되도록 하나만 가져가기 -->
+	<select id="orderList" resultType="AdminOrderListVO" parameterType="Map">
 		select ord_idx, prd_title, prd_price, ord_tot_price, ord_amount, mem_id, ord_recp_name, ord_date, ord_state, mem_name
 		from (select o.ord_idx, p.prd_title, p.prd_price, o.ord_tot_price, d.ord_amount, o.mem_id, o.ord_recp_name, o.ord_date, o.ord_state, p.prd_company, m.mem_name,
 		             row_number() over(order by o.ord_idx desc) o_seq
@@ -16,20 +24,22 @@
 		            on p.prd_idx = d.prd_idx
 		        inner join member_tb m
 		            on m.mem_id = o.mem_id
-		        order by o.ord_idx desc, d.prd_idx desc
+		        where d.ord_idx = #{ord_idx} and d.prd_idx=(select max(prd_idx) from ord_detail_tb where ord_idx=#{ord_idx})
+		        <include refid="search" />
+		        order by d.ord_idx desc, d.prd_idx desc
 		        )
-		where o_seq between #{rowStart} and #{rowEnd}
+		where o_seq between #{cri.rowStart} and #{cri.rowEnd}
 	</select>
 	
 	<sql id="search">
 		<if test="searchType != null">
 			<if test="searchType == 'orderNum'.toString()">
-				where ord_idx like '%' || #{keyword} || '%'
+				where ord_idx = #{keyword}
 			</if>		
 			<if test="searchType == 'memId'.toString()">
 				where mem_id like '%' || #{keyword} || '%' 
 			</if>	
-			<if test="searchType == 'memNAme'.toString()">
+			<if test="searchType == 'memName'.toString()">
 				where mem_name like '%' || #{keyword} || '%'
 			</if>
 			<if test="searchType == 'state'.toString()">
@@ -44,14 +54,17 @@
 		</if>
 	</sql>
 	
-	<!-- 총 주문개수 -->
+	<!-- 총 주문개수
 	<select id="orderTotal" resultType="int">
 		select count(o.ord_idx)
 		from order_tb o inner join ord_detail_tb d
-		    on o.ord_idx = d.ord_idx
-		inner join product_tb p
-		    on p.prd_idx = d.prd_idx
+		            on o.ord_idx = d.ord_idx
+		        inner join product_tb p
+		            on p.prd_idx = d.prd_idx
+		        inner join member_tb m
+		            on m.mem_id = o.mem_id
 	</select>
+	 -->
 	
 	<!-- 주문 당 주문상품 종류 개수 -->
 	<select id="productCount" resultType="int" parameterType="int">

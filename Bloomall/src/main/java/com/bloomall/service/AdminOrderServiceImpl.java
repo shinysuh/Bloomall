@@ -11,18 +11,23 @@ import org.springframework.stereotype.Service;
 import com.bloomall.domain.AdminOrderDetailVO;
 import com.bloomall.domain.AdminOrderListVO;
 import com.bloomall.persistence.AdminOrderDAO;
-import com.bloomall.util.SearchCriteria;
 
 @Service
 public class AdminOrderServiceImpl implements AdminOrderService {
 
 	@Inject
 	private AdminOrderDAO dao;
+
+	// 존재하는 주문번호 가져오기
+	@Override
+	public List<Integer> getOrdIDX() throws Exception {
+		return dao.getOrdIDX();
+	}
 	
 	// 주문 목록
 	@Override
-	public List<AdminOrderListVO> orderList(SearchCriteria cri) throws Exception {
-		return dao.orderList(cri);
+	public List<AdminOrderListVO> orderList(Map<String, Object> map) throws Exception {
+		return dao.orderList(map);
 	}
 
 	// 주문 총 개수
@@ -53,4 +58,5 @@ public class AdminOrderServiceImpl implements AdminOrderService {
 	public List<AdminOrderDetailVO> orderDetail(int ord_idx) throws Exception {
 		return dao.orderDetail(ord_idx);
 	}
+
 }

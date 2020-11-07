@@ -10,7 +10,6 @@ import org.springframework.stereotype.Repository;
 
 import com.bloomall.domain.AdminOrderDetailVO;
 import com.bloomall.domain.AdminOrderListVO;
-import com.bloomall.util.SearchCriteria;
 
 @Repository
 public class AdminOrderDAOImpl implements AdminOrderDAO {
@@ -20,10 +19,16 @@ public class AdminOrderDAOImpl implements AdminOrderDAO {
 	
 	private final static String NS = "com.bloomall.mappers.AdminOrderMapper";
 
+	// 존재하는 주문번호 가져오기
+	@Override
+	public List<Integer> getOrdIDX() throws Exception {
+		return session.selectList(NS + ".getOrdIDX");
+	}
+
 	// 주문 목록
 	@Override
-	public List<AdminOrderListVO> orderList(SearchCriteria cri) throws Exception {
-		return session.selectList(NS + ".orderList", cri);
+	public List<AdminOrderListVO> orderList(Map<String, Object> map) throws Exception {
+		return session.selectList(NS + ".orderList", map);
 	}
 
 	// 주문 총 개수
