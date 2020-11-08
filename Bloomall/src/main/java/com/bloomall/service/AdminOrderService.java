@@ -22,4 +22,10 @@ public interface AdminOrderService {
 	// 주문 상태 변경
 	public void updateState(int ord_idx, int ord_state) throws Exception;
 	
+	/* 주문정보 상세 페이지 [수정] */
+	public void updateAmount(int ord_idx, int ord_amount) throws Exception;
+	
+	/* 주문정보 상세 페이지 [삭제] */
+	public void deleteOrder(int ord_idx) throws Exception;
+	
 }

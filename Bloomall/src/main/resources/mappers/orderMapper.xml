@@ -27,16 +27,16 @@
 	<!-- 주문정보 추가(주문테이블) -->
 	<insert id="addOrderInfo" parameterType="OrderVO">
 		insert into order_tb(ord_idx, mem_id, ord_recp_name, ord_recp_zip, ord_recp_addr,
-							 ord_recp_addr_d, ord_recp_tel, ord_tot_price, ord_date)
+							 ord_recp_addr_d, ord_recp_tel, ord_tot_price, ord_date, ord_state)
     		values(#{ord_idx},#{mem_id},#{ord_recp_name},#{ord_recp_zip},#{ord_recp_addr},
-    			   #{ord_recp_addr_d},#{ord_recp_tel},#{ord_tot_price}, sysdate)
+    			   #{ord_recp_addr_d},#{ord_recp_tel},#{ord_tot_price}, sysdate, 1)
 	</insert>
 	
 	
 	<!-- 주문내역리스트 (OrderHistoryVO) -->
 	<select id="orderHistoryList" resultType="OrderHistoryVO" parameterType="Map">
-		select ord_idx, prd_title, prd_price, ord_tot_price, ord_amount, mem_id, ord_recp_name, ord_date
-		from (select o.ord_idx, p.prd_title, p.prd_price, o.ord_tot_price, d.ord_amount, o.mem_id, o.ord_recp_name, o.ord_date,
+		select ord_idx, prd_title, prd_price, ord_tot_price, ord_amount, mem_id, ord_recp_name, ord_date, ord_state
+		from (select o.ord_idx, p.prd_title, p.prd_price, o.ord_tot_price, d.ord_amount, o.mem_id, o.ord_recp_name, o.ord_date, o.ord_state
 		             row_number() over(order by o.ord_idx desc) o_seq
 		        from order_tb o inner join ord_detail_tb d
 		            on o.ord_idx = d.ord_idx
@@ -73,7 +73,7 @@
 	<!-- 주문자 정보(주문테이블) -->
 	<select id="recipientInfo" resultType="OrderVO" parameterType="int">
 		select ord_idx, mem_id, ord_recp_name, ord_recp_zip, ord_recp_addr, ord_recp_addr_d,
-			   ord_recp_tel, ord_tot_price, ord_date
+			   ord_recp_tel, ord_tot_price, ord_date, ord_state
 		from order_tb
 		where ord_idx = #{ord_idx}
 	</select>

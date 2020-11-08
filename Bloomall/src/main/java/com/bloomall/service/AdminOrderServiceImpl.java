@@ -52,4 +52,23 @@ public class AdminOrderServiceImpl implements AdminOrderService {
 		dao.updateState(map);
 	}
 
+	
+	/* 주문정보 상세 페이지 [수정] */
+	@Override
+	public void updateAmount(int ord_idx, int ord_amount) throws Exception {
+		
+		Map<String , Object> map = new HashMap<String, Object>();
+		map.put("ord_amount", ord_amount);
+		map.put("ord_idx", ord_idx);
+		
+		dao.updateAmount(map);
+	}
+	
+	/* 주문정보 상세 페이지 [삭제] */
+	@Override
+	public void deleteOrder(int ord_idx) throws Exception {
+		dao.deleteDetail(ord_idx);
+		dao.deleteOrder(ord_idx);
+	}
+
 }

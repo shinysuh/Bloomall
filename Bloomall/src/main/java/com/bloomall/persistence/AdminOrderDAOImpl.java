@@ -48,4 +48,26 @@ public class AdminOrderDAOImpl implements AdminOrderDAO {
 		session.update(NS + ".updateState", map);
 	}
 
+	
+	/* 주문정보 상세 페이지 [수정] */
+	// 1)주문처리상태 수정
+	// 2)상품별 수량 수정
+	@Override
+	public void updateAmount(Map<String, Object> map) throws Exception {
+		session.update(NS + ".updateAmount", map);
+	}
+
+	
+	/* 주문정보 상세 페이지 [삭제] */
+	// 1)주문상세테이블 삭제
+	@Override
+	public void deleteDetail(int ord_idx) throws Exception {
+		session.delete(NS + ".deleteDetail", ord_idx);
+	}
+	// 2)주문테이블 삭제
+	@Override
+	public void deleteOrder(int ord_idx) throws Exception {
+		session.delete(NS + ".deleteOrder", ord_idx);
+	}
+
 }

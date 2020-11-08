@@ -160,7 +160,6 @@ $(function(){
 							<option value="2">배송준비중</option>
 							<option value="3">배송중</option>
 							<option value="4">배송완료</option>
-							<option value="5">취소/반품</option>
 						</select>				
 						<button type="button" id="btnUpdateChk" class="btn btn-primary">변경</button>
 					</div>
@@ -237,7 +236,6 @@ $(function(){
 										<option value="2" <c:out value="${orderList.ord_state == 2 ? 'selected':''}" />>배송준비중</option>
 										<option value="3" <c:out value="${orderList.ord_state == 3 ? 'selected':''}" />>배송중</option>
 										<option value="4" <c:out value="${orderList.ord_state == 4 ? 'selected':''}" />>배송완료</option>
-										<option value="4" <c:out value="${orderList.ord_state == 5 ? 'selected':''}" />>취소/반품</option>
 									</select>				
 									<button type="button" name="btnUpdate" value="${orderList.ord_idx }" class="btn btn-primary">변경</button>
 								</td>

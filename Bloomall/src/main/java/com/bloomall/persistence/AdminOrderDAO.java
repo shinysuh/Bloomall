@@ -22,4 +22,16 @@ public interface AdminOrderDAO {
 	// 주문 상태 변경
 	public void updateState(Map<String, Object> map) throws Exception;
 	
+	/* 주문정보 상세 페이지 [수정] */
+	// 1)주문처리상태 수정
+	// 2)상품별 수량 수정
+	public void updateAmount(Map<String, Object> map) throws Exception;
+	
+	/* 주문정보 상세 페이지 [삭제] */
+	// 1)주문상세테이블 삭제
+	public void deleteDetail(int ord_idx) throws Exception;
+	// 2)주문테이블 삭제
+	public void deleteOrder(int ord_idx) throws Exception;
+	
+	
 }

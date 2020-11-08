@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.bloomall.domain.AdminOrderListVO;
 import com.bloomall.domain.OrderHistoryDetailVO;
@@ -186,12 +187,42 @@ public class AdminOrderController {
 	
 	
 	
-	// 주문상세정보 페이지 - 수정
+	// 주문상세정보 페이지 - 수정 POST		/admin/order/updateDetail
+	@RequestMapping(value = "/updateDetail", method=RequestMethod.POST)
+	public String updateDetail(@RequestParam int ord_idx, @RequestParam int ord_state, 
+							   @RequestParam("ord_amount") List<Integer> amtArr,
+							   SearchCriteria cri, RedirectAttributes rttr) throws Exception{
+		
+		logger.info("======== updateDetail() called ========");
+		logger.info(cri.toString());
+		
+		// 주문상태 업데이트
+		service.updateState(ord_idx, ord_state);
+		
+		// 주문수량 업데이트 - for문
+		for(int i=0; i < amtArr.size(); i++) {
+			service.updateAmount(ord_idx, amtArr.get(i));
+		}
+		
+		rttr.addFlashAttribute("cri", cri);
+		
+		return "redirect:/admin/order/orderList";
+	}
 	
 	
 	
-	// 주문상세정보 페이지 - 주문 삭제
-	
+	// 주문상세정보 페이지 - 주문 삭제  POST
+	@RequestMapping(value = "/deleteOrder", method=RequestMethod.POST)
+	public String deleteOrder(@RequestParam int ord_idx, SearchCriteria cri, RedirectAttributes rttr) throws Exception{
+		
+		logger.info("======== deleteOrder() called ========");
+		logger.info(cri.toString());
+		
+		service.deleteOrder(ord_idx);
+		rttr.addFlashAttribute("cri", cri);
+		
+		return "redirect:/admin/order/orderList";
+	}
 	
 }
 
