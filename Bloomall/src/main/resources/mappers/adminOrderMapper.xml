@@ -85,11 +85,18 @@
 	
 	
 	<!-- 주문정보 상세 페이지 [수정] -->
-	<!-- 1)주문처리상태 수정 -->
-	<!-- 2)상품별 수량 수정 -->
+	<!-- 1)수령자정보/주문처리상태 수정 (주문테이블) -->
+	<update id="updateRecipientAndState" parameterType="OrderVO">
+		update order_tb
+		set ord_recp_name=#{ord_recp_name}, ord_recp_tel=#{ord_recp_tel}, ord_recp_zip=#{ord_recp_zip},
+		    ord_recp_addr=#{ord_recp_addr}, ord_recp_addr_d=#{ord_recp_addr_d}, ord_state=#{ord_state}
+		where ord_idx=#{ord_idx}
+	</update>
+	
+	<!-- 2)상품별 수량 수정 (주문상세테이블) -->
 	<update id="updateAmount" parameterType="map">
 		update ord_detail_tb set ord_amount=#{ord_amount}
-		where ord_idx=#{ord_idx}
+		where ord_idx=#{ord_idx} and prd_idx=#{prd_idx}
 	</update>
 	
 	

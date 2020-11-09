@@ -35,15 +35,17 @@
 			<div class="row">
 				<div class="col-md-10">
 				<!-- left column -->
-						<div style="display: inline-block; float: right; margin-right:10%;">
+					<div>
+						<input type="hidden" name="ord_idx" value="${buyer.ord_idx}" />
+						<input type="hidden" name="page" value="${cri.page}" /> 
+					<input type="hidden" name="perPageNum" value="${cri.perPageNum}" />
+					</div>
+					<div class="box" style="border: none;">
+						<div style="display: inline-block; float: right; margin:8px 6%;">
 						<a href="/order/orderHistory${pageMaker.makeQuery(pageMaker.cri.page) }">
-							<button type="button" id="btn_toHistoryList" class="btn btn-default">목록으로</button>	
-							<input type="hidden" name="ord_idx" value="${buyer.ord_idx}" />
-							<input type="hidden" name="page" value="${cri.page}" /> 
-							<input type="hidden" name="perPageNum" value="${cri.perPageNum}" />
+							<button type="button" id="btn_toHistoryList" class="btn btn-primary">목록으로</button>	
 						</a>
 						</div>
-					<div class="box" style="border: none;">
 						<div class="box-body" style="padding:30px 10px 100px 10px;">
 							<%-- 주문내역 상단 버튼 --%>
 							<div class="col-sm-12">

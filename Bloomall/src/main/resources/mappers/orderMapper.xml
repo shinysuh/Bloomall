@@ -36,7 +36,7 @@
 	<!-- 주문내역리스트 (OrderHistoryVO) -->
 	<select id="orderHistoryList" resultType="OrderHistoryVO" parameterType="Map">
 		select ord_idx, prd_title, prd_price, ord_tot_price, ord_amount, mem_id, ord_recp_name, ord_date, ord_state
-		from (select o.ord_idx, p.prd_title, p.prd_price, o.ord_tot_price, d.ord_amount, o.mem_id, o.ord_recp_name, o.ord_date, o.ord_state
+		from (select o.ord_idx, p.prd_title, p.prd_price, o.ord_tot_price, d.ord_amount, o.mem_id, o.ord_recp_name, o.ord_date, o.ord_state,
 		             row_number() over(order by o.ord_idx desc) o_seq
 		        from order_tb o inner join ord_detail_tb d
 		            on o.ord_idx = d.ord_idx

@@ -15,7 +15,7 @@ $(function(){
 	
 	// 주문상태 변경 버튼 btnUpdate
 	$("#btnUpdate").click(function(){
-		var ord_idx = "${buyer.ord_idx }";
+		var ord_idx = $("input[name='ord_idx']").val();
 		var ord_state = $("#update_status").val();
 		
 		$.ajax({
@@ -32,11 +32,23 @@ $(function(){
 	
 	// 이 주문 삭제하기 버튼 - deleteOrder
 	$("#deleteOrder").click(function(){
-		 var form = $("#form1");
-		 if(confirm("정말 이 주문건을 삭제하시겠습니까? \n이 작업은 DB정보만 삭제하며, 포인트 회수 및 쿠폰 취소를 위해서는 \n주문취소 작업 후 진행해주시기 바랍니다. \n이 작업은 취소할 수 없으므로 신중하게 결정해주세요.")){
-			 form.attr("action", "/admin/order/deleteOrder");
-			 form.submit();
-			 alert("해당 주문건이 정상적으로 삭제되었습니다.");
+		
+		var ord_idx = $("input[name='ord_idx']").val();
+		
+		if(confirm("정말 이 주문건을 삭제하시겠습니까? \n이 작업은 DB정보만 삭제하며, 포인트 회수 및 쿠폰 취소를 위해서는 \n주문취소 작업 후 진행해주시기 바랍니다. \n이 작업은 취소할 수 없으므로 신중하게 결정해주세요.")){
+
+			$.ajax({
+				type	: 'post',
+				url		: '/admin/order/deleteOrder',
+				dataType: 'text',
+				data	: {ord_idx : ord_idx},
+				success	: function(data){
+					
+					alert("해당 주문건이 정상적으로 삭제되었습니다.")
+					
+					location.href = "/admin/order/orderList${pageMaker.makeSearch(pageMaker.cri.page)}";
+				}
+			});
 		 }
 	});
 	
@@ -107,12 +119,16 @@ function getStateText(){
 								</div>
 								<!-- 상품 리스트 테이블 -->
 								<div style="font-size:16px;">
-									<span>주문번호 : <b style="font-size:18px;">${buyer.ord_idx }</b></span>
+								<input type="hidden" name="ord_idx" value="${order.ord_idx }" >
+									<span>주문번호 : <b style="font-size:18px;">${order.ord_idx }</b></span>
 									<span class='divi'>&nbsp;&nbsp;|&nbsp;&nbsp;</span>
-									<span>주문날짜 : <fmt:formatDate value="${buyer.ord_date}" pattern="yyyy-MM-dd HH:mm"/> </span>
+									<span>주문날짜 : <fmt:formatDate value="${order.ord_date}" pattern="yyyy-MM-dd HH:mm"/> </span>
 									<button type="button" class="btnList btn btn-primary" style="float:right; margin-right:1%">목록으로</button>
 									<br>
 								</div>
+								
+								
+								<!-- =================================================================================== -->
 								<div class="col-sm-12">
 								<!-- [1번 테이블(상품정보)] -->
 								<div style="color:green;font-weight:bold;">&#9660; 주문상품</div>
@@ -129,9 +145,14 @@ function getStateText(){
 										<th>처리상태</th>
 									</tr>
 									<c:forEach items="${orderDetail }" var="orderDetail" varStatus="i">
+									<c:set var="totalPrice" value="${totalPrice + orderDetail.prd_price * orderDetail.ord_amount }" />
+									<c:set var="totalDC" value="${totalDC + (orderDetail.prd_price - orderDetail.ord_price) * orderDetail.ord_amount }" />
 								  	<tr style="text-align:center;">
 								  		<td><input type="checkbox" name="check" class="check" /></td>
-								  		<td>${i.index + 1 }</td>
+								  		<td>
+								  			${i.index + 1 }
+								  			<input type="hidden" name="prd_idx" value="${orderDetail.prd_idx }"  />
+								  		</td>
 								  		<td class="col-md-1">
 								  			<a href="/product/detail?prd_idx=${orderDetail.prd_idx}">
 												<img src="/product/fileDisplay?fileName=${orderDetail.prd_img}" style="height:80px;">
@@ -146,12 +167,82 @@ function getStateText(){
 								  		<td class="col-md-2" style="font-weight:bold;">
 								  			<fmt:formatNumber value="${orderDetail.ord_price * orderDetail.ord_amount }" pattern="###,###,###"/>원
 							  			</td>
-								  		<td class="state col-md-2">${buyer.ord_state }</td>
+								  		<td class="state col-md-2">${order.ord_state }</td>
 								  	</tr>
 									</c:forEach>
 								</table>
 								</div>
-									<%--
+	 
+								<!-- =================================================================================== -->
+								<div class="col-sm-12">
+								<!-- [2번 테이블(현재 상태)] -->
+									<div style="color:green;font-weight:bold;">&#9660; 현재 주문처리상태</div>
+									<table class="table table-striped text-center" id="table_2">
+										<tr>
+											<td class="col-sm-2" style="font-weight:bold;">주문상태</td>
+											<td>
+												<select class="form-control" id="update_status" name="ord_state" style="width: 170px; display: inline-block; float:left;">
+													<option value="1" <c:out value="${order.ord_state == 1 ? 'selected':''}" />>주문접수</option>
+													<option value="2" <c:out value="${order.ord_state == 2 ? 'selected':''}" />>배송준비중</option>
+													<option value="3" <c:out value="${order.ord_state == 3 ? 'selected':''}" />>배송중</option>
+													<option value="4" <c:out value="${order.ord_state == 4 ? 'selected':''}" />>배송완료</option>
+												</select>
+												<button type="button" id="btnUpdate" class="btn btn-default" style="float:left;margin-left:5px;">변경</button>
+												<button type="button" id="deleteOrder" class="btn btn-danger" style="float:right;">이 주문 삭제하기</button>
+											</td>
+										</tr>
+									</table>
+								</div>
+								
+								
+								<!-- =================================================================================== -->
+								<div class="col-sm-12">
+								<!-- [3번 테이블(결제정보)] -->
+								<div style="color:green;font-weight:bold;">&#9660; 결제금액 정보</div>
+								<table class="table table-striped text-center" id="table_3">
+									<tr>
+										<td class="col-sm-2" style="font-weight:bold;">주문금액</td>
+										<td style="float:left;"><fmt:formatNumber value="${totalPrice }" pattern="###,###,###" />원</td>
+									</tr>
+									<tr>
+										<td style="font-weight:bold;">할인금액</td>
+										<td style="float:left;"> - <fmt:formatNumber value="${totalDC }" pattern="###,###,###" />원</td>
+									</tr>
+									<tr>
+										<td style="font-weight:bold;">결제금액</td>
+										<td style="float:left;font-weight:bold;"><fmt:formatNumber value="${order.ord_tot_price }" pattern="###,###,###" />원</td>
+									</tr>
+								</table>
+								</div>
+
+
+								<!-- =================================================================================== -->
+
+								<div class="col-sm-6">
+								<!-- [4번 테이블(주문자 정보)] -->
+								<div style="color:green;font-weight:bold;">&#9660; 주문자 정보</div>
+								<table class="table table-striped text-center" id="table_4">
+									<tr>
+										<td class="col-sm-3" style="font-weight:bold;">이름/ID</td>
+										<td style="float:left;">${member.mem_name } / ${member.mem_id}</td>
+									</tr>
+									<tr>
+										<td style="font-weight:bold;">이메일</td>
+										<td style="float:left;">${member.mem_email }</td>
+									</tr>
+									<tr>
+										<td style="font-weight:bold;">연락처</td>
+										<td style="float:left;">${member.mem_tel }</td>
+									</tr>
+									<tr>
+										<td style="font-weight:bold;">주문날짜</td>
+										<td style="float:left;"><fmt:formatDate value="${order.ord_date }" pattern="yyyy-MM-dd HH:mm"/></td>
+									</tr>
+								</table>
+								</div>
+								
+								
+																<%--
 										(수정가능) 항목들은 input으로 => 맨아래 수정버튼으로 수정 제출
 										
 										[1번 테이블(상품정보)]
@@ -165,66 +256,70 @@ function getStateText(){
 										[3번 테이블(결제정보)]
 										총 주문금액
 										총 할인금액
-										결제금액 - 쿠폰이나 포인트 사용에 따라 달라질 수 있는 항목  (buyer.ord_tot_price)
+										결제금액 - 쿠폰이나 포인트 사용에 따라 달라질 수 있는 항목  (order.ord_tot_price)
 										결제수단 
 										
 										
-										[4번 테이블(주문자 정보)]	 	/		[4번 테이블(수령자 정보)]
-										이름/ID							수령자 이름(수정가능)
+										[4번 테이블(주문자 정보)]	 	/		[5번 테이블(수령자 정보)]
+										이름/ID							수령자(수정가능)
 										이메일							연락처(ord_recp_tel)(수정가능)
-										연락처(user.mem_tel)(수정가능)		주소/우편번호(수정가능)
+										연락처(member.mem_tel)				주소/우편번호(수정가능)
 										주문날짜							상세주소(수정가능)
-										=> 주문자 정보(session에서 user로 가져오기)
-										
-										
 										
 												[수정] => post. form태그로 테이블 전체 감싸기 / [목록] class="btnList"
 																	
 									 --%>
-								<div class="col-sm-12">
-								<!-- [2번 테이블(현재 상태)] -->
-									<div style="color:green;font-weight:bold;">&#9660; 현재 주문처리상태</div>
-									<table class="table table-striped text-center" id="table_2">
-										<tr>
-											<td class="col-sm-1">주문상태</td>
-											<td>
-												<select class="form-control" id="update_status" name="ord_state" style="width: 170px; display: inline-block; float:left;">
-													<option value="1" <c:out value="${buyer.ord_state == 1 ? 'selected':''}" />>주문접수</option>
-													<option value="2" <c:out value="${buyer.ord_state == 2 ? 'selected':''}" />>배송준비중</option>
-													<option value="3" <c:out value="${buyer.ord_state == 3 ? 'selected':''}" />>배송중</option>
-													<option value="4" <c:out value="${buyer.ord_state == 4 ? 'selected':''}" />>배송완료</option>
-												</select>
-												<button type="button" id="btnUpdate" class="btn btn-primary" style="float:left;margin-left:5px;">변경</button>
-												<button type="button" id="deleteOrder" class="btn btn-danger" style="float:right;">이 주문 삭제하기</button>
-											</td>
-										</tr>
-									</table>
-								</div>
-								
-								
-								<!-- [3번 테이블(결제정보)] -->
-								<div class="col-sm-12">
-								<table class="table table-striped text-center" id="table_3">
+									 
+
+								<!-- =================================================================================== -->
+								<div class="col-sm-6">
+								<!-- [5번 테이블(수령자 정보)] -->
+								<div style="color:green;font-weight:bold;">&#9660; 수령자 정보</div>
+								<table class="table table-striped text-center" id="table_5">
 									<tr>
-
-
-
-
-
-
+										<td class="col-sm-3" style="font-weight:bold;">수령자</td>
+										<td style="float:left;"><input type="text" value="${order.ord_recp_name }" name="ord_recp_name" /></td>
+									</tr>
+									<tr>
+										<td style="font-weight:bold;">연락처</td>
+										<td style="float:left;"><input type="tel" value="${order.ord_recp_tel }" name="ord_recp_tel" /></td>
+									</tr>
+									<tr>
+										<td style="font-weight:bold;">주소</td>
+										<td style="float:left;">
+											<input type="text" id="sample2_postcode" name="ord_recp_zip" class="form-control" 
+												value = "${order.ord_recp_zip}" 
+												style="width:calc(100% - 128px); margin-right: 5px; display: inline-block;" placeholder="우편번호">
+											<input type="button" onclick="sample2_execDaumPostcode()" id="btn_postCode" class="btn btn-default" value="우편번호 찾기"><br>
+											<input type="text" id="sample2_address" name="ord_recp_addr" class="form-control" 
+												value = "${order.ord_recp_addr}" 
+												placeholder="주소" style=" margin:3px 0px;">
+											<input type="text" id="sample2_detailAddress" name="ord_recp_addr_d" class="form-control" 
+												value = "${order.ord_recp_addr_d}"
+												placeholder="상세주소">
+											<input type="hidden" id="sample2_extraAddress" class="form-control" placeholder="참고항목">
+										</td>
 									</tr>
 								</table>
 								</div>
-
-
-
-
+								
+								
+								<div class="col-sm-12" style="text-align:center;">
+									<button type="submit" class="btn btn-primary">수정</button> <!-- 컨트롤러에 수령자 정보 업데이트 기능도 추가해야함 -->
+									<button type="button" class="btnList btn btn-warning">목록</button>
+								</div>
 
 							</div>
 						</div>
 					</form>	
 					</div>
 				</div>
+				<!-- iOS에서는 position:fixed 버그가 있음, 적용하는 사이트에 맞게 position:absolute 등을 이용하여 top,left값 조정 필요 -->
+				<div id="layer" style="display:none;position:fixed;overflow:hidden;z-index:1;-webkit-overflow-scrolling:touch;">
+				<img src="//t1.daumcdn.net/postcode/resource/images/close.png" id="btnCloseLayer" style="cursor:pointer;position:absolute;right:-3px;top:-3px;z-index:1" onclick="closeDaumPostcode()" alt="닫기 버튼">
+				</div>
+				<!-- 우편번호 API 자바스크립트 -->
+				<%@include file="/WEB-INF/views/include/zipcode.jsp" %>
 			</section>
 			<!-- /.content -->
 		</div>

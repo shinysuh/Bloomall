@@ -21,9 +21,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.bloomall.domain.AdminOrderListVO;
+import com.bloomall.domain.MemberVO;
 import com.bloomall.domain.OrderHistoryDetailVO;
 import com.bloomall.domain.OrderVO;
 import com.bloomall.service.AdminOrderService;
+import com.bloomall.service.MemberService;
 import com.bloomall.service.OrderService;
 import com.bloomall.util.PageMaker;
 import com.bloomall.util.SearchCriteria;
@@ -39,6 +41,9 @@ public class AdminOrderController {
 	
 	@Inject
 	private OrderService orderService;		// 주문정보 상세 페이지
+	
+	@Inject
+	private MemberService memberService;	// 주문정보 상세 페이지
 	
 	// 주문목록 - /admin/order/orderList		- SearchCriteria
 	@RequestMapping(value = "/orderList", method=RequestMethod.GET)
@@ -171,15 +176,21 @@ public class AdminOrderController {
 		logger.info("======== orderDetail() called ========");
 		logger.info("ord_idx : " + ord_idx);
 		
+		// 주문상품 정보
 		List<OrderHistoryDetailVO> orderDetail = orderService.orderHistoryDetail(ord_idx);
-		OrderVO buyer = orderService.recipientInfo(ord_idx);
+		// 주문/수령자 정보
+		OrderVO order = orderService.recipientInfo(ord_idx);
+		// 주문자 정보
+		MemberVO member = memberService.getUserInfo(order.getMem_id());
+		
 		
 		PageMaker pageMaker = new PageMaker();
 		pageMaker.setCri(cri);
 		pageMaker.getCri().setPerPageNum(20);
 		
 		model.addAttribute("orderDetail", orderDetail);
-		model.addAttribute("buyer", buyer);
+		model.addAttribute("order", order);
+		model.addAttribute("member", member);
 		model.addAttribute("pageMaker", pageMaker);
 		
 		return "/admin/order/orderDetail";
@@ -189,39 +200,44 @@ public class AdminOrderController {
 	
 	// 주문상세정보 페이지 - 수정 POST		/admin/order/updateDetail
 	@RequestMapping(value = "/updateDetail", method=RequestMethod.POST)
-	public String updateDetail(@RequestParam int ord_idx, @RequestParam int ord_state, 
-							   @RequestParam("ord_amount") List<Integer> amtArr,
-							   SearchCriteria cri, RedirectAttributes rttr) throws Exception{
+	public String updateDetail(@RequestParam int ord_idx, @RequestParam int ord_state,
+							   @RequestParam("prd_idx") List<Integer> prd_idxArr,
+							   @RequestParam("ord_amount") List<Integer> amtArr) throws Exception{
 		
 		logger.info("======== updateDetail() called ========");
-		logger.info(cri.toString());
 		
-		// 주문상태 업데이트
-		service.updateState(ord_idx, ord_state);
+		OrderVO vo = orderService.recipientInfo(ord_idx);
+		
+		// 수령자 정보 & 주문상태 업데이트
+		service.updateRecipientAndState(vo);
 		
 		// 주문수량 업데이트 - for문
-		for(int i=0; i < amtArr.size(); i++) {
-			service.updateAmount(ord_idx, amtArr.get(i));
+		for(int i=0; i < prd_idxArr.size(); i++) {
+			service.updateAmount(ord_idx, prd_idxArr.get(i), amtArr.get(i));
 		}
 		
-		rttr.addFlashAttribute("cri", cri);
-		
-		return "redirect:/admin/order/orderList";
+		return "redirect:/admin/order/orderDetail";
 	}
 	
 	
 	
 	// 주문상세정보 페이지 - 주문 삭제  POST
+	@ResponseBody
 	@RequestMapping(value = "/deleteOrder", method=RequestMethod.POST)
-	public String deleteOrder(@RequestParam int ord_idx, SearchCriteria cri, RedirectAttributes rttr) throws Exception{
+	public ResponseEntity<String> deleteOrder(@RequestParam int ord_idx) throws Exception{
 		
 		logger.info("======== deleteOrder() called ========");
-		logger.info(cri.toString());
 		
-		service.deleteOrder(ord_idx);
-		rttr.addFlashAttribute("cri", cri);
+		ResponseEntity<String> entity = null;
 		
-		return "redirect:/admin/order/orderList";
+		try {
+			service.deleteOrder(ord_idx);
+			entity = new ResponseEntity<String>(HttpStatus.OK);
+		}catch(Exception e) {
+			e.printStackTrace();
+			entity = new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
+		}
+		return entity;
 	}
 	
 }

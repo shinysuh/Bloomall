@@ -9,6 +9,7 @@ import javax.inject.Inject;
 import org.springframework.stereotype.Service;
 
 import com.bloomall.domain.AdminOrderListVO;
+import com.bloomall.domain.OrderVO;
 import com.bloomall.persistence.AdminOrderDAO;
 
 @Service
@@ -53,16 +54,25 @@ public class AdminOrderServiceImpl implements AdminOrderService {
 	}
 
 	
+	
 	/* 주문정보 상세 페이지 [수정] */
+	// 1)수령자정보/주문처리상태 수정 (주문테이블)
+	public void updateRecipientAndState(OrderVO vo) throws Exception{
+		dao.updateRecipientAndState(vo);
+	}
+	// 2)상품별 수량 수정 (주문상세테이블)
 	@Override
-	public void updateAmount(int ord_idx, int ord_amount) throws Exception {
+	public void updateAmount(int ord_idx, int prd_idx, int ord_amount) throws Exception {
 		
 		Map<String , Object> map = new HashMap<String, Object>();
-		map.put("ord_amount", ord_amount);
 		map.put("ord_idx", ord_idx);
+		map.put("prd_idx", prd_idx);
+		map.put("ord_amount", ord_amount);
 		
 		dao.updateAmount(map);
 	}
+
+	
 	
 	/* 주문정보 상세 페이지 [삭제] */
 	@Override

@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.bloomall.domain.AdminOrderListVO;
+import com.bloomall.domain.OrderVO;
 
 public interface AdminOrderService {
 
@@ -23,7 +24,10 @@ public interface AdminOrderService {
 	public void updateState(int ord_idx, int ord_state) throws Exception;
 	
 	/* 주문정보 상세 페이지 [수정] */
-	public void updateAmount(int ord_idx, int ord_amount) throws Exception;
+	// 1)수령자정보/주문처리상태 수정 (주문테이블)
+	public void updateRecipientAndState(OrderVO vo) throws Exception;
+	// 2)상품별 수량 수정 (주문상세테이블)
+	public void updateAmount(int ord_idx, int prd_idx, int ord_amount) throws Exception;
 	
 	/* 주문정보 상세 페이지 [삭제] */
 	public void deleteOrder(int ord_idx) throws Exception;

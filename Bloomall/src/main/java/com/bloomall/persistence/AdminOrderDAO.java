@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.bloomall.domain.AdminOrderListVO;
+import com.bloomall.domain.OrderVO;
 
 public interface AdminOrderDAO {
 
@@ -23,8 +24,9 @@ public interface AdminOrderDAO {
 	public void updateState(Map<String, Object> map) throws Exception;
 	
 	/* 주문정보 상세 페이지 [수정] */
-	// 1)주문처리상태 수정
-	// 2)상품별 수량 수정
+	// 1)수령자정보/주문처리상태 수정 (주문테이블)
+	public void updateRecipientAndState(OrderVO vo) throws Exception;
+	// 2)상품별 수량 수정 (주문상세테이블)
 	public void updateAmount(Map<String, Object> map) throws Exception;
 	
 	/* 주문정보 상세 페이지 [삭제] */
