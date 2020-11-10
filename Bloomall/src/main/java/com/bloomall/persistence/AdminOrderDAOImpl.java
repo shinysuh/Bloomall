@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import com.bloomall.domain.AdminOrderListVO;
 import com.bloomall.domain.OrderVO;
+import com.bloomall.util.SearchCriteria;
 
 @Repository
 public class AdminOrderDAOImpl implements AdminOrderDAO {
@@ -33,8 +34,8 @@ public class AdminOrderDAOImpl implements AdminOrderDAO {
 
 	// 주문 총 개수
 	@Override
-	public int orderTotal() throws Exception {
-		return session.selectOne(NS + ".orderTotal");
+	public int orderTotal(SearchCriteria cri) throws Exception {
+		return session.selectOne(NS + ".orderTotal", cri);
 	}
 	
 	// 주문 당 주문상품 종류 개수

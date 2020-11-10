@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import com.bloomall.domain.AdminOrderListVO;
 import com.bloomall.domain.OrderVO;
 import com.bloomall.persistence.AdminOrderDAO;
+import com.bloomall.util.SearchCriteria;
 
 @Service
 public class AdminOrderServiceImpl implements AdminOrderService {
@@ -32,8 +33,8 @@ public class AdminOrderServiceImpl implements AdminOrderService {
 
 	// 주문 총 개수
 	@Override
-	public int orderTotal() throws Exception {
-		return dao.orderTotal();
+	public int orderTotal(SearchCriteria cri) throws Exception {
+		return dao.orderTotal(cri);
 	}
 
 	// 주문 당 주문상품 종류 개수

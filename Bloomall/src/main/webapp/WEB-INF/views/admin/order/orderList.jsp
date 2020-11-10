@@ -144,8 +144,6 @@ $(function(){
 								아이디</option>
 							<option value="state" <c:out value="${cri.searchType eq 'state'?'selected':''}" />>
 								주문처리상태</option>
-							<option value="product" <c:out value="${cri.searchType eq 'product'?'selected':''}" />>
-								상품명</option>
 							<option value="company" <c:out value="${cri.searchType eq 'company'?'selected':''}" />>
 								출판사</option>
 						</select>				
@@ -194,17 +192,9 @@ $(function(){
 
 						  <c:forEach items="${orderList }" var="orderList" varStatus="i" >
 						  
-						  		<%--=========================================== 
-								  <table>
-								<c:if> ord_idx가 이전 idx와 [일치 X] 때, 왼쪽 <td> 출력 
-									
-										<c:if> - <c:set>으로 카운트 변수 1 지정해주고 
-											ord_idx가 이전 idx와 [일치]할때, 1씩 누적시켜주기
-											=> 왼쪽 rowspan에 넣어줄 것 
-							   	===============================================--%>
-						  
-							<%-- <c:if> ord_idx가 이전 idx와 [일치 X] 때, 왼쪽 <td> 출력 --%>
+							<%--
 							<c:if test="${i.index == 0 || orderList.ord_idx != idx}">
+							 --%>
 						  	  <tr>
 								<td ><input type="checkbox" name="check" class="check" value="${orderList.ord_idx }" /></td>
 								<td><c:out value="${count }"/></td>
@@ -241,18 +231,15 @@ $(function(){
 								</td>
 							</tr>
 						  	<c:set var="count" value="${count+1 }"></c:set>
+						  	<%--
 						  </c:if>
+							 --%>
 						  <c:if test="${pageMaker.cri.page != 1}">
-						  	<c:set	var="count" value="${count + (page -1) * 20 }"	/>
-						  			<%--
-						  			<c:set var="count" value="${count + (page -1) * 20 }"></c:set>
-						  			 --%>
-									<!-- 강사님 조언 -->
-									<%-- 일련번호 : ((현재page - 1) * pageSize) + 1 변수에 담아 forEach 구문에서 1씩 증가해서 처리 --%>
-									
-														  	
+						  	<c:set	var="count" value="${count + (page -1) * cri.perPageNum }"	/>
 						  </c:if>
+							<%--
 						  <c:set var="idx" value="${orderList.ord_idx}" />
+							 --%>
 						  </c:forEach>
 						</table>
 					</div>

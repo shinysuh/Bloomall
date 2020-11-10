@@ -50,11 +50,12 @@ public class AdminOrderController {
 	public String orderList(@ModelAttribute("cri") SearchCriteria cri, Model model) throws Exception{
 		
 		logger.info("======== orderList() called ========");
-		logger.info(cri.toString());
 		
 		PageMaker pageMaker = new PageMaker();
-		cri.setPerPageNum(20);
+//		cri.setPerPageNum(20);
 		pageMaker.setCri(cri);
+
+		logger.info(cri.toString());
 		
 		// 주문번호도 리스트로 가져와서 for문 돌려서 하나씩 집어넣기
 		List<Integer> idxList = service.getOrdIDX();
@@ -76,8 +77,7 @@ public class AdminOrderController {
 			productCount.add(service.productCount(idxList.get(i)));
 		}
 		
-		// 페이징에 적용될 카운트 개수는 주문번호 리스트의 크기. 매퍼쿼리 노 필요
-		int count = idxList.size();
+		int count = service.orderTotal(cri);
 		pageMaker.setTotalCount(count);
 		
 		logger.info("===========총 주문 개수 : " + count);
@@ -212,7 +212,7 @@ public class AdminOrderController {
 		service.updateRecipientAndState(vo);
 		
 		// 주문수량 업데이트 - for문
-		for(int i=0; i < prd_idxArr.size(); i++) {
+		for(int i=0; i < amtArr.size(); i++) {
 			service.updateAmount(ord_idx, prd_idxArr.get(i), amtArr.get(i));
 		}
 		

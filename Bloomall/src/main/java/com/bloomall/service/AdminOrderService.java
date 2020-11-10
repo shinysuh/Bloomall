@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.bloomall.domain.AdminOrderListVO;
 import com.bloomall.domain.OrderVO;
+import com.bloomall.util.SearchCriteria;
 
 public interface AdminOrderService {
 
@@ -15,7 +16,7 @@ public interface AdminOrderService {
 	public List<AdminOrderListVO> orderList(Map<String, Object> map) throws Exception;
 	
 	// 주문 총 개수
-	public int orderTotal() throws Exception;
+	public int orderTotal(SearchCriteria cri) throws Exception;
 	
 	// 주문 당 주문상품 종류 개수
 	public int productCount(int ord_idx) throws Exception;

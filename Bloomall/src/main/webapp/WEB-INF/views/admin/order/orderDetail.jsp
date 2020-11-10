@@ -52,6 +52,12 @@ $(function(){
 		 }
 	});
 	
+	// 목록 버튼 2개
+	$(".btnList").click(function(){
+		location.href = "/admin/order/orderList${pageMaker.makeSearch(pageMaker.cri.page)}";
+		
+	});
+	
 });
 
 function getStateText(){
@@ -107,11 +113,11 @@ function getStateText(){
 				<div class="row">
 					<div class="col-md-10">
 					<form id="form1" action="/admin/order/updateDetail" method="post">
-						주문번호(주문상품) / 주문자 / 수령자 / 결제(수단) / 금액 / [처리상태(주문접수(1) / 배송준비중(2) / 배송중(3) / 배송완료(4) / 취소/반품(5)])]
 						<div class="box" style="border: none;">
 							<div class="box-body">
 								<!-- 페이징 정보 저장 -->
 								<div id="pagingInfo">
+									<input type="hidden" name="ord_idx" value="${order.ord_idx }" >
 									<input type="hidden" name="page" value="${cri.page }" />
 									<input type="hidden" name="perPageNum" value="${cri.perPageNum }" />
 									<input type="hidden" name="searchType" value="${cri.searchType }" />
@@ -119,12 +125,10 @@ function getStateText(){
 								</div>
 								<!-- 상품 리스트 테이블 -->
 								<div style="font-size:16px;">
-								<input type="hidden" name="ord_idx" value="${order.ord_idx }" >
 									<span>주문번호 : <b style="font-size:18px;">${order.ord_idx }</b></span>
 									<span class='divi'>&nbsp;&nbsp;|&nbsp;&nbsp;</span>
 									<span>주문날짜 : <fmt:formatDate value="${order.ord_date}" pattern="yyyy-MM-dd HH:mm"/> </span>
-									<button type="button" class="btnList btn btn-primary" style="float:right; margin-right:1%">목록으로</button>
-									<br>
+									<br><br>
 								</div>
 								
 								
@@ -305,7 +309,7 @@ function getStateText(){
 								
 								
 								<div class="col-sm-12" style="text-align:center;">
-									<button type="submit" class="btn btn-primary">수정</button> <!-- 컨트롤러에 수령자 정보 업데이트 기능도 추가해야함 -->
+									<button type="submit" class="btn btn-primary">수정</button>
 									<button type="button" class="btnList btn btn-warning">목록</button>
 								</div>
 
