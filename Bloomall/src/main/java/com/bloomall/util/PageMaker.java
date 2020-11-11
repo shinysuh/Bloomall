@@ -1,5 +1,7 @@
 package com.bloomall.util;
 
+import java.util.List;
+
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -123,6 +125,57 @@ public class PageMaker {
 								  .queryParam("searchType", ((SearchCriteria)cri).getSearchType())
 								  .queryParam("keyword", ((SearchCriteria)cri).getKeyword())
 								  .build();
+		
+		return uric.toUriString();
+	}
+	
+public String makeSearch(int page, List<String> stateList) {
+		//System.out.println(stateList);
+	
+		UriComponents uric = null;
+		String state = "";
+	   
+//	    if(((SearchCriteria)cri).getSearchType().equals("state")) {
+		
+		   
+		
+//		if(stateList.get(0).equals("noSel") && stateList.size() == 1) {
+//			   // searchType이 [주문처리상태]가 아닐때
+//			   state = "";
+//		
+		   if(stateList.get(0).equals("noSel")) {
+			   // searchType이 [주문처리상태]가 아닐때
+			   state = "";
+		   
+		   }else {
+			  // searchType이 [주문처리상태]일 때
+			   for(int i=0; i < stateList.size(); i++) {
+				   state += stateList.get(i) + ",";
+			   }
+			   
+			   state = state.substring(0, state.lastIndexOf(","));
+		   }
+		   
+		   uric	= UriComponentsBuilder.newInstance()
+					  .queryParam("page", page)
+					  .queryParam("perPageNum", cri.getPerPageNum())
+					  .queryParam("searchType", ((SearchCriteria)cri).getSearchType())
+					  .queryParam("keyword", ((SearchCriteria)cri).getKeyword())
+					  .queryParam("state", state)
+					  .build();
+	   
+//	    }else {
+//		   
+//	   
+//	
+//		   uric	= UriComponentsBuilder.newInstance()
+//								  .queryParam("page", page)
+//								  .queryParam("perPageNum", cri.getPerPageNum())
+//								  .queryParam("searchType", ((SearchCriteria)cri).getSearchType())
+//								  .queryParam("keyword", ((SearchCriteria)cri).getKeyword())
+//								  .queryParam("state", state)
+//								  .build();
+//	   }
 		
 		return uric.toUriString();
 	}

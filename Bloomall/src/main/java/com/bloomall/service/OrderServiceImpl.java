@@ -36,6 +36,7 @@ public class OrderServiceImpl implements OrderService {
 		// 1)주문정보 저장(주문테이블)
 		// 주문정보에 주문번호 적용
 		orderVO.setOrd_idx(ord_idx);
+		orderVO.setOrd_count(1);
 		dao.addOrderInfo(orderVO);
 		
 		// 2)주문상세 정보 저장(주문상세테이블)
@@ -52,13 +53,17 @@ public class OrderServiceImpl implements OrderService {
 		
 		// 시퀀스 가져오기
 		int ord_idx = dao.getOrderCode();
-
+		
 		// 1)주문정보 저장(주문테이블)
-		// 주문정보에 주문번호 적용
 		orderVO.setOrd_idx(ord_idx);
+
+		List<OrderDetailVO> list = detailList.getOrderDetailList();
+		
+		// 주문테이블에 주문상세테이블의 prd_idx(상품종류) 개수 잡기 (관리자 주문관리목록에서 상품명 외 3건 등의 숫자 표기용) 
+		orderVO.setOrd_count(list.size());
+		// 주문정보에 주문번호 적용
 		dao.addOrderInfo(orderVO);
 		
-		List<OrderDetailVO> list = detailList.getOrderDetailList();
 		// 2)주문상세정보 저장(주문상세 테이블) - 각 상품 주문 정보(주문상세)는 리스트 형태로 받음 - 파라미터 detailList
 		// 주문상세 건 수 만큼 반복
 		for(int i=0; i < list.size(); i++) {
@@ -114,6 +119,7 @@ public class OrderServiceImpl implements OrderService {
 		// 1)주문정보 저장(주문테이블)
 		// 주문정보에 주문번호 적용
 		orderVO.setOrd_idx(ord_idx);
+		orderVO.setOrd_count(1);
 		dao.addOrderInfo(orderVO);
 		
 		// 2)주문상세 정보 저장(주문상세테이블)
@@ -141,9 +147,13 @@ public class OrderServiceImpl implements OrderService {
 		// 1)주문정보 저장(주문테이블)
 		// 주문정보에 주문번호 적용
 		orderVO.setOrd_idx(ord_idx);
-		dao.addOrderInfo(orderVO);
 		
 		List<OrderDetailVO> list = detailList.getOrderDetailList();
+
+		// 주문 상품 종류 개수
+		orderVO.setOrd_count(list.size());
+		dao.addOrderInfo(orderVO);
+
 		// 2)주문상세정보 저장(주문상세 테이블) - 각 상품 주문 정보(주문상세)는 리스트 형태로 받음 - 파라미터 detailList
 		// 주문상세 건 수 만큼 반복
 		for(int i=0; i < list.size(); i++) {
@@ -164,7 +174,8 @@ public class OrderServiceImpl implements OrderService {
 			// 장바구니에서 주문한 상품들 지우기
 			cartService.emptyCart(map);
 		}
-		// 주문상세정보 리스트로 저장
+		
+
 		
 		return ord_idx;
 	}
@@ -212,11 +223,12 @@ public class OrderServiceImpl implements OrderService {
 	public int orderCartAll(String mem_id, OrderVO orderVO, OrderDetailListVO detailList) throws Exception {
 		
 		int ord_idx = dao.getOrderCode();
-		
+
 		orderVO.setOrd_idx(ord_idx);
-		dao.addOrderInfo(orderVO);
-		
 		List<OrderDetailVO> list = detailList.getOrderDetailList();
+
+		orderVO.setOrd_count(list.size());
+		dao.addOrderInfo(orderVO);
 		
 		for(int i=0; i < list.size(); i++) {
 
@@ -226,8 +238,8 @@ public class OrderServiceImpl implements OrderService {
 			// 주문상세리스트에 주문상세정보 추가
 			dao.addOrderDetailOne(detailVO);
 		}
-		// 주문상세정보 리스트로 저장
-
+		
+		
 		// 장바구니 전체 비우기
 		cartService.emptyCartAll(mem_id);
 		

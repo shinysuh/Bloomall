@@ -10,11 +10,57 @@
 <script type="text/javascript">
 $(function(){
 	
+	// disableKeyword();
+	
 	// 검색 버튼
 	$("#btnSearch").click(function(){
-		self.location = "orderList" + "${pageMaker.makeQuery(1)}"
-					  + "&searchType=" + $("#search").val()
-					  + "&keyword=" + $("#keyword").val();
+		// 검색구분 주문처리상태 => 문자열 입력 숫자로 바꿔서 보내기
+		if($("#search").val() == "state"){
+		/*
+			if($("#keyword").val() == "주문접수"){
+				$("#keyword").val("1");
+			}else if($("#keyword").val() == "배송준비중"){
+				$("#keyword").val("2");
+			}else if($("#keyword").val() == "배송중"){
+				$("#keyword").val("3");
+			}else if($("#keyword").val() == "배송완료"){
+				$("#keyword").val("4");
+			}
+		
+			$("#keyword").attr("disabled", true);
+		*/
+		
+		}
+			var state = "";
+			
+			$("input[name='ord_state']").each(function(i, item){
+				if(item.checked == true){
+					state += ($(this).val()) + ",";
+				}else{}
+			});
+			state = state.substring(0,state.lastIndexOf(","));
+			alert(state);
+			
+			var url = "orderList${pageMaker.makeSearch(1,stateList)}";
+			
+			
+		<%--
+		<c:if test="${!empty stateList}">
+			var url = "orderList" + "${pageMaker.makeSearch(1, stateList)}";
+			
+			if(state == null || state == ""){
+				self.location = url;
+				
+			}else{
+				self.location = url + "&state=" + state;
+			}
+		</c:if>	
+		<c:if test="${empty stateList}">
+			self.location = "orderList${pageMaker.makeSearch(1)}";
+		</c:if>
+		 --%>	
+		 
+			self.location = url;
 	});
 	
 	
@@ -100,7 +146,23 @@ $(function(){
 			});
 		}
 	});
+
+	
+	
 });
+/*
+function disableKeyword(){
+	
+	if($("#search").val() == "state"){
+		$("#keyword").attr("disabled", true);
+		location.href = "/admin/order/orderList${pageMaker.makeSearch(pageMaker.cri.page)}&state=" + state;
+	}else{
+		$("#keyword").attr("disabled", false);
+		location.href = "/admin/order/orderList${pageMaker.makeSearch(pageMaker.cri.page)}";
+	}
+}
+*/
+
 </script>
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
@@ -140,15 +202,21 @@ $(function(){
 								주문번호</option>
 							<option value="memName" <c:out value="${cri.searchType eq 'memName'?'selected':''}" />>
 								주문자명</option>
+							<option value="recipient" <c:out value="${cri.searchType eq 'recipient'?'selected':''}" />>
+								수령자</option>
 							<option value="memId" <c:out value="${cri.searchType eq 'memId'?'selected':''}" />>
 								아이디</option>
-							<option value="state" <c:out value="${cri.searchType eq 'state'?'selected':''}" />>
+							<option value="state" id="search_state" <c:out value="${cri.searchType eq 'state'?'selected':''}" />>
 								주문처리상태</option>
-							<option value="company" <c:out value="${cri.searchType eq 'company'?'selected':''}" />>
-								출판사</option>
 						</select>				
 						<input type="text" name="keyword" id="keyword" value="${cri.keyword }" style="width:180px; padding-left:5px;"  />
-						<button type="button" id="btnSearch" class="btn btn-default">검색</button>
+						
+						<input type="checkbox" name="ord_state" class="chkState" value="1"   />주문접수
+						<input type="checkbox" name="ord_state" class="chkState" value="2"   />배송준비중
+						<input type="checkbox" name="ord_state" class="chkState" value="3"   />배송중
+						<input type="checkbox" name="ord_state" class="chkState" value="4"   />배송완료
+						
+						<button type="button" id="btnSearch" class="btn btn-warning">검색</button>
 					</div>				
 					<div style="display: inline-block; float: right; margin-right:15px;">
 						선택주문건 &nbsp;
@@ -174,7 +242,8 @@ $(function(){
 								<th>주문번호</th>
 								<th>주문상품</th>
 								<th>주문자아이디</th>
-								<th>주문자명</th>
+								<th>주문자</th>
+								<th>수령자</th>
 								<th>결제수단</th>
 								<th>결제금액</th>
 								<th>처리상태</th>
@@ -187,8 +256,7 @@ $(function(){
 							</tr>
 						  </c:if>
 
-
-						  <c:set var="count" value="1"></c:set>	  <!-- rowspan 적용 변수 -->
+						  <c:set	var="count" value="${((cri.page -1) * cri.perPageNum) + 1 }"	/>	  <!-- rowspan 적용 변수 -->
 
 						  <c:forEach items="${orderList }" var="orderList" varStatus="i" >
 						  
@@ -205,21 +273,22 @@ $(function(){
 									${orderList.ord_idx }</a></td>
 								<td class="col-md-2">
 									<a href="/admin/order/orderDetail${pageMaker.makeSearch(pageMaker.cri.page)}&ord_idx=${orderList.ord_idx}" style="color:black;">
-									<c:if test="${productCount[i.index] > 1 }">
-										${orderList.prd_title } 외 ${productCount[i.index] - 1}건
+									<c:if test="${orderList.ord_count > 1 }">
+										${orderList.prd_title } 외 ${orderList.ord_count - 1}건
 									</c:if>
-									<c:if test="${productCount[i.index] <= 1 }">
+									<c:if test="${orderList.ord_count == 1 }">
 										${orderList.prd_title }
 									</c:if>
 									</a>
 								</td>
 								<td class="col-md-1">${orderList.mem_id }</td>
 								<td class="col-md-1">${orderList.mem_name }</td>
+								<td class="col-md-1">${orderList.ord_recp_name }</td>
 								<td class="col-md-1">결제수단</td>
 								<td class="col-md-1" style="font-weight:bold;">
 									<fmt:formatNumber value="${orderList.ord_tot_price }" pattern="###,###,###"/>원
 								</td>
-								<td class="col-md-3">
+								<td class="col-md-2">
 									<select class="form-control" name="ord_state_${orderList.ord_idx }" style="width: 130px; display: inline-block;">
 										<option value="99" <c:out value="${orderList.ord_state == null ? 'selected':''}" />>[주문상태]</option>
 										<option value="1" <c:out value="${orderList.ord_state == 1 ? 'selected':''}" />>주문접수</option>
@@ -231,12 +300,6 @@ $(function(){
 								</td>
 							</tr>
 						  	<c:set var="count" value="${count+1 }"></c:set>
-						  	<%--
-						  </c:if>
-							 --%>
-						  <c:if test="${pageMaker.cri.page != 1}">
-						  	<c:set	var="count" value="${count + (page -1) * cri.perPageNum }"	/>
-						  </c:if>
 							<%--
 						  <c:set var="idx" value="${orderList.ord_idx}" />
 							 --%>

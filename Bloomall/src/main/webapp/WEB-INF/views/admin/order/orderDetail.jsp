@@ -66,7 +66,7 @@ function getStateText(){
 	if(ord_state.html() == 1){
 		ord_state.html("주문접수");
 		// 주문접수 상태에서는 수량 수정 가능
-		$(".amount").attr("disabled", false);
+		$(".amount").attr("readonly", false);
 	}else if(ord_state.html() == 2){
 		ord_state.html("배송준비중");
 	}else if(ord_state.html() == 3){
@@ -164,7 +164,7 @@ function getStateText(){
 										</td>
 								  		<td class="col-md-3">${orderDetail.prd_title }</td>
 								  		<td class="col-md-1">
-								  			<input type="text" name="ord_amount" class="amount" value="${orderDetail.ord_amount }" size="1" disabled/> 
+								  			<input type="text" name="ord_amount" class="amount" value="${orderDetail.ord_amount }" size="1" readonly/> 
 								  		</td>
 								  		<td class="col-md-1"><fmt:formatNumber value="${orderDetail.prd_price }" pattern="###,###,###"/>원</td>
 								  		<td class="col-md-1"><fmt:formatNumber value="${orderDetail.ord_price }" pattern="###,###,###"/>원</td>
@@ -214,7 +214,7 @@ function getStateText(){
 									</tr>
 									<tr>
 										<td style="font-weight:bold;">결제금액</td>
-										<td style="float:left;font-weight:bold;"><fmt:formatNumber value="${order.ord_tot_price }" pattern="###,###,###" />원</td>
+										<td style="float:left;font-weight:bold;color:blue;font-size:18px;"><fmt:formatNumber value="${order.ord_tot_price }" pattern="###,###,###" />원</td>
 									</tr>
 								</table>
 								</div>

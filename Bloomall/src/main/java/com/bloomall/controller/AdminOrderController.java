@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.bloomall.domain.AdminOrderListVO;
 import com.bloomall.domain.MemberVO;
@@ -47,44 +46,54 @@ public class AdminOrderController {
 	
 	// 주문목록 - /admin/order/orderList		- SearchCriteria
 	@RequestMapping(value = "/orderList", method=RequestMethod.GET)
-	public String orderList(@ModelAttribute("cri") SearchCriteria cri, Model model) throws Exception{
+	public String orderList(@RequestParam(required=false) String state,
+							@ModelAttribute("cri") SearchCriteria cri, Model model) throws Exception{
 		
 		logger.info("======== orderList() called ========");
 		
 		PageMaker pageMaker = new PageMaker();
-//		cri.setPerPageNum(20);
+		cri.setPerPageNum(20);
 		pageMaker.setCri(cri);
 
 		logger.info(cri.toString());
 		
-		// 주문번호도 리스트로 가져와서 for문 돌려서 하나씩 집어넣기
-		List<Integer> idxList = service.getOrdIDX();
-		// 주문목록 리스트
-		List<AdminOrderListVO> orderList = new ArrayList<AdminOrderListVO>();
-		// 주문 당 주문 상품 종류 개수
-		List<Integer> productCount = new ArrayList<Integer>();
+		List<String> stateList = new ArrayList<String>();
 		
+		if(state == null) {
+			stateList.add("noSel");
+		}else if(state != null) {
+			
+			cri.setSearchType("state");
+			String[] stateArr = state.split(",");
+			
+			stateList.remove(0);
+			
+			for(int i =0; i < stateArr.length; i++) {
+				stateList.add(stateArr[i]);
+			}
+		}
+		model.addAttribute("stateList", stateList);
+		
+		// 주문상태 매퍼에서 사용할 거 - mybatis foreach
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("cri", cri);
+		map.put("stateList", stateList);
 		
-		int ord_idx = 0;
+		logger.info("searchType: " + cri.getSearchType());
+		// 주문목록 리스트
+		List<AdminOrderListVO> orderList = service.orderList(map);
 		
-		for(int i = 0; i < idxList.size(); i++) {
-			ord_idx = idxList.get(i);
-			map.put("ord_idx", ord_idx);
-			// 주문내역 리스트에 저장
-			orderList.addAll(service.orderList(map));
-			productCount.add(service.productCount(idxList.get(i)));
-		}
+		logger.info("orderList : " + orderList.size());
 		
-		int count = service.orderTotal(cri);
+		int count = service.orderTotal(map);
 		pageMaker.setTotalCount(count);
 		
 		logger.info("===========총 주문 개수 : " + count);
 		logger.info(pageMaker.toString());
-
+		logger.info("state :" + state);
+		
+		
 		model.addAttribute("orderList", orderList);
-		model.addAttribute("productCount", productCount);
 		model.addAttribute("pageMaker", pageMaker);
 		
 		return "/admin/order/orderList";
@@ -202,12 +211,12 @@ public class AdminOrderController {
 	@RequestMapping(value = "/updateDetail", method=RequestMethod.POST)
 	public String updateDetail(@RequestParam int ord_idx, @RequestParam int ord_state,
 							   @RequestParam("prd_idx") List<Integer> prd_idxArr,
-							   @RequestParam("ord_amount") List<Integer> amtArr) throws Exception{
+							   @RequestParam("ord_amount") List<Integer> amtArr, OrderVO vo) throws Exception{
 		
 		logger.info("======== updateDetail() called ========");
 		
-		OrderVO vo = orderService.recipientInfo(ord_idx);
-		
+		logger.info("ord_idx : "+ord_idx);
+		logger.info(vo.toString());
 		// 수령자 정보 & 주문상태 업데이트
 		service.updateRecipientAndState(vo);
 		

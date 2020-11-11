@@ -27,9 +27,9 @@
 	<!-- 주문정보 추가(주문테이블) -->
 	<insert id="addOrderInfo" parameterType="OrderVO">
 		insert into order_tb(ord_idx, mem_id, ord_recp_name, ord_recp_zip, ord_recp_addr,
-							 ord_recp_addr_d, ord_recp_tel, ord_tot_price, ord_date, ord_state)
+							 ord_recp_addr_d, ord_recp_tel, ord_tot_price, ord_date, ord_state, ord_count)
     		values(#{ord_idx},#{mem_id},#{ord_recp_name},#{ord_recp_zip},#{ord_recp_addr},
-    			   #{ord_recp_addr_d},#{ord_recp_tel},#{ord_tot_price}, sysdate, 1)
+    			   #{ord_recp_addr_d},#{ord_recp_tel},#{ord_tot_price}, sysdate, 1, #{ord_count})
 	</insert>
 	
 	

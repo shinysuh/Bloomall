@@ -34,8 +34,8 @@ public class AdminOrderDAOImpl implements AdminOrderDAO {
 
 	// 주문 총 개수
 	@Override
-	public int orderTotal(SearchCriteria cri) throws Exception {
-		return session.selectOne(NS + ".orderTotal", cri);
+	public int orderTotal(Map<String, Object> map) throws Exception {
+		return session.selectOne(NS + ".orderTotal", map);
 	}
 	
 	// 주문 당 주문상품 종류 개수

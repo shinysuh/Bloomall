@@ -33,8 +33,8 @@ public class AdminOrderServiceImpl implements AdminOrderService {
 
 	// 주문 총 개수
 	@Override
-	public int orderTotal(SearchCriteria cri) throws Exception {
-		return dao.orderTotal(cri);
+	public int orderTotal(Map<String, Object> map) throws Exception {
+		return dao.orderTotal(map);
 	}
 
 	// 주문 당 주문상품 종류 개수
