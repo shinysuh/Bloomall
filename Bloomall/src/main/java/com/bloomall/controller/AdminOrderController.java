@@ -59,18 +59,20 @@ public class AdminOrderController {
 		
 		List<String> stateList = new ArrayList<String>();
 		
-		if(state == null) {
+		if(state == null || state == "") {
 			stateList.add("noSel");
+			logger.info("state1 : " + state);
 		}else if(state != null) {
 			
 			cri.setSearchType("state");
 			String[] stateArr = state.split(",");
 			
-			stateList.remove(0);
+//			stateList.remove(0);		// java.lang.IndexOutOfBoundsException: Index 0 out of bounds for length 0
 			
 			for(int i =0; i < stateArr.length; i++) {
 				stateList.add(stateArr[i]);
 			}
+			logger.info("state2 : " + state);
 		}
 		model.addAttribute("stateList", stateList);
 		
@@ -247,6 +249,21 @@ public class AdminOrderController {
 			entity = new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
 		}
 		return entity;
+	}
+	
+	
+	// 주문 통계
+	@RequestMapping(value = "/orderStat", method = RequestMethod.GET)
+	public String orderStat() throws Exception{
+		
+		
+		
+		
+		
+		
+		
+		
+		return "/admin/order/orderStat";
 	}
 	
 }

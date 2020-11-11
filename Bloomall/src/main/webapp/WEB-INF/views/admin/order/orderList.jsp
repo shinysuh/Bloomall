@@ -9,11 +9,13 @@
 <head>
 <script type="text/javascript">
 $(function(){
-	
 	// disableKeyword();
 	
 	// 검색 버튼
 	$("#btnSearch").click(function(){
+		var url="orderList${pageMaker.makeQuery(1)}&searchType="
+			+ $("#search").val() +
+			"&keyword=" + $("#keyword").val();
 		// 검색구분 주문처리상태 => 문자열 입력 숫자로 바꿔서 보내기
 		if($("#search").val() == "state"){
 		/*
@@ -30,7 +32,6 @@ $(function(){
 			$("#keyword").attr("disabled", true);
 		*/
 		
-		}
 			var state = "";
 			
 			$("input[name='ord_state']").each(function(i, item){
@@ -38,10 +39,20 @@ $(function(){
 					state += ($(this).val()) + ",";
 				}else{}
 			});
-			state = state.substring(0,state.lastIndexOf(","));
-			alert(state);
 			
-			var url = "orderList${pageMaker.makeSearch(1,stateList)}";
+			
+			state = state.substring(0,state.lastIndexOf(","));
+			
+			url = "orderList${pageMaker.makeQuery(1)}&searchType="
+				+ $("#search").val() +
+				"&keyword=" + $("#keyword").val() + "&state=" + state;
+			
+			
+			alert(state);
+		}
+			
+			//var url = "orderList${pageMaker.makeSearch(1,stateList)}";
+			
 			
 			
 		<%--
@@ -315,21 +326,21 @@ function disableKeyword(){
 								<!-- [이전] 표시 -->
 								<c:if test="${pageMaker.prev }">
 									<li>
-										<a href="${pageMaker.makeSearch(pageMaker.cri.page - 1)}">[이전]</a>
+										<a href="${pageMaker.makeSearch(pageMaker.cri.page - 1, stateList)}">[이전]</a>
 									</li>
 								</c:if>
 								<!-- 페이지 번호 표시 -->
 								<c:forEach begin="${pageMaker.startPage }" end="${pageMaker.endPage }" var="idx" >
 									<li <c:out value="${pageMaker.cri.page == idx	?'class=active':'' }" />>
 										<a 
-										 href="/admin/order/orderList${pageMaker.makeSearch(idx) }">${idx }</a>
+										 href="/admin/order/orderList${pageMaker.makeSearch(idx,stateList) }">${idx }</a>
 									</li>
 								</c:forEach>
 							
 								<!-- [다음] 표시 -->
 								<c:if test="${pageMaker.next }">
 									<li>
-										<a href="${pageMaker.makeSearch(pageMaker.cri.page + 1 )}">[다음]</a>
+										<a href="${pageMaker.makeSearch(pageMaker.cri.page + 1 ,stateList)}">[다음]</a>
 									</li>
 								</c:if>
 							</ul>

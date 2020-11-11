@@ -130,7 +130,7 @@ public class PageMaker {
 	}
 	
 public String makeSearch(int page, List<String> stateList) {
-		//System.out.println(stateList);
+		System.out.println(stateList);
 	
 		UriComponents uric = null;
 		String state = "";
@@ -146,12 +146,14 @@ public String makeSearch(int page, List<String> stateList) {
 		   if(stateList.get(0).equals("noSel")) {
 			   // searchType이 [주문처리상태]가 아닐때
 			   state = "";
+			   System.out.println("1");
 		   
 		   }else {
 			  // searchType이 [주문처리상태]일 때
 			   for(int i=0; i < stateList.size(); i++) {
 				   state += stateList.get(i) + ",";
 			   }
+			   System.out.println("2");
 			   
 			   state = state.substring(0, state.lastIndexOf(","));
 		   }
