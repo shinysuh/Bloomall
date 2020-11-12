@@ -25,7 +25,7 @@ $(function(){
 			data	: {ord_idx : ord_idx, ord_state : ord_state},
 			success	: function(data){
 				alert("주문상태가 변경되었습니다.");
-				location.href = "/admin/order/orderDetail${pageMaker.makeSearch(pageMaker.cri.page)}&ord_idx=" + ord_idx;
+				location.href = "/admin/order/orderDetail${pageMaker.makeSearch(pageMaker.cri.page, stateList)}&ord_idx=" + ord_idx;
 			}
 		});
 	});
@@ -46,7 +46,7 @@ $(function(){
 					
 					alert("해당 주문건이 정상적으로 삭제되었습니다.")
 					
-					location.href = "/admin/order/orderList${pageMaker.makeSearch(pageMaker.cri.page)}";
+					location.href = "/admin/order/orderList${pageMaker.makeSearch(pageMaker.cri.page, stateList)}";
 				}
 			});
 		 }
@@ -54,7 +54,7 @@ $(function(){
 	
 	// 목록 버튼
 	$(".btnList").click(function(){
-		location.href = "/admin/order/orderList${pageMaker.makeSearch(pageMaker.cri.page)}";
+		location.href = "/admin/order/orderList${pageMaker.makeSearch(pageMaker.cri.page, stateList)}";
 		
 	});
 	
@@ -122,6 +122,7 @@ function getStateText(){
 									<input type="hidden" name="perPageNum" value="${cri.perPageNum }" />
 									<input type="hidden" name="searchType" value="${cri.searchType }" />
 									<input type="hidden" name="keyword" value="${cri.keyword }" />
+									<input type="hidden" name="state" value="${stateList }" />
 								</div>
 								<!-- 상품 리스트 테이블 -->
 								<div style="font-size:16px;">

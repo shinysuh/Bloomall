@@ -1,5 +1,7 @@
 package com.bloomall.controller;
 
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -20,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.bloomall.domain.AdminOrderListVO;
 import com.bloomall.domain.MemberVO;
@@ -68,8 +71,6 @@ public class AdminOrderController {
 			
 			cri.setSearchType("state");
 			String[] stateArr = state.split(",");
-			
-//			stateList.remove(0);		// java.lang.IndexOutOfBoundsException: Index 0 out of bounds for length 0
 			
 			for(int i =0; i < stateArr.length; i++) {
 				stateList.add(stateArr[i]);
@@ -184,10 +185,11 @@ public class AdminOrderController {
 	
 	// 주문 상세 정보 페이지
 	@RequestMapping(value = "/orderDetail", method=RequestMethod.GET)
-	public String orderDetail(@ModelAttribute SearchCriteria cri, int ord_idx, Model model) throws Exception{
+	public String orderDetail(@RequestParam(required=false) String state, @ModelAttribute("cri") SearchCriteria cri, int ord_idx, Model model) throws Exception{
 		
 		logger.info("======== orderDetail() called ========");
 		logger.info("ord_idx : " + ord_idx);
+		logger.info(cri.toString());
 		
 		// 주문상품 정보
 		List<OrderHistoryDetailVO> orderDetail = orderService.orderHistoryDetail(ord_idx);
@@ -196,6 +198,23 @@ public class AdminOrderController {
 		// 주문자 정보
 		MemberVO member = memberService.getUserInfo(order.getMem_id());
 		
+		
+		List<String> stateList = new ArrayList<String>();
+		
+		if(state == null || state == "") {
+			stateList.add("noSel");
+			logger.info("state1 : " + state);
+		}else if(state != null) {
+			
+			cri.setSearchType("state");
+			String[] stateArr = state.split(",");
+			
+			for(int i =0; i < stateArr.length; i++) {
+				stateList.add(stateArr[i]);
+			}
+			logger.info("state2 : " + state);
+		}
+		model.addAttribute("stateList", stateList);
 		
 		PageMaker pageMaker = new PageMaker();
 		pageMaker.setCri(cri);
@@ -215,11 +234,15 @@ public class AdminOrderController {
 	@RequestMapping(value = "/updateDetail", method=RequestMethod.POST)
 	public String updateDetail(@RequestParam int ord_idx, @RequestParam int ord_state,
 							   @RequestParam("prd_idx") List<Integer> prd_idxArr,
-							   @RequestParam("ord_amount") List<Integer> amtArr, OrderVO vo) throws Exception{
+							   @RequestParam("ord_amount") List<Integer> amtArr,
+							   @RequestParam(required=false) String state,
+							   SearchCriteria cri,
+							   RedirectAttributes rttr, OrderVO vo) throws Exception{
 		
 		logger.info("======== updateDetail() called ========");
 		
 		logger.info("ord_idx : "+ord_idx);
+		logger.info("state : " + state);
 		logger.info(vo.toString());
 		// 수령자 정보 & 주문상태 업데이트
 		service.updateRecipientAndState(vo);
@@ -228,6 +251,25 @@ public class AdminOrderController {
 		for(int i=0; i < amtArr.size(); i++) {
 			service.updateAmount(ord_idx, prd_idxArr.get(i), amtArr.get(i));
 		}
+		
+		cri.setPerPageNum(20);
+		
+		state = state.replace("[", "").replace("]", "");
+		
+		//state = URLEncoder.encode(state);
+		
+//		state = URLDecoder.decode(state);
+		
+		logger.info("state 12: " + state);
+
+		
+		rttr.addAttribute("state", state);
+		
+		rttr.addAttribute("ord_idx", ord_idx);
+		rttr.addAttribute("page", cri.getPage());
+		rttr.addAttribute("perPageNum", cri.getPerPageNum());
+		rttr.addAttribute("searchType", cri.getSearchType());
+		rttr.addAttribute("keyword", cri.getKeyword());
 		
 		return "redirect:/admin/order/orderDetail";
 	}
@@ -276,23 +318,38 @@ public class AdminOrderController {
 		return "/admin/order/orderStat";
 	}
 
-	
 	// 주문통계 페이지 날짜 검색 기능
-	@ResponseBody
 	@RequestMapping(value = "/statByDate", method=RequestMethod.POST)
-	public ResponseEntity<String> statByDate(Timestamp ord_date, Model model) throws Exception{
+	public String statByDate(@RequestParam("year") String year, @RequestParam("month") String month, Model model, RedirectAttributes rttr) throws Exception{
+		
 		
 		logger.info("======== statByDate() called ========");
 		
+		// Timestamp 형식으로 지정한 뒤 형변환 
+		String dateValue = year + "-" + month + "-01 00:00:00.000";
+		
+		Timestamp ord_date = Timestamp.valueOf(dateValue);
+		
+		rttr.addFlashAttribute("stat", service.orderStat(ord_date));
+		
+		return "redirect:/admin/order/orderStat";
+	}
+	
+	
+	
+	
+	/*
+	// 주문통계 페이지 날짜 검색 기능
+	@ResponseBody
+	@RequestMapping(value = "/statByDate", method=RequestMethod.POST)
+	public ResponseEntity<String> statByDate(@RequestParam("ord_date") Timestamp ord_date) throws Exception{
+		
+		logger.info("======== statByDate() called ========");
 		
 		ResponseEntity<String> entity = null;
 		
 		try {
-			
-			
-			
-			
-			
+			service.orderStat(ord_date);
 			
 			entity = new ResponseEntity<String>(HttpStatus.OK); 
 		}catch (Exception e) {
@@ -301,7 +358,7 @@ public class AdminOrderController {
 		}
 		return entity;
 	}
-	
+	*/
 	
 	
 	

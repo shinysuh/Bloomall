@@ -279,10 +279,10 @@ function disableKeyword(){
 								<td class="col-md-1"><fmt:formatDate value="${orderList.ord_date }" pattern="yyyy-MM-dd"/></td>
 								<td  class="col-md-1" style="font-weight:bold;">
 									<input type="hidden" name="ord_idx" value="${orderList.ord_idx }">
-									<a href="/admin/order/orderDetail${pageMaker.makeSearch(pageMaker.cri.page)}&ord_idx=${orderList.ord_idx}" style="color:black;">
+									<a href="/admin/order/orderDetail${pageMaker.makeSearch(pageMaker.cri.page, stateList)}&ord_idx=${orderList.ord_idx}" style="color:black;">
 									${orderList.ord_idx }</a></td>
 								<td class="col-md-2">
-									<a href="/admin/order/orderDetail${pageMaker.makeSearch(pageMaker.cri.page)}&ord_idx=${orderList.ord_idx}" style="color:black;">
+									<a href="/admin/order/orderDetail${pageMaker.makeSearch(pageMaker.cri.page, stateList)}&ord_idx=${orderList.ord_idx}" style="color:black;">
 									<c:if test="${orderList.ord_count > 1 }">
 										${orderList.prd_title } 외 ${orderList.ord_count - 1}건
 									</c:if>

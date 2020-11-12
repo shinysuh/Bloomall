@@ -126,13 +126,12 @@
 	<!-- 주문통계 페이지 -->
 	<select id="orderStat" resultType="AdminOrderStatVO" parameterType="Date">
 		select count(ord_idx) order_count, TO_CHAR(ord_date, 'YYYY/MM/DD') order_date, sum(ord_tot_price) total_sales
-		        , (select count(ord_idx) from order_tb where ord_state=4) delivered
-		        , (select count(ord_idx) from order_tb where ord_state=3) shipped
-		        , ord_updatedate
-		from order_tb
-		where TO_CHAR(ord_date, 'YYYY/MM') =  TO_CHAR(#{ord_date}, 'YYYY/MM') 
-		group by TO_CHAR(ord_date, 'YYYY/MM/DD')
-		order by TO_CHAR(ord_date, 'YYYY/MM/DD') asc
+				        , (select count(ord_idx) from order_tb where ord_state=4) delivered
+				        , (select count(ord_idx) from order_tb where ord_state=3) shipped
+				from order_tb
+				where TO_CHAR(ord_date, 'YYYY/MM') =  TO_CHAR(#{ord_date}, 'YYYY/MM')
+				group by TO_CHAR(ord_date, 'YYYY/MM/DD')
+				order by TO_CHAR(ord_date, 'YYYY/MM/DD') asc
 	</select>
 	
 	

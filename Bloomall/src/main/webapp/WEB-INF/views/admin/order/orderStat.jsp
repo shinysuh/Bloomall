@@ -5,8 +5,36 @@
 <html>
 <%@include file="/WEB-INF/views/include/header.jsp" %>
 <%@include file="/WEB-INF/views/include/plugin_js.jsp" %>
+<head>
 <script type="text/javascript" src="/js/admin/login.js"></script>
-
+<script type="text/javascript">
+$(function(){
+	// 날짜 검색 버튼
+	$("#btnSearch").click(function(){
+		
+		/*
+		var year = $("#year").val();
+		var month = $("#month").val();
+		
+		var ord_date = new Date(year + "/" + month);
+		
+		$.ajax({
+			type	: "post",
+			url		: "/admin/order/statByDate",
+			dataType: "Date",
+			date	: {ord_date:ord_date},
+			success	: function(data){
+				alert(ord_date);
+				self.location="/admin/order/orderStat";
+			}
+		});
+		*/
+		
+	});
+	
+});
+</script>
+</head>
 <body class="hold-transition skin-blue sidebar-mini">
 	<div class="wrapper">
 		<%@include file="/WEB-INF/views/include/main_header_ad.jsp" %>
@@ -115,7 +143,7 @@
 							  	<td>${total_shipped }</td>
 							  	<td>${total_delivered }</td>
 							  	<td>0</td>
-							  	<td>0</td>
+							  	<td style="font-weight:bold;">0</td>
 							  </tr>
 						</table>
 					</div>
