@@ -15,7 +15,8 @@ public class OrderVO {
     ord_tot_price       number                  not null,
     ord_date            date default sysdate	not null,
     ord_state			number default 1,
-    ord_count			number default 1
+    ord_count			number default 1,
+   ord_updatedate		date default sysdate
 	 */
 	
 	private int 	ord_idx;
@@ -29,14 +30,8 @@ public class OrderVO {
 	private Timestamp ord_date;
 	private int 	ord_state;		// 주문처리 현황
 	private int		ord_count;
+	private Timestamp ord_updatedate;	// 주문정보 수정 날짜
 	
-	@Override
-	public String toString() {
-		return "OrderVO [ord_idx=" + ord_idx + ", mem_id=" + mem_id + ", ord_recp_name=" + ord_recp_name
-				+ ", ord_recp_zip=" + ord_recp_zip + ", ord_recp_addr=" + ord_recp_addr + ", ord_recp_addr_d="
-				+ ord_recp_addr_d + ", ord_recp_tel=" + ord_recp_tel + ", ord_tot_price=" + ord_tot_price
-				+ ", ord_date=" + ord_date + ", ord_state=" + ord_state + ", ord_count=" + ord_count + "]";
-	}
 	public int getOrd_count() {
 		return ord_count;
 	}
@@ -102,6 +97,21 @@ public class OrderVO {
 	}
 	public void setOrd_state(int ord_state) {
 		this.ord_state = ord_state;
+	}
+	public Timestamp getOrd_updatedate() {
+		return ord_updatedate;
+	}
+	public void setOrd_updatedate(Timestamp ord_updatedate) {
+		this.ord_updatedate = ord_updatedate;
+	}
+	
+	@Override
+	public String toString() {
+		return "OrderVO [ord_idx=" + ord_idx + ", mem_id=" + mem_id + ", ord_recp_name=" + ord_recp_name
+				+ ", ord_recp_zip=" + ord_recp_zip + ", ord_recp_addr=" + ord_recp_addr + ", ord_recp_addr_d="
+				+ ord_recp_addr_d + ", ord_recp_tel=" + ord_recp_tel + ", ord_tot_price=" + ord_tot_price
+				+ ", ord_date=" + ord_date + ", ord_state=" + ord_state + ", ord_count=" + ord_count
+				+ ", ord_updatedate=" + ord_updatedate + "]";
 	}
 
 }

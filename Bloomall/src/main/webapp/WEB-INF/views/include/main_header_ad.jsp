@@ -154,7 +154,7 @@
 						</a>
 						<ul class="dropdown-menu" id="order">
 							<li><a href="/admin/order/orderList">주문목록</a></li>
-							<li><a href="#">주문통계</a></li>
+							<li><a href="/admin/order/orderStat">주문통계</a></li>
 						</ul>
 					</li>
 					<li class="dropdown user user-menu">

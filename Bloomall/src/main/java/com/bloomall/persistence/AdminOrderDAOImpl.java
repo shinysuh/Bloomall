@@ -1,5 +1,6 @@
 package com.bloomall.persistence;
 
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Map;
 
@@ -9,8 +10,8 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 
 import com.bloomall.domain.AdminOrderListVO;
+import com.bloomall.domain.AdminOrderStatVO;
 import com.bloomall.domain.OrderVO;
-import com.bloomall.util.SearchCriteria;
 
 @Repository
 public class AdminOrderDAOImpl implements AdminOrderDAO {
@@ -63,7 +64,6 @@ public class AdminOrderDAOImpl implements AdminOrderDAO {
 		session.update(NS + ".updateAmount", map);
 	}
 
-	
 	/* 주문정보 상세 페이지 [삭제] */
 	// 1)주문상세테이블 삭제
 	@Override
@@ -75,6 +75,14 @@ public class AdminOrderDAOImpl implements AdminOrderDAO {
 	public void deleteOrder(int ord_idx) throws Exception {
 		session.delete(NS + ".deleteOrder", ord_idx);
 	}
+
+	// 주문 통계
+	@Override
+	public List<AdminOrderStatVO> orderStat(Timestamp ord_date) throws Exception {
+		return session.selectList(NS + ".orderStat", ord_date);
+	}
+
+
 
 
 }

@@ -29,7 +29,6 @@ $(function(){
 				$("#keyword").val("4");
 			}
 		
-			$("#keyword").attr("disabled", true);
 		*/
 		
 			var state = "";
@@ -277,7 +276,7 @@ function disableKeyword(){
 						  	  <tr>
 								<td ><input type="checkbox" name="check" class="check" value="${orderList.ord_idx }" /></td>
 								<td><c:out value="${count }"/></td>
-								<td class="col-md-1"><fmt:formatDate value="${orderList.ord_date }" pattern="yyyy-MM-dd HH:mm"/></td>
+								<td class="col-md-1"><fmt:formatDate value="${orderList.ord_date }" pattern="yyyy-MM-dd"/></td>
 								<td  class="col-md-1" style="font-weight:bold;">
 									<input type="hidden" name="ord_idx" value="${orderList.ord_idx }">
 									<a href="/admin/order/orderDetail${pageMaker.makeSearch(pageMaker.cri.page)}&ord_idx=${orderList.ord_idx}" style="color:black;">

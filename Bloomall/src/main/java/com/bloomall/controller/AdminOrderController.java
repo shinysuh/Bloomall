@@ -1,5 +1,7 @@
 package com.bloomall.controller;
 
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -252,19 +254,59 @@ public class AdminOrderController {
 	}
 	
 	
-	// 주문 통계
+	// 주문 통계 페이지
 	@RequestMapping(value = "/orderStat", method = RequestMethod.GET)
-	public String orderStat() throws Exception{
+	public String orderStat(Model model) throws Exception{
 		
+		logger.info("======== orderStat() called ========");
 		
+		// 현재 달 정보를 기본으로 가져옴
+		Timestamp currentDate = new Timestamp(System.currentTimeMillis());
+		/*
+		SimpleDateFormat format = new SimpleDateFormat("yyyy/MM");
+		String order_date = format.format(currentDate);	// 현재 날짜를 달까지만 뽑아서 '2020/11' 형태로 저장
+		System.out.println(order_date);
+		System.out.println("================================="+order_date.substring(0, 4));
 		
-		
-		
-		
-		
+		List<OrderVO> stat = service.orderStat(order_date);
+		 */
+		logger.info("currentDate : " + currentDate);
+		model.addAttribute("stat", service.orderStat(currentDate));
 		
 		return "/admin/order/orderStat";
 	}
+
+	
+	// 주문통계 페이지 날짜 검색 기능
+	@ResponseBody
+	@RequestMapping(value = "/statByDate", method=RequestMethod.POST)
+	public ResponseEntity<String> statByDate(Timestamp ord_date, Model model) throws Exception{
+		
+		logger.info("======== statByDate() called ========");
+		
+		
+		ResponseEntity<String> entity = null;
+		
+		try {
+			
+			
+			
+			
+			
+			
+			entity = new ResponseEntity<String>(HttpStatus.OK); 
+		}catch (Exception e) {
+			e.printStackTrace();
+			entity = new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
+		}
+		return entity;
+	}
+	
+	
+	
+	
+	
+	
 	
 }
 

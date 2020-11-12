@@ -1,5 +1,6 @@
 package com.bloomall.service;
 
+import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -9,9 +10,9 @@ import javax.inject.Inject;
 import org.springframework.stereotype.Service;
 
 import com.bloomall.domain.AdminOrderListVO;
+import com.bloomall.domain.AdminOrderStatVO;
 import com.bloomall.domain.OrderVO;
 import com.bloomall.persistence.AdminOrderDAO;
-import com.bloomall.util.SearchCriteria;
 
 @Service
 public class AdminOrderServiceImpl implements AdminOrderService {
@@ -54,8 +55,6 @@ public class AdminOrderServiceImpl implements AdminOrderService {
 		dao.updateState(map);
 	}
 
-	
-	
 	/* 주문정보 상세 페이지 [수정] */
 	// 1)수령자정보/주문처리상태 수정 (주문테이블)
 	public void updateRecipientAndState(OrderVO vo) throws Exception{
@@ -81,5 +80,12 @@ public class AdminOrderServiceImpl implements AdminOrderService {
 		dao.deleteDetail(ord_idx);
 		dao.deleteOrder(ord_idx);
 	}
+
+	// 주문 통계
+	@Override
+	public List<AdminOrderStatVO> orderStat(Timestamp ord_date) throws Exception {
+		return dao.orderStat(ord_date);
+	}
+
 
 }

@@ -10,26 +10,31 @@
 		 상품번호가 가장 큰 상품명만 노출되도록 하나만 가져가기 -->
 		 <!-- [연관성 있는 서브쿼리]를 하나의 컬럼 a로 뽑아옴 -->
 	<select id="orderList" resultType="AdminOrderListVO" parameterType="Map">
-		select ord_idx, prd_title, prd_price, ord_tot_price, mem_id, ord_recp_name, ord_date, ord_state, ord_count, mem_name
-		from(
-		    select x.ord_idx, p.prd_title, p.prd_price, x.ord_tot_price, x.mem_id, x.ord_recp_name, x.ord_date, x.ord_state, x.ord_count, p.prd_company, m.mem_name,
-		                 row_number() over(order by x.ord_idx desc) o_seq
-		    from (select o.ord_idx, o.ord_tot_price, o.mem_id, o.ord_recp_name, o.ord_date, o.ord_state, o.ord_count
-		         , (select max(d.prd_idx) from ORD_DETAIL_TB d where o.ord_idx = d.ord_idx) a
-		        from order_tb o) x
-		            inner join product_tb p
-		                on p.prd_idx = x.a
-		            inner join member_tb m
-		                on m.mem_id = x.mem_id
-		            order by x.ord_idx desc
-	        )
-        <if test="cri.searchType != null and cri.searchType != '' and cri.searchType != 'null'">
-        <include refid="search" />
-		and o_seq between #{cri.rowStart} and #{cri.rowEnd}
-        </if>
-        <if test="cri.searchType == null or cri.searchType =='' or cri.searchType=='null'" >
-		where o_seq between #{cri.rowStart} and #{cri.rowEnd}
-        </if>
+		select *
+		from (select ord_idx, prd_title, prd_price, ord_tot_price, mem_id, ord_recp_name, ord_date, ord_state, ord_count, ord_updatedate, mem_name
+				               , row_number() over(order by ord_idx desc) o_seq
+				from(
+				    select x.ord_idx, p.prd_title, p.prd_price, x.ord_tot_price, x.mem_id, x.ord_recp_name, x.ord_date, x.ord_state, x.ord_count, x.ord_updatedate, p.prd_company, m.mem_name
+		
+				    from (select o.ord_idx, o.ord_tot_price, o.mem_id, o.ord_recp_name, o.ord_date, o.ord_state, o.ord_count, o.ord_updatedate
+				         , (select max(d.prd_idx) from ORD_DETAIL_TB d where o.ord_idx = d.ord_idx) a
+				        from order_tb o) x
+				            inner join product_tb p
+				                on p.prd_idx = x.a
+				            inner join member_tb m
+				                on m.mem_id = x.mem_id
+				            order by x.ord_idx desc
+				        )
+			        <if test="cri.searchType != null and cri.searchType != '' and cri.searchType != 'null'">
+			        <include refid="search" />
+			        )
+					where o_seq between #{cri.rowStart} and #{cri.rowEnd}
+			        </if>
+			        <if test="cri.searchType == null or cri.searchType =='' or cri.searchType=='null'" >
+			        )
+					where o_seq between #{cri.rowStart} and #{cri.rowEnd}
+			        </if>
+			        
 	</select>
 	
 	<sql id="search">
@@ -59,8 +64,8 @@
 	<!-- 총 주문개수 -->
 	<select id="orderTotal" resultType="int"  parameterType="map">
 		select count(ord_idx)
-		from (select x.ord_idx, p.prd_title, p.prd_price, x.ord_tot_price, x.mem_id, x.ord_recp_name, x.ord_date, x.ord_state, x.ord_count, p.prd_company, m.mem_name
-		      from (select o.ord_idx, o.ord_tot_price, o.mem_id, o.ord_recp_name, o.ord_date, o.ord_state, o.ord_count
+		from (select x.ord_idx, p.prd_title, p.prd_price, x.ord_tot_price, x.mem_id, x.ord_recp_name, x.ord_date, x.ord_state, x.ord_count, x.ord_updatedate, p.prd_company, m.mem_name
+		      from (select o.ord_idx, o.ord_tot_price, o.mem_id, o.ord_recp_name, o.ord_date, o.ord_state, o.ord_count, o.ord_updatedate
 		         , (select max(d.prd_idx) from ORD_DETAIL_TB d where o.ord_idx = d.ord_idx) a
 		        from order_tb o) x
 		            inner join product_tb p
@@ -85,17 +90,16 @@
 	
 	<!-- 주문상태 변경 -->
 	<update id="updateState" parameterType="map">
-		update order_tb set ord_state=#{ord_state}
+		update order_tb set ord_state=#{ord_state}, ord_updatedate=sysdate
 		where ord_idx = #{ord_idx}
 	</update>
-	
 	
 	<!-- 주문정보 상세 페이지 [수정] -->
 	<!-- 1)수령자정보/주문처리상태 수정 (주문테이블) -->
 	<update id="updateRecipientAndState" parameterType="OrderVO">
 		update order_tb
 		set ord_recp_name=#{ord_recp_name}, ord_recp_tel=#{ord_recp_tel}, ord_recp_zip=#{ord_recp_zip},
-		    ord_recp_addr=#{ord_recp_addr}, ord_recp_addr_d=#{ord_recp_addr_d}, ord_state=#{ord_state}
+		    ord_recp_addr=#{ord_recp_addr}, ord_recp_addr_d=#{ord_recp_addr_d}, ord_state=#{ord_state}, ord_updatedate=sysdate
 		where ord_idx=#{ord_idx}
 	</update>
 	
@@ -117,5 +121,20 @@
 		delete from order_tb
 		where ord_idx=#{ord_idx}
 	</delete>
+	
+	
+	<!-- 주문통계 페이지 -->
+	<select id="orderStat" resultType="AdminOrderStatVO" parameterType="Date">
+		select count(ord_idx) order_count, TO_CHAR(ord_date, 'YYYY/MM/DD') order_date, sum(ord_tot_price) total_sales
+		        , (select count(ord_idx) from order_tb where ord_state=4) delivered
+		        , (select count(ord_idx) from order_tb where ord_state=3) shipped
+		        , ord_updatedate
+		from order_tb
+		where TO_CHAR(ord_date, 'YYYY/MM') =  TO_CHAR(#{ord_date}, 'YYYY/MM') 
+		group by TO_CHAR(ord_date, 'YYYY/MM/DD')
+		order by TO_CHAR(ord_date, 'YYYY/MM/DD') asc
+	</select>
+	
+	
 
 </mapper>

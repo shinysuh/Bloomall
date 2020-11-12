@@ -1,11 +1,12 @@
 package com.bloomall.service;
 
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Map;
 
 import com.bloomall.domain.AdminOrderListVO;
+import com.bloomall.domain.AdminOrderStatVO;
 import com.bloomall.domain.OrderVO;
-import com.bloomall.util.SearchCriteria;
 
 public interface AdminOrderService {
 
@@ -32,5 +33,8 @@ public interface AdminOrderService {
 	
 	/* 주문정보 상세 페이지 [삭제] */
 	public void deleteOrder(int ord_idx) throws Exception;
+
+	// 주문 통계
+	public List<AdminOrderStatVO> orderStat(Timestamp ord_date) throws Exception;
 	
 }

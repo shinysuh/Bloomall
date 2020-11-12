@@ -73,7 +73,7 @@
 	<!-- 주문자 정보(주문테이블) -->
 	<select id="recipientInfo" resultType="OrderVO" parameterType="int">
 		select ord_idx, mem_id, ord_recp_name, ord_recp_zip, ord_recp_addr, ord_recp_addr_d,
-			   ord_recp_tel, ord_tot_price, ord_date, ord_state
+			   ord_recp_tel, ord_tot_price, ord_date, ord_state, ord_updatedate
 		from order_tb
 		where ord_idx = #{ord_idx}
 	</select>

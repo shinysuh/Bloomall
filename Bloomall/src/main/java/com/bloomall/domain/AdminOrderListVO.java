@@ -17,6 +17,7 @@ public class AdminOrderListVO {
 	private Timestamp ord_date;		// 주문날짜 - OrderVO
 	private int 	ord_state;		// 주문처리 현황 - OrderVO
 	private int 	ord_count;
+	private Timestamp ord_updatedate;
 	
 	public int getOrd_count() {
 		return ord_count;
@@ -90,11 +91,19 @@ public class AdminOrderListVO {
 	public void setOrd_state(int ord_state) {
 		this.ord_state = ord_state;
 	}
+	public Timestamp getOrd_updatedate() {
+		return ord_updatedate;
+	}
+	public void setOrd_updatedate(Timestamp ord_updatedate) {
+		this.ord_updatedate = ord_updatedate;
+	}
+	
 	@Override
 	public String toString() {
 		return "AdminOrderListVO [ord_idx=" + ord_idx + ", prd_title=" + prd_title + ", prd_price=" + prd_price
 				+ ", prd_company=" + prd_company + ", ord_tot_price=" + ord_tot_price + ", ord_amount=" + ord_amount
 				+ ", mem_id=" + mem_id + ", mem_name=" + mem_name + ", ord_recp_name=" + ord_recp_name + ", ord_date="
-				+ ord_date + ", ord_state=" + ord_state + ", ord_count=" + ord_count + "]";
+				+ ord_date + ", ord_state=" + ord_state + ", ord_count=" + ord_count + ", ord_updatedate="
+				+ ord_updatedate + "]";
 	}
 }

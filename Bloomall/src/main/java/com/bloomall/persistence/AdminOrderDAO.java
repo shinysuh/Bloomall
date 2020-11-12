@@ -1,11 +1,12 @@
 package com.bloomall.persistence;
 
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Map;
 
 import com.bloomall.domain.AdminOrderListVO;
+import com.bloomall.domain.AdminOrderStatVO;
 import com.bloomall.domain.OrderVO;
-import com.bloomall.util.SearchCriteria;
 
 public interface AdminOrderDAO {
 
@@ -35,6 +36,9 @@ public interface AdminOrderDAO {
 	public void deleteDetail(int ord_idx) throws Exception;
 	// 2)주문테이블 삭제
 	public void deleteOrder(int ord_idx) throws Exception;
+	
+	// 주문 통계
+	public List<AdminOrderStatVO> orderStat(Timestamp ord_date) throws Exception;
 	
 	
 }

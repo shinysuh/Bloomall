@@ -52,7 +52,7 @@ $(function(){
 		 }
 	});
 	
-	// 목록 버튼 2개
+	// 목록 버튼
 	$(".btnList").click(function(){
 		location.href = "/admin/order/orderList${pageMaker.makeSearch(pageMaker.cri.page)}";
 		
@@ -125,9 +125,12 @@ function getStateText(){
 								</div>
 								<!-- 상품 리스트 테이블 -->
 								<div style="font-size:16px;">
-									<span>주문번호 : <b style="font-size:18px;">${order.ord_idx }</b></span>
+									<span>주문번호 : <b style="font-size:20px;">${order.ord_idx }</b></span>
+									<span style="float:right;">
+									<span><b>주문날짜 : </b><fmt:formatDate value="${order.ord_date}" pattern="yyyy-MM-dd HH:mm"/> </span>
 									<span class='divi'>&nbsp;&nbsp;|&nbsp;&nbsp;</span>
-									<span>주문날짜 : <fmt:formatDate value="${order.ord_date}" pattern="yyyy-MM-dd HH:mm"/> </span>
+									<span><b>수정날짜 : </b><fmt:formatDate value="${order.ord_updatedate}" pattern="yyyy-MM-dd HH:mm"/> </span>
+									</span>
 									<br><br>
 								</div>
 								
