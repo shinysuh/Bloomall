@@ -8,7 +8,7 @@ public class LoginSessionManager implements HttpSessionListener{
 
 	private static int count;  // 현재 접속자 수
 	
-	private static int totalCount;  // 전체 방문 수 -> 저장(txt파일, DB) ->"전체방문 수" = 회원가입 수?? or what?
+	private static int totalCount;  // 전체 방문 수 -> 저장(txt파일, DB) ->"전체방문 수" => 말그대로 방문 수. 세션 생성된 총 개수
 	
 	public static int getCount() {
 		return count;
@@ -26,7 +26,7 @@ public class LoginSessionManager implements HttpSessionListener{
 		session.setMaxInactiveInterval(60*20);
 		
 		count++;
-		totalCount++;
+		totalCount++;		// 방문 카운트 +1
 		
 		// 타겟 컨트롤러 관련 빈객체 생성 전이므로, context.xml 파일들에 xml문법으로 생성한 객체(sqlSession 등)에 직접 접근해서 정보를 가져온다
 		session.getServletContext().log(session.getId() + " 세션생성" + ", 접속자 수 : " + count);

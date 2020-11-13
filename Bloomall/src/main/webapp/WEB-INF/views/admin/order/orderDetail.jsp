@@ -54,7 +54,30 @@ $(function(){
 	
 	// 목록 버튼
 	$(".btnList").click(function(){
-		location.href = "/admin/order/orderList${pageMaker.makeSearch(pageMaker.cri.page, stateList)}";
+		//location.href = "/admin/order/orderList${pageMaker.makeSearch(pageMaker.cri.page, stateList)}";
+		var url = "/admin/order/orderList${pageMaker.makeQuery(1)}"
+						+ "&searchType=" + $("#search").val()
+						+ "&keyword=" + $("#keyword").val();
+		
+		if($("#search").val() == "state"){
+			
+			var state = "";
+			
+			$("input[name='ord_state']").each(function(i, item){
+				if(item.checked == true){
+					state += ($(this).val()) + ",";
+				}else{}
+			});
+			
+			
+			state = state.substring(0,state.lastIndexOf(","));
+			
+			url = "orderList${pageMaker.makeQuery(1)}&searchType="
+				+ $("#search").val() +
+				"&keyword=" + $("#keyword").val() + "&state=" + state;
+		}
+
+		location.href = url;
 		
 	});
 	

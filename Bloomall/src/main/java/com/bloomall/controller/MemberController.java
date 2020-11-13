@@ -20,6 +20,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.bloomall.domain.MemberVO;
 import com.bloomall.dto.MemberDTO;
 import com.bloomall.service.MemberService;
+import com.bloomall.util.LoginBindingManager;
 
 @Controller
 @RequestMapping("/member/*")
@@ -123,27 +124,46 @@ public class MemberController {
 		
 		String url = "";
 		
+		
+		// 중복 로그인 체크 기능 singleton 클래스 객체 가져오기
+		LoginBindingManager binder = LoginBindingManager.getInstance();
+		
 		if(memDto != null) {	// 로그인 성공
-			logger.info("로그인 성공");
 			
+			logger.info("로그인 성공");
+
+			String mem_id = memDto.getMem_id();
+			
+			// 중복 로그인 여부 체크
+			boolean dup = binder.isDuplicated(mem_id);
+			logger.info("dup : " + dup);
+			
+			if(dup == true) {	// 아이디 이미 사용중
+				// 아이디가 이미 사용 중이면 기존 세션 소멸
+				binder.removeSesseion(mem_id);
+			}
+			
+			// 새로운 세션 생성 - 아래 session.setAttribute 코드와 overlap되는 기능. "user"를 어떻게 한번에 저장할지 고민 필요
+			binder.setSession(session, mem_id);
 			session.setAttribute("user", memDto);	// 세션에 사용자 정보 저장
+			
 			rttr.addFlashAttribute("msg", "LOGIN_SUCCESS");
 			
 			// 로그인 전에 요청된 주소의 존재 유무 확인
 			// 존재하면 해당 주소로 이동
 			String destination = (String) session.getAttribute("dest");
-			
 			url = destination != null ? (String) destination : "/";
 			
-			return "redirect:" + url;	// 루트
 		}else {	// 로그인 실패
 			logger.info("로그인 실패");
 			
 			// 주소 이동 시, "msg"키 노출 안됨
 			rttr.addFlashAttribute("msg", "LOGIN_FAIL");
 			
-			return "redirect:/member/login";	// 다시 로그인 페이지로 이동
+			url = "/member/login";
+			
 		}
+		return "redirect:" + url;	// 루트
 	}
 	
 	

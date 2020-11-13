@@ -106,9 +106,8 @@ public class AdminOrderController {
 	
 	
 	
-	
-	
-	// 검색 연습용
+	//==========================================================================================================
+	// 주문처리 검색 연습용(입력칸 사용. 체크박스 X)
 	@RequestMapping(value = "/orderList_prac", method=RequestMethod.GET)
 	public String orderList_prac(@ModelAttribute("cri") SearchCriteria cri, Model model) throws Exception{
 		
@@ -141,14 +140,8 @@ public class AdminOrderController {
 		
 		return "/admin/order/orderList_prac";
 	}
-	
-	
-	
-	
-	
-	
-	
-	
+	//==========================================================================================================
+
 	
 	
 	// 주문처리상태 변경

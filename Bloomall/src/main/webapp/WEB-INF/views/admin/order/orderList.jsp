@@ -13,9 +13,10 @@ $(function(){
 	
 	// 검색 버튼
 	$("#btnSearch").click(function(){
-		var url="orderList${pageMaker.makeQuery(1)}&searchType="
-			+ $("#search").val() +
-			"&keyword=" + $("#keyword").val();
+		var url="orderList${pageMaker.makeQuery(1)}"
+				+ "&searchType=" + $("#search").val()
+				+ "&keyword=" + $("#keyword").val();
+		
 		// 검색구분 주문처리상태 => 문자열 입력 숫자로 바꿔서 보내기
 		if($("#search").val() == "state"){
 		/*
@@ -47,7 +48,7 @@ $(function(){
 				"&keyword=" + $("#keyword").val() + "&state=" + state;
 			
 			
-			alert(state);
+			//alert(state);
 		}
 			
 			//var url = "orderList${pageMaker.makeSearch(1,stateList)}";
@@ -185,7 +186,7 @@ function disableKeyword(){
 			<!-- Content Header (Page header) -->
 			<section class="content-header">
 				<h1>
-					Order Management <small>주문관리</small>
+					<a href="/admin/order/orderList" style="color:black;">Order Management</a> <small>주문관리</small>
 				</h1>
 				<ol class="breadcrumb">
 					<li>

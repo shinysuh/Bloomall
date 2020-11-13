@@ -9,7 +9,6 @@
 <head>
 <script type="text/javascript">
 $(function(){
-	// disableKeyword();
 	
 	// 검색 버튼
 	$("#btnSearch").click(function(){
@@ -35,19 +34,6 @@ $(function(){
 	});
 	
 });
-
-/*
-function disableKeyword(){
-	
-	if($("#search").val() == "state"){
-		$("#keyword").attr("disabled", true);
-		location.href = "/admin/order/orderList${pageMaker.makeSearch(pageMaker.cri.page)}&state=" + state;
-	}else{
-		$("#keyword").attr("disabled", false);
-		location.href = "/admin/order/orderList${pageMaker.makeSearch(pageMaker.cri.page)}";
-	}
-}
-*/
 
 </script>
 </head>
