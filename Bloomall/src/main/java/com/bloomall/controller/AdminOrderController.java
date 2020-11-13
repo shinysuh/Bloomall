@@ -105,6 +105,52 @@ public class AdminOrderController {
 	}
 	
 	
+	
+	
+	
+	// 검색 연습용
+	@RequestMapping(value = "/orderList_prac", method=RequestMethod.GET)
+	public String orderList_prac(@ModelAttribute("cri") SearchCriteria cri, Model model) throws Exception{
+		
+		logger.info("======== orderList_prac() called ========");
+		
+		PageMaker pageMaker = new PageMaker();
+		cri.setPerPageNum(20);
+		pageMaker.setCri(cri);
+
+		logger.info(cri.toString());
+		
+		// 주문상태 매퍼에서 사용할 거 - mybatis foreach
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("cri", cri);
+		
+		logger.info("searchType: " + cri.getSearchType());
+		// 주문목록 리스트
+		List<AdminOrderListVO> orderList = service.orderList(map);
+		
+		logger.info("orderList : " + orderList.size());
+		
+		int count = service.orderTotal(map);
+		pageMaker.setTotalCount(count);
+		
+		logger.info("===========총 주문 개수 : " + count);
+		logger.info(pageMaker.toString());
+		
+		model.addAttribute("orderList", orderList);
+		model.addAttribute("pageMaker", pageMaker);
+		
+		return "/admin/order/orderList_prac";
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	// 주문처리상태 변경
 	@ResponseBody
 	@RequestMapping(value = "/updateState", method=RequestMethod.POST)

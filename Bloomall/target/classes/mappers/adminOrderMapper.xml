@@ -57,6 +57,11 @@
 						#{state}
 					</foreach>
 			</if>
+			
+			<!-- 검색 연습용 -->
+			<if test="cri.searchType == 'state12'.toString()">
+				where ord_state like '%' || #{cri.keyword} || '%'
+			</if>
 	
 		</if>
 	</sql>

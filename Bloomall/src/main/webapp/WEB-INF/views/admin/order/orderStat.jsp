@@ -81,7 +81,7 @@ $(function(){
 						<form id="dateForm" action="/admin/order/statByDate" method="post">
 							<table class="table table-striped text-center" id="dateTable">
 								<tr>
-									<td class="col-sm-1" style="font-weight:bold;">기간설정</td>
+									<td class="col-sm-1" style="font-weight:bold;padding-top:15px;">기간설정</td>
 									<td style="float:left;">
 										<jsp:useBean id="selectDate" class="java.util.Date" />
 										<!-- 현재 연도 뽑아오기 - 현재 연도까지 dropdown에 표시해야 하므로 정보 필요 -->
