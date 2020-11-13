@@ -298,29 +298,44 @@ public class AdminOrderController {
 	
 	// 주문 통계 페이지
 	@RequestMapping(value = "/orderStat", method = RequestMethod.GET)
-	public String orderStat(Model model) throws Exception{
+	public String orderStat(String year, String month,Model model) throws Exception{
 		
 		logger.info("======== orderStat() called ========");
 		
 		// 현재 달 정보를 기본으로 가져옴
 		Timestamp currentDate = new Timestamp(System.currentTimeMillis());
-		/*
 		SimpleDateFormat format = new SimpleDateFormat("yyyy/MM");
-		String order_date = format.format(currentDate);	// 현재 날짜를 달까지만 뽑아서 '2020/11' 형태로 저장
-		System.out.println(order_date);
-		System.out.println("================================="+order_date.substring(0, 4));
+		String orderDate = format.format(currentDate);	// 현재 날짜를 달까지만 뽑아서 '2020/11' 형태로 저장
 		
-		List<OrderVO> stat = service.orderStat(order_date);
-		 */
-		logger.info("currentDate : " + currentDate);
-		model.addAttribute("stat", service.orderStat(currentDate));
+		logger.info("year1 : " + year + " // month1 : " + month);
+		
+		if(year == null || year == ""){
+			year = orderDate.substring(0,4);
+		}else{}
+
+		if(month==null || month == ""){
+			month = orderDate.substring(5,7);
+		}else{}
+		
+		logger.info("orderDate : " + orderDate);
+		logger.info("year : " + year + " // month : " + month);
+		
+		// Timestamp 형식으로 지정한 뒤 형변환 
+		String dateValue = year + "-" + month + "-01 00:00:00.000";
+		
+		Timestamp ord_date = Timestamp.valueOf(dateValue);
+		
+		model.addAttribute("year", year);
+		model.addAttribute("month", month);
+		model.addAttribute("stat", service.orderStat(ord_date));
 		
 		return "/admin/order/orderStat";
 	}
-
+	
+	
 	// 주문통계 페이지 날짜 검색 기능
 	@RequestMapping(value = "/statByDate", method=RequestMethod.POST)
-	public String statByDate(@RequestParam("year") String year, @RequestParam("month") String month, Model model, RedirectAttributes rttr) throws Exception{
+	public String statByDate(@RequestParam("year") String year, @RequestParam("month") String month, RedirectAttributes rttr){
 		
 		
 		logger.info("======== statByDate() called ========");
@@ -330,26 +345,30 @@ public class AdminOrderController {
 		
 		Timestamp ord_date = Timestamp.valueOf(dateValue);
 		
-		rttr.addFlashAttribute("stat", service.orderStat(ord_date));
+		logger.info("orderDate : " + ord_date);
+		logger.info("year : " + year + " // month : " + month);
+		
+		//rttr.addAttribute("stat", service.orderStat(ord_date));		// 필요 없음. year랑 month 값만 넘겨주면 됨
+		rttr.addAttribute("year", year);
+		rttr.addAttribute("month", month);
 		
 		return "redirect:/admin/order/orderStat";
 	}
-	
-	
-	
 	
 	/*
 	// 주문통계 페이지 날짜 검색 기능
 	@ResponseBody
 	@RequestMapping(value = "/statByDate", method=RequestMethod.POST)
-	public ResponseEntity<String> statByDate(@RequestParam("ord_date") Timestamp ord_date) throws Exception{
+	public ResponseEntity<String> statByDate(@RequestParam("year") String year, @RequestParam("month") String month) throws Exception{
 		
 		logger.info("======== statByDate() called ========");
 		
 		ResponseEntity<String> entity = null;
 		
 		try {
-			service.orderStat(ord_date);
+			
+			String dateValue = year + "-" + month + "-01 00:00:00.000";
+			Timestamp ord_date = Timestamp.valueOf(dateValue);
 			
 			entity = new ResponseEntity<String>(HttpStatus.OK); 
 		}catch (Exception e) {
@@ -358,8 +377,7 @@ public class AdminOrderController {
 		}
 		return entity;
 	}
-	*/
-	
+			 */
 	
 	
 	
