@@ -16,7 +16,8 @@ public class OrderVO {
     ord_date            date default sysdate	not null,
     ord_state			number default 1,
     ord_count			number default 1,
-   ord_updatedate		date default sysdate
+   	ord_updatedate		date default sysdate,
+   	state_updatedate	date default sysdate
 	 */
 	
 	private int 	ord_idx;
@@ -31,6 +32,7 @@ public class OrderVO {
 	private int 	ord_state;		// 주문처리 현황
 	private int		ord_count;
 	private Timestamp ord_updatedate;	// 주문정보 수정 날짜
+	private Timestamp state_updatedate;	// 주문처리상태 수정날짜(일일 발송/배송 건수 추적용)
 	
 	public int getOrd_count() {
 		return ord_count;
@@ -104,14 +106,19 @@ public class OrderVO {
 	public void setOrd_updatedate(Timestamp ord_updatedate) {
 		this.ord_updatedate = ord_updatedate;
 	}
-	
+	public Timestamp getState_updatedate() {
+		return state_updatedate;
+	}
+	public void setState_updatedate(Timestamp state_updatedate) {
+		this.state_updatedate = state_updatedate;
+	}
 	@Override
 	public String toString() {
 		return "OrderVO [ord_idx=" + ord_idx + ", mem_id=" + mem_id + ", ord_recp_name=" + ord_recp_name
 				+ ", ord_recp_zip=" + ord_recp_zip + ", ord_recp_addr=" + ord_recp_addr + ", ord_recp_addr_d="
 				+ ord_recp_addr_d + ", ord_recp_tel=" + ord_recp_tel + ", ord_tot_price=" + ord_tot_price
 				+ ", ord_date=" + ord_date + ", ord_state=" + ord_state + ", ord_count=" + ord_count
-				+ ", ord_updatedate=" + ord_updatedate + "]";
+				+ ", ord_updatedate=" + ord_updatedate + ", state_updatedate=" + state_updatedate + "]";
 	}
 
 }

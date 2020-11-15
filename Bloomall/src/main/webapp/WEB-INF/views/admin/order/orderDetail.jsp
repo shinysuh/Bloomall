@@ -75,7 +75,7 @@ $(function(){
 			url = "orderList${pageMaker.makeQuery(1)}&searchType="
 				+ $("#search").val() +
 				"&keyword=" + $("#keyword").val() + "&state=" + state;
-		}
+		}else{}
 
 		location.href = url;
 		

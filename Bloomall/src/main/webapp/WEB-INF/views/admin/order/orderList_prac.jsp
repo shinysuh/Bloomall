@@ -9,7 +9,7 @@
 <head>
 <script type="text/javascript">
 $(function(){
-	
+	stateToString();
 	// 검색 버튼
 	$("#btnSearch").click(function(){
 		// 검색구분 주문처리상태 => 문자열 입력 숫자로 바꿔서 보내기
@@ -34,6 +34,39 @@ $(function(){
 	});
 	
 });
+function stateToString(){
+	
+	var keyword = $("#keyword");
+	
+	if($("#search").val() == "state12"){
+		
+		if(keyword.val() == 1){
+			keyword.val("주문접수");
+		}else if(keyword.val() == 2){
+			keyword.val("배송준비중");
+		}else if(keyword.val() == 3){
+			keyword.val("배송중");
+		}else if(keyword.val() == 4){
+			keyword.val("배송완료");
+		}
+		/*	
+		switch(keyword.val()){		// 왜 안되지?
+		case 1:
+			keyword.val("주문접수");
+			break;
+		case 2:
+			keyword.val("배송준비중");
+			break;
+		case 3:
+			keyword.val("배송중");
+			break;
+		case 4:
+			keyword.val("배송완료");
+			
+		}*/
+		alert(keyword.val());
+	}
+}
 
 </script>
 </head>
