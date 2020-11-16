@@ -232,9 +232,9 @@ $(function(){
 												         	<b style="color:black; font-size:22px" ><fmt:formatNumber value="${rvwAverage}" pattern="#.##" /> <br></b>
 														</div>
 														<div class="rvwCount">
-															판매지수 <span style="color:red;">${vo.ord_amount }</span>
+															판매지수 <span style="font-size:14px;">${vo.ord_amount }</span>
 															<span class='divi'>&nbsp;|&nbsp;</span>
-															회원리뷰 (<a href="#" class="toRvw" id="r_count">${vo.rvw_count}</a>건) <!-- 클릭시 리뷰 앵커 / 펼쳐짐 기능 js-->
+															회원리뷰 (<a href="#" class="toRvw" id="r_count" style="font-size:16px;font-weight:bold;">${vo.rvw_count}</a>건) <!-- 클릭시 리뷰 앵커 / 펼쳐짐 기능 js-->
 														</div>
 													</div>
 												

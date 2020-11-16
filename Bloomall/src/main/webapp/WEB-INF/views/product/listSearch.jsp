@@ -7,73 +7,7 @@
 <head>
 <%@include file="/WEB-INF/views/include/listCSS.jsp" %>
 
-<script type="text/javascript">
-$(function(){
-	 
-	// 바로구매  btn_purchaseOne
-	$(".btn_purchaseOne").click(function(){
-		var prd_idx = $(this).val();
-		var ord_amount = $("#count_"+prd_idx).val();
-		
-		location.href = "/order/one?prd_idx=" + prd_idx + "&ord_amount=" + ord_amount;
-	});
-	
-	// 장바구니  btn_addToCart
-	$(".btn_addToCart").click(function(){
-		
-		var prd_idx = $(this).val();
-		var cart_amount = $(this).prev().find("input[name='count_input']").val();
-		
-		$.ajax({
-			type	: 'post',
-			url		: '/cart/add/',
-			dataType: 'text',
-			data	: {prd_idx:prd_idx, cart_amount:cart_amount},
-			success	: function(data){
-				if(confirm("상품이 장바구니에 추가되었습니다. \n장바구니로 이동 하시겠습니까?")){
-					location.href = "/cart/list";
-				}else{}
-			}
-		});
-	});
-	
-	// 체크 상품 장바구니	btn_cartChk
-	$("#btn_cartChk").click(function(){
-		
-		var checked = $("input[name='check']:checked");
-		
-		// 체크박스 유효성 검사
-		if(checked.length == 0){
-			alert("장바구니에 추가할 상품을 선택해주세요.");
-			return;
-		}
-		
-		var chkArr = [];
-		var amtArr =[];
-		
-		checked.each(function(i){
-			var prd_idx = $(this).val();
-			var cart_amount = $(this).next().next().val();
-			
-			chkArr.push(prd_idx);
-			amtArr.push(cart_amount);
-		});
-		
-		$.ajax({
-			type	: 'post',
-			url		: '/cart/addchk/',
-			dataType: 'text',
-			data	: {chkArr : chkArr, amtArr :amtArr},
-			success	: function(data){
-				if(confirm("선택 상품이 장바구니에 담겼습니다. \n장바구니로 이동 하시겠습니까?")){
-					location.href = "/cart/list";
-				}else{}
-			}
-		});
-	});
-	
-});
-</script>
+<script type="text/javascript" src="/js/product/list.js"></script>
 
 </head>
 
@@ -132,8 +66,8 @@ $(function(){
 							
 							<%-- 검색 조건에 일치하는 상품이 존재하는 경우 --%>
 					        <!-- 상품 목록 시작-->
-					        <c:forEach items="${productList}" var="prdList">	    
-					        <tr>
+					        <c:forEach items="${productList}" var="prdList" varStatus="i">	    
+					        <tr class="tr">
 					      		<td class="product_img" style="width:13%;height:140%">
 					            	<div class="ico_wrap"></div>
 					            	<input type="hidden" name="prd_idx" value="${prdList.prd_idx}" />
@@ -160,17 +94,18 @@ $(function(){
 									<div class="rating_info">
 										<span class="rvwCount">
 											판매지수 <span style="font-size:14px;font-weight:bold"> ${prdList.ord_amount }</span><em class="divi">|</em>
-											회원리뷰 <a href="#"><span style="color:blue;font-size:14px;font-weight:bold">${prdList.rvw_count}</span></a>건
+											회원리뷰 <a href="/product/detailSearch${pageMaker.makeSearch(pageMaker.cri.page)}&prd_idx=${prdList.prd_idx}#repliesDiv"><span style="color:blue;font-size:14px;font-weight:bold">${prdList.rvw_count}</span></a>건
 										</span><br>
 										<span class="rating">평점: </span>
 										<span class="stars">
-									        <label for="stars-rating-5"><i class="fa fa-star text-primary"></i></label>
-								    	    <label for="stars-rating-4"><i class="fa fa-star text-primary"></i></label>
-								        	<label for="stars-rating-3"><i class="fa fa-star text-primary"></i></label>
-								        	<label for="stars-rating-2"><i class="fa fa-star text-primary"></i></label>
-								         	<label for="stars-rating-1"><i class="fa fa-star text-default"></i></label>
-								         	<input type="hidden" id="avg_rating"  value="${rvwAverage}" />
-											<b style="color:black; font-size:22px" ><fmt:formatNumber value="${rvwAverage}" pattern="#.##" /></b>
+									       	<label><i id="star1_${prdList.prd_idx}"></i></label>
+								        	<label><i id="star2_${prdList.prd_idx}"></i></label>
+								        	<label><i id="star3_${prdList.prd_idx}"></i></label>
+								    	    <label><i id="star4_${prdList.prd_idx}"></i></label>
+									        <label><i id="star5_${prdList.prd_idx}"></i></label>
+								         	<input type="hidden" name="avg_rating" value="${rvwAverage[i.index]}" />
+								         	<input type="hidden" name="prd_idx" value="${prdList.prd_idx}" />
+											<b style="color:black; font-size:22px" ><fmt:formatNumber value="${rvwAverage[i.index]}" pattern="#.##" /></b>
 										</span>
 									</div>
 									<br>

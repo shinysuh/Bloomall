@@ -1,5 +1,6 @@
 package com.bloomall.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -96,9 +97,6 @@ public class UserProductController {
 		
 		// 부모 카테고리 이름 - jsp에서 사용
 		String prt_name = service.getPrtName(ctgr_cd);
-//		// 리뷰 개수 - jsp에서 사용
-//		ProductVO vo = new ProductVO();
-//		int rvwCount = reviewService.reviewCount(vo.getPrd_idx());
 		
 		String title = "";
 		int count = 0;
@@ -130,7 +128,7 @@ public class UserProductController {
 		int prd_idx = 0;
 		int rvwCount =0;
 		ProductVO vo = null;
-		List<Double> rvwAverage = null;
+		List<Double> rvwAverage = new ArrayList<Double>();
 		
 		// 리스트의 상품당 주문건수/리뷰건수 저장
 		for(int i=0; i < productList.size(); i++) {
@@ -155,7 +153,6 @@ public class UserProductController {
 		pageMaker.setCri(cri);
 		pageMaker.setTotalCount(count);
 		
-//		model.addAttribute("rvwCount", rvwCount);
 		model.addAttribute("prt_name", prt_name);
 		model.addAttribute("ctgr_name", title);
 		model.addAttribute("productList", productList);
@@ -179,16 +176,10 @@ public class UserProductController {
 		pageMaker.setCri(scri);
 		pageMaker.setTotalCount(service.countBySearch(scri.getKeyword()));
 		
-//		// 리뷰 개수 - jsp에서 사용
-//		ProductVO vo = new ProductVO();
-//		int rvwCount = reviewService.reviewCount(vo.getPrd_idx());
-//		
-//		model.addAttribute("rvwCount", rvwCount);
-		
 		int prd_idx = 0;
 		int rvwCount =0;
 		ProductVO vo = null;
-		double rvwAverage = 0.00;
+		List<Double> rvwAverage = new ArrayList<Double>();
 		
 		// 리스트의 상품당 주문건수/리뷰건수 저장
 		for(int i=0; i < productList.size(); i++) {
@@ -203,9 +194,9 @@ public class UserProductController {
 			
 			if(rvwCount > 0) {
 				// 리뷰가 있을 때, 해당 상품의 리뷰 평점
-				rvwAverage = reviewService.rvwAverage(prd_idx);
+				rvwAverage.add(reviewService.rvwAverage(prd_idx));
 			}else {
-				rvwAverage = 0.00;
+				rvwAverage.add(0.00);
 			}
 		}
 		
@@ -229,6 +220,8 @@ public class UserProductController {
 		// 선택한 상품의 이미지 정보를 썸네일에서 원본 이미지 정보로 바꿈
 		ProductVO vo = service.productDetail(prd_idx);
 		vo.setPrd_img(FileUtils.thumbToOriginalName(vo.getPrd_img()));
+		
+		// 주문건수 / 리뷰건수 
 		vo.setOrd_amount(orderService.productSalesCount(prd_idx));
 		vo.setRvw_count(reviewService.reviewCount(prd_idx));
 		
@@ -283,6 +276,8 @@ public class UserProductController {
 		// 선택한 상품의 이미지 정보를 썸네일에서 원본 이미지 정보로 바꿈
 		ProductVO vo = service.productDetail(prd_idx);
 		vo.setPrd_img(FileUtils.thumbToOriginalName(vo.getPrd_img()));
+		
+		// 주문건수 / 리뷰건수 
 		vo.setOrd_amount(orderService.productSalesCount(prd_idx));
 		vo.setRvw_count(reviewService.reviewCount(prd_idx));
 		

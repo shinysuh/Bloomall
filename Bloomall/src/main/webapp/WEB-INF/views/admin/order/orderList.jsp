@@ -17,20 +17,8 @@ $(function(){
 				+ "&searchType=" + $("#search").val()
 				+ "&keyword=" + $("#keyword").val();
 		
-		// 검색구분 주문처리상태 => 문자열 입력 숫자로 바꿔서 보내기
+		// 검색구분 주문처리상태
 		if($("#search").val() == "state"){
-		/*
-			if($("#keyword").val() == "주문접수"){
-				$("#keyword").val("1");
-			}else if($("#keyword").val() == "배송준비중"){
-				$("#keyword").val("2");
-			}else if($("#keyword").val() == "배송중"){
-				$("#keyword").val("3");
-			}else if($("#keyword").val() == "배송완료"){
-				$("#keyword").val("4");
-			}
-		
-		*/
 		
 			var state = "";
 			
@@ -75,6 +63,10 @@ $(function(){
 	});
 	
 	
+	
+	// 주문처리상태 업데이트 시, 트리거 적용함. 그럼 전체선택 버튼을 사용해서 몇개만 주문처리상태 수정할 경우,
+	// 전체상품의 state_updatedate 컬럼이 업데이트 되므로, 이를 방지하기 위해 전체선택 체크박스 삭제
+	/*
 	// chkAll 클릭 시 전체 선택
 	$("#chkAll").click(function(){
 		$(".check").prop("checked", this.checked);
@@ -84,7 +76,10 @@ $(function(){
 	$(".check").click(function(){
 		$("#chkAll").prop("checked", false);
 	});
-
+	*/
+	
+	
+	
 	
 	// 주문상태 변경 버튼(개별)
 	$("button[name='btnUpdate']").click(function(){
@@ -247,7 +242,7 @@ function disableKeyword(){
 						<!-- 상품 리스트 테이블 -->
 						<table class="table table-striped text-center">
 							<tr>
-								<th><input type="checkbox" id="chkAll" /></th>
+								<th>선택<%-- <input type="checkbox" id="chkAll" /> --%></th>
 								<th>번호</th>
 								<th>주문날짜</th>
 								<th>주문번호</th>
