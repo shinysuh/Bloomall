@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.bloomall.domain.CategoryVO;
 import com.bloomall.domain.ProductVO;
+import com.bloomall.util.Criteria;
 import com.bloomall.util.SearchCriteria;
 
 public interface UserProductDAO {
@@ -28,7 +29,7 @@ public interface UserProductDAO {
 	public List<ProductVO> primeList(Map<String, Object> map) throws Exception;
 	
 	// 상품리스트 ALL
-	public List<ProductVO> productListAll(Map<String, Object> map) throws Exception;
+	public List<ProductVO> productListAll(Criteria cri) throws Exception;
 	
 	// 상품 개수 (2차 카테고리 선택 시)
 	public int countByCtgr(String ctgr_cd) throws Exception;

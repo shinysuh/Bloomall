@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.bloomall.domain.CategoryVO;
 import com.bloomall.domain.ProductVO;
+import com.bloomall.service.OrderService;
 import com.bloomall.service.ReviewService;
 import com.bloomall.service.UserProductService;
 import com.bloomall.util.Criteria;
@@ -39,8 +40,10 @@ public class UserProductController {
 	private UserProductService service;
 	
 	@Inject
-	private ReviewService reviewService;
-
+	private OrderService orderService;				// 상품당 리뷰건수 reviewCount(int prd_idx)
+	
+	@Inject
+	private ReviewService reviewService;			// 상품당 주문건수 productSalesCount(int prd_idx)
 	
 	// 웹 프로젝트 영역 외부에 파일을 저장할 때 사용할 경로
 	@Resource(name="uploadPath")
@@ -93,16 +96,16 @@ public class UserProductController {
 		
 		// 부모 카테고리 이름 - jsp에서 사용
 		String prt_name = service.getPrtName(ctgr_cd);
-		// 리뷰 개수 - jsp에서 사용
-		ProductVO vo = new ProductVO();
-		int rvwCount = reviewService.reviewCount(vo.getPrd_idx());
+//		// 리뷰 개수 - jsp에서 사용
+//		ProductVO vo = new ProductVO();
+//		int rvwCount = reviewService.reviewCount(vo.getPrd_idx());
 		
 		String title = "";
 		int count = 0;
 		
 		if(ctgr_cd.equals("all")) {
 			title = "모든 상품";
-			productList = service.productListAll(map);
+			productList = service.productListAll(cri);
 			count = service.all_countByCtgr();
 			
 			logger.info("count :"+count);
@@ -124,15 +127,40 @@ public class UserProductController {
 			}
 		}
 		
+		int prd_idx = 0;
+		int rvwCount =0;
+		ProductVO vo = null;
+		List<Double> rvwAverage = null;
+		
+		// 리스트의 상품당 주문건수/리뷰건수 저장
+		for(int i=0; i < productList.size(); i++) {
+			
+			vo = productList.get(i);
+			prd_idx = vo.getPrd_idx();
+			
+			vo.setOrd_amount(orderService.productSalesCount(prd_idx));
+			vo.setRvw_count(reviewService.reviewCount(prd_idx));
+			
+			rvwCount = vo.getRvw_count();
+			
+			if(rvwCount > 0) {
+				// 리뷰가 있을 때, 해당 상품의 리뷰 평점
+				rvwAverage.add(reviewService.rvwAverage(prd_idx));
+			}else {
+				rvwAverage.add(0.00);
+			}
+		}
+		
 		PageMaker pageMaker = new PageMaker();
 		pageMaker.setCri(cri);
 		pageMaker.setTotalCount(count);
 		
-		model.addAttribute("rvwCount", rvwCount);
+//		model.addAttribute("rvwCount", rvwCount);
 		model.addAttribute("prt_name", prt_name);
 		model.addAttribute("ctgr_name", title);
 		model.addAttribute("productList", productList);
 		model.addAttribute("pageMaker", pageMaker);
+		model.addAttribute("rvwAverage", rvwAverage);
 		
 		return "/product/list";
 	}
@@ -151,13 +179,39 @@ public class UserProductController {
 		pageMaker.setCri(scri);
 		pageMaker.setTotalCount(service.countBySearch(scri.getKeyword()));
 		
-		// 리뷰 개수 - jsp에서 사용
-		ProductVO vo = new ProductVO();
-		int rvwCount = reviewService.reviewCount(vo.getPrd_idx());
+//		// 리뷰 개수 - jsp에서 사용
+//		ProductVO vo = new ProductVO();
+//		int rvwCount = reviewService.reviewCount(vo.getPrd_idx());
+//		
+//		model.addAttribute("rvwCount", rvwCount);
 		
-		model.addAttribute("rvwCount", rvwCount);
+		int prd_idx = 0;
+		int rvwCount =0;
+		ProductVO vo = null;
+		double rvwAverage = 0.00;
+		
+		// 리스트의 상품당 주문건수/리뷰건수 저장
+		for(int i=0; i < productList.size(); i++) {
+			
+			vo = productList.get(i);
+			prd_idx = vo.getPrd_idx();
+			
+			vo.setOrd_amount(orderService.productSalesCount(prd_idx));
+			vo.setRvw_count(reviewService.reviewCount(prd_idx));
+			
+			rvwCount = vo.getRvw_count();
+			
+			if(rvwCount > 0) {
+				// 리뷰가 있을 때, 해당 상품의 리뷰 평점
+				rvwAverage = reviewService.rvwAverage(prd_idx);
+			}else {
+				rvwAverage = 0.00;
+			}
+		}
+		
 		model.addAttribute("productList", productList);
 		model.addAttribute("pageMaker", pageMaker);
+		model.addAttribute("rvwAverage", rvwAverage);
 		
 		return "product/listSearch";
 	}
@@ -175,6 +229,8 @@ public class UserProductController {
 		// 선택한 상품의 이미지 정보를 썸네일에서 원본 이미지 정보로 바꿈
 		ProductVO vo = service.productDetail(prd_idx);
 		vo.setPrd_img(FileUtils.thumbToOriginalName(vo.getPrd_img()));
+		vo.setOrd_amount(orderService.productSalesCount(prd_idx));
+		vo.setRvw_count(reviewService.reviewCount(prd_idx));
 		
 		logger.info(vo.toString());
 		
@@ -195,7 +251,8 @@ public class UserProductController {
 			on_sale = "품절";
 		}
 		
-		int rvwCount = reviewService.reviewCount(vo.getPrd_idx());
+		int rvwCount = vo.getRvw_count();
+		
 		double rvwAverage = 0.00;
 		
 		if(rvwCount > 0) {
@@ -210,8 +267,6 @@ public class UserProductController {
 		model.addAttribute("prt_name", prt_name);
 		model.addAttribute("vo", vo);
 		model.addAttribute("pageMaker", pageMaker);
-		// 해당 상품에 달린 리뷰 개수 -> 모델로 jsp에 보냄
-		model.addAttribute("rvwCount", rvwCount);
 		model.addAttribute("rvwAverage", rvwAverage);
 		
 		return "product/detail";
@@ -228,6 +283,8 @@ public class UserProductController {
 		// 선택한 상품의 이미지 정보를 썸네일에서 원본 이미지 정보로 바꿈
 		ProductVO vo = service.productDetail(prd_idx);
 		vo.setPrd_img(FileUtils.thumbToOriginalName(vo.getPrd_img()));
+		vo.setOrd_amount(orderService.productSalesCount(prd_idx));
+		vo.setRvw_count(reviewService.reviewCount(prd_idx));
 		
 		logger.info(vo.toString());
 		
@@ -248,7 +305,8 @@ public class UserProductController {
 			on_sale = "품절";
 		}
 		
-		int rvwCount = reviewService.reviewCount(vo.getPrd_idx());
+		int rvwCount = vo.getRvw_count();
+		
 		double rvwAverage = 0.00;
 		
 		if(rvwCount > 0) {
@@ -263,8 +321,6 @@ public class UserProductController {
 		model.addAttribute("prt_name", prt_name);
 		model.addAttribute("vo", vo);
 		model.addAttribute("pageMaker", pageMaker);
-		// 해당 상품에 달린 리뷰 개수 -> 모델로 jsp에 보냄
-		model.addAttribute("rvwCount", rvwCount);		
 		// 해당 상품의 리뷰 평점
 		model.addAttribute("rvwAverage", rvwAverage);
 		

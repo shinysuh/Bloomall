@@ -19,7 +19,7 @@ public class UserProductServiceImpl implements UserProductService {
 
 	@Inject
 	private UserProductDAO dao;
-
+	
 	// 1차 카테고리 출력
 	@Override
 	public List<CategoryVO> primaryCtgrList() throws Exception {
@@ -57,8 +57,8 @@ public class UserProductServiceImpl implements UserProductService {
 	
 	// 상품리스트 ALL
 	@Override
-	public List<ProductVO> productListAll(Map<String, Object> map) throws Exception {
-		return dao.productListAll(map);
+	public List<ProductVO> productListAll(Criteria cri) throws Exception {
+		return dao.productListAll(cri);
 	}
 
 	// 상품 개수 (2차 카테고리 선택 시)

@@ -37,9 +37,9 @@
 	<!-- 상품 리스트 (카테고리 선택 시) => 페이징 - Criteria 파라미터 -->
 	<select id="productList" resultType="ProductVO" parameterType="Map">
 		select prd_idx, ctgr_cd, ctgr_prt_cd, prd_title, prd_author, prd_price, prd_dc_price,
-		        prd_company, prd_detail, prd_img, prd_amount, prd_in_stock, prd_regdate
+		        prd_company, prd_detail, prd_img, prd_amount, prd_in_stock, prd_regdate, ord_amount, rvw_count
 		from (select prd_idx, ctgr_cd, ctgr_prt_cd, prd_title, prd_author, prd_price, prd_dc_price,
-		            prd_company, prd_detail, prd_img, prd_amount, prd_in_stock, prd_regdate,
+		            prd_company, prd_detail, prd_img, prd_amount, prd_in_stock, prd_regdate, ord_amount, rvw_count,
 		            row_number() over(order by prd_idx desc) seq_p
 		      from product_tb
 		      where ctgr_cd=#{ctgr_cd})
@@ -49,9 +49,9 @@
 	<!-- 상품리스트(카테고리 - 1차) -->
 	<select id="primeList" resultType="ProductVO" parameterType="Map">
 		select prd_idx, ctgr_cd, ctgr_prt_cd, prd_title, prd_author, prd_price, prd_dc_price,
-		       prd_company, prd_detail, prd_img, prd_amount, prd_in_stock, prd_regdate
+		       prd_company, prd_detail, prd_img, prd_amount, prd_in_stock, prd_regdate, ord_amount, rvw_count
 		from (select prd_idx, ctgr_cd, ctgr_prt_cd, prd_title, prd_author, prd_price, prd_dc_price,
-		             prd_company, prd_detail, prd_img, prd_amount, prd_in_stock, prd_regdate,
+		             prd_company, prd_detail, prd_img, prd_amount, prd_in_stock, prd_regdate, ord_amount, rvw_count,
 		             row_number() over(order by prd_idx desc) seq_p
 		      from product_tb
 		      where ctgr_cd in (select ctgr_cd from category_tb where ctgr_prt_cd = #{ctgr_prt_cd})
@@ -60,14 +60,14 @@
 	</select>
 	
 	<!-- 모든 상품 가져오기 -->
-	<select id="productListAll" resultType="ProductVO" parameterType="Map">
+	<select id="productListAll" resultType="ProductVO" parameterType="Criteria">
 		select prd_idx, ctgr_cd, ctgr_prt_cd, prd_title, prd_author, prd_price, prd_dc_price,
-		        prd_company, prd_detail, prd_img, prd_amount, prd_in_stock, prd_regdate
+		        prd_company, prd_detail, prd_img, prd_amount, prd_in_stock, prd_regdate, ord_amount, rvw_count
 		from (select prd_idx, ctgr_cd, ctgr_prt_cd, prd_title, prd_author, prd_price, prd_dc_price,
-		            prd_company, prd_detail, prd_img, prd_amount, prd_in_stock, prd_regdate,
+		            prd_company, prd_detail, prd_img, prd_amount, prd_in_stock, prd_regdate, ord_amount, rvw_count,
 		            row_number() over(order by prd_idx desc) seq_p
 		      from product_tb)
-		where seq_p between #{cri.rowStart} and #{cri.rowEnd}
+		where seq_p between #{rowStart} and #{rowEnd}
 	</select>
 	
 	<!-- 해당되는 상품 개수(카테고리) -->
@@ -93,9 +93,9 @@
 	<!-- 상품 리스트 (검색 시) => 검색/페이징 - SearchCriteria 파라미터 -->
 	<select id="productListSearch" parameterType="SearchCriteria" resultType="ProductVO">
 		select prd_idx, ctgr_cd, ctgr_prt_cd, prd_title, prd_author, prd_price, prd_dc_price,
-		        prd_company, prd_detail, prd_img, prd_amount, prd_in_stock, prd_regdate
+		        prd_company, prd_detail, prd_img, prd_amount, prd_in_stock, prd_regdate, ord_amount, rvw_count
 		from (select prd_idx, ctgr_cd, ctgr_prt_cd, prd_title, prd_author, prd_price, prd_dc_price,
-		             prd_company, prd_detail, prd_img, prd_amount, prd_in_stock, prd_regdate,
+		             prd_company, prd_detail, prd_img, prd_amount, prd_in_stock, prd_regdate, ord_amount, rvw_count,
 		             row_number() over(order by prd_idx desc) seq_p
 		      from product_tb
               where (prd_title like '%' || #{keyword} || '%')
@@ -121,7 +121,7 @@
 	<!-- 상품 상세정보 페이지 -->
 	<select id="productDetail" resultType="ProductVO" parameterType="int">
 		select prd_idx, ctgr_cd, ctgr_prt_cd, prd_title, prd_author, prd_price, prd_dc_price,
-		        prd_company, prd_detail, prd_img, prd_amount, prd_in_stock, prd_regdate
+		        prd_company, prd_detail, prd_img, prd_amount, prd_in_stock, prd_regdate, ord_amount, rvw_count
 		from product_tb
 		where prd_idx=#{prd_idx}
 	</select>

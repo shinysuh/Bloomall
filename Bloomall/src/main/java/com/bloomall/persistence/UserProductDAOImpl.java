@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import com.bloomall.domain.CategoryVO;
 import com.bloomall.domain.ProductVO;
+import com.bloomall.util.Criteria;
 import com.bloomall.util.SearchCriteria;
 
 @Repository
@@ -52,8 +53,8 @@ public class UserProductDAOImpl implements UserProductDAO{
 
 	// 상품리스트 ALL
 	@Override
-	public List<ProductVO> productListAll(Map<String, Object> map) throws Exception {
-		return session.selectList(NS + ".productListAll", map);
+	public List<ProductVO> productListAll(Criteria cri) throws Exception {
+		return session.selectList(NS + ".productListAll", cri);
 	}
 
 	// 상품 개수 (2차 카테고리 선택 시)

@@ -20,7 +20,9 @@ public class ProductVO {
     prd_amount          number                  not null,
     prd_in_stock        char(1)                 not null,
     prd_regdate         date default sysdate    not null,
-    prd_updatedate      date default sysdate    not null
+    prd_updatedate      date default sysdate    not null,
+    ord_amount          number default 0,
+    rvw_count           number default 0
 	 */
 	
 	private int prd_idx;
@@ -37,6 +39,8 @@ public class ProductVO {
 	private String prd_in_stock;
 	private Timestamp prd_regdate;
 	private Timestamp prd_updatedate;
+	private int ord_amount;
+	private int rvw_count;
 	
 	private MultipartFile file1;
 
@@ -160,14 +164,30 @@ public class ProductVO {
 		this.file1 = file1;
 	}
 
+	public int getOrd_amount() {
+		return ord_amount;
+	}
+
+	public void setOrd_amount(int ord_amount) {
+		this.ord_amount = ord_amount;
+	}
+
+	public int getRvw_count() {
+		return rvw_count;
+	}
+
+	public void setRvw_count(int rvw_count) {
+		this.rvw_count = rvw_count;
+	}
+
 	@Override
 	public String toString() {
 		return "ProductVO [prd_idx=" + prd_idx + ", ctgr_cd=" + ctgr_cd + ", ctgr_prt_cd=" + ctgr_prt_cd
 				+ ", prd_title=" + prd_title + ", prd_author=" + prd_author + ", prd_price=" + prd_price
-				+ ", prd_dc_price=" + prd_dc_price + ", prd_company=" + prd_company + ", prd_img=" + prd_img
-				+ ", prd_amount=" + prd_amount + ", prd_in_stock=" + prd_in_stock + ", prd_regdate=" + prd_regdate
-				+ ", prd_updatedate=" + prd_updatedate + ", file1=" + file1 + "]";
+				+ ", prd_dc_price=" + prd_dc_price + ", prd_company=" + prd_company + ", prd_detail=" + prd_detail
+				+ ", prd_img=" + prd_img + ", prd_amount=" + prd_amount + ", prd_in_stock=" + prd_in_stock
+				+ ", prd_regdate=" + prd_regdate + ", prd_updatedate=" + prd_updatedate + ", ord_amount=" + ord_amount
+				+ ", rvw_count=" + rvw_count + ", file1=" + file1 + "]";
 	}
-
 	
 }

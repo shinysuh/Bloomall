@@ -213,8 +213,8 @@ $(function(){
 									</div>
 									<div class="rating_info">
 										<span class="rvwCount">
-											판매지수 <span style="color:red;"> (판매count 넣기)</span><em class="divi">|</em>
-											회원리뷰 <a href="#">${rvwCount}</a>건
+											판매지수 <span style="font-size:14px;font-weight:bold"> ${prdList.ord_amount }</span><em class="divi">|</em>
+											회원리뷰 <a href="#"><span style="color:blue;font-size:14px;font-weight:bold">${prdList.rvw_count}</span></a>건
 										</span><br>
 										<span class="rating">평점: </span>
 										<span class="stars">
@@ -223,7 +223,8 @@ $(function(){
 								        	<label for="stars-rating-3"><i class="fa fa-star text-primary"></i></label>
 								        	<label for="stars-rating-2"><i class="fa fa-star text-primary"></i></label>
 								         	<label for="stars-rating-1"><i class="fa fa-star text-default"></i></label>
-								         	<b style="color:red;">9.3 (평점 EL 문법으로 표시)</b>
+								         	<input type="hidden" id="avg_rating"  value="${rvwAverage}" />
+											<b style="color:black; font-size:22px" ><fmt:formatNumber value="${rvwAverage}" pattern="#.##" /></b>
 										</span>
 									</div>
 									<br>

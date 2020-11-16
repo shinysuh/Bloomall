@@ -164,11 +164,11 @@ public class AdminProductController {
 		logger.info("======== productList() called ========");
 		logger.info(cri.toString());
 		
-		List<ProductVO> productList = service.productList(cri);
-		
 		PageMaker pageMaker = new PageMaker();
 		pageMaker.setCri(cri);
 		pageMaker.getCri().setPerPageNum(10);
+		
+		List<ProductVO> productList = service.productList(cri);
 		
 		int count = service.searchCount(cri);
 		pageMaker.setTotalCount(count);

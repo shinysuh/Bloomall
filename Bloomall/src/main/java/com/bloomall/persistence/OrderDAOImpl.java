@@ -75,4 +75,10 @@ public class OrderDAOImpl implements OrderDAO {
 		session.update(NS + ".updatePoint", map);
 	}
 
+	// 상품당 주문건수 (사용자 상품리스트에서 출력)
+	@Override
+	public int productSalesCount(int prd_idx) throws Exception {
+		return session.selectOne(NS + ".productSalesCount", prd_idx);
+	}
+
 }

@@ -37,4 +37,7 @@ public interface OrderDAO {
 	
 	// 회원 포인트 적립
 	public void updatePoint(Map<String, Object> map) throws Exception;
+	
+	// 상품당 주문건수 (사용자 상품리스트에서 출력)
+	public int productSalesCount(int prd_idx) throws Exception;
 }

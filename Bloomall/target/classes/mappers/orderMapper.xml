@@ -79,6 +79,12 @@
 	</select>
 	
 	
+	<!-- 상품별 주문건수 (사용자 상품리스트에서 출력) -->
+	<select id="productSalesCount" resultType="int" parameterType="int">
+		select sum(ord_amount)
+		from ord_detail_tb
+		where prd_idx=#{prd_idx}
+	</select>
 	
 	
 </mapper>

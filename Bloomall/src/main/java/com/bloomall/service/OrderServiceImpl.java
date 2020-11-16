@@ -306,4 +306,10 @@ public class OrderServiceImpl implements OrderService {
 		
 		dao.updatePoint(map);
 	}
+
+	// 상품당 주문건수 (사용자 상품리스트에서 출력)
+	@Override
+	public int productSalesCount(int prd_idx) throws Exception {
+		return dao.productSalesCount(prd_idx);
+	}
 }

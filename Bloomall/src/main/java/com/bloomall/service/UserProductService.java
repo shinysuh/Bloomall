@@ -29,7 +29,7 @@ public interface UserProductService {
 	public List<ProductVO> primeList(Criteria cri, String ctgr_prt_cd) throws Exception;
 	
 	// 상품리스트 ALL
-	public List<ProductVO> productListAll(Map<String, Object> map) throws Exception;
+	public List<ProductVO> productListAll(Criteria cri) throws Exception;
 	
 	// 상품 개수 (2차 카테고리 선택 시)
 	public int countByCtgr(String ctgr_cd) throws Exception;
