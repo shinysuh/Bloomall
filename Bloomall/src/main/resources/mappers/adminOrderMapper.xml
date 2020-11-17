@@ -130,16 +130,29 @@
 	
 	<!-- 주문통계 페이지 -->
 	<select id="orderStat" resultType="AdminOrderStatVO" parameterType="Date">
-		select order_count, order_date, total_sales
-		       , (select count(ord_idx) from order_tb where ord_state=3 and TO_CHAR(state_updatedate, 'YYYY/MM/DD') = order_date) shipped
-		       ,  (select count(ord_idx) from order_tb where ord_state=4 and TO_CHAR(state_updatedate, 'YYYY/MM/DD') = order_date) delivered
+		select order_count, order_date, total_sales, date1, day
+		       , (select count(ord_idx) from order_tb where ord_state=3 and TO_CHAR(state_updatedate, 'YYYY/MM/DD') = date1) shipped
+		       ,  (select count(ord_idx) from order_tb where ord_state=4 and TO_CHAR(state_updatedate, 'YYYY/MM/DD') = date1) delivered
 		from (
-		        select count(ord_idx) order_count, TO_CHAR(ord_date, 'YYYY/MM/DD') order_date, sum(ord_tot_price) total_sales
-		        from order_tb
+		        select count(ord_idx) order_count, TO_CHAR(ord_date, 'YYYY/MM/DD') date1, sum(ord_tot_price) total_sales
+        		from order_tb
 		        where TO_CHAR(ord_date, 'YYYY/MM') =  TO_CHAR(#{ord_date}, 'YYYY/MM')
 		        group by TO_CHAR(ord_date, 'YYYY/MM/DD')
-		        order by TO_CHAR(ord_date, 'YYYY/MM/DD') asc
-			 )               
+		        
+		) c right join 
+		<![CDATA[
+		(select order_date, day 
+			from (select TO_CHAR(#{ord_date} + level -1 , 'YYYY/MM/DD') order_date
+			        from dual
+			        connect by level <= (last_day(#{ord_date}) - trunc (#{ord_date}, 'month') +1)) a
+			left join
+			     (select level lv, to_char(trunc(#{ord_date}, 'IW') + level -1, 'day') day, (trunc(#{ord_date}, 'IW') + level -1) date1
+			      from dual
+			      connect by level <= 40) b
+			on a.order_date=b.date1) d
+		]]>
+		on c.date1=d.order_date
+		order by order_date asc
 	</select>
 	
 	

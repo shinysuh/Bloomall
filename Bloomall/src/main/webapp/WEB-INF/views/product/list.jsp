@@ -162,6 +162,7 @@
 								    	    <label><i id="star4_${prdList.prd_idx}"></i></label>
 									        <label><i id="star5_${prdList.prd_idx}"></i></label>
 								         	<input type="hidden" name="avg_rating" value="${rvwAverage[i.index]}" />
+								         	<!-- 상품번호 hidden -->
 								         	<input type="hidden" name="prd_idx" value="${prdList.prd_idx}" />
 											<b style="color:black; font-size:22px" ><fmt:formatNumber value="${rvwAverage[i.index]}" pattern="#.##" /></b>
 										</span>
@@ -170,8 +171,6 @@
 								</td>
 								<td class="buttons">
 									<span class="prd_count_edit">
-										<!-- 상품번호 hidden -->
-						            	<input type="hidden" name="prd_idx" value="${prdList.prd_idx}" />
 									<%--<c:set value="${0 }" var="i"> 체크박스 value 바꾸면 다른 기능도 손보기--%>
 										
 										<input type="checkbox" name="check" class="check" value="${prdList.prd_idx }" />

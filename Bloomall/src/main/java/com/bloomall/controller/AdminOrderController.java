@@ -364,6 +364,8 @@ public class AdminOrderController {
 		
 		Timestamp ord_date = Timestamp.valueOf(dateValue);
 		
+		logger.info("ord_date : " + ord_date);
+		
 		model.addAttribute("year", year);
 		model.addAttribute("month", month);
 		model.addAttribute("stat", service.orderStat(ord_date));

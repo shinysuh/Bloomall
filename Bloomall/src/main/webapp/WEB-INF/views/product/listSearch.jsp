@@ -70,7 +70,6 @@
 					        <tr class="tr">
 					      		<td class="product_img" style="width:13%;height:140%">
 					            	<div class="ico_wrap"></div>
-					            	<input type="hidden" name="prd_idx" value="${prdList.prd_idx}" />
 					            	<a href="/product/detailSearch${pageMaker.makeSearch(pageMaker.cri.page)}&prd_idx=${prdList.prd_idx}">
 					                <img src="/product/fileDisplay?fileName=${prdList.prd_img }" alt="${prdList.prd_title}"></a>
 								</td>
@@ -104,6 +103,7 @@
 								    	    <label><i id="star4_${prdList.prd_idx}"></i></label>
 									        <label><i id="star5_${prdList.prd_idx}"></i></label>
 								         	<input type="hidden" name="avg_rating" value="${rvwAverage[i.index]}" />
+								         	<!-- 상품번호 hidden -->
 								         	<input type="hidden" name="prd_idx" value="${prdList.prd_idx}" />
 											<b style="color:black; font-size:22px" ><fmt:formatNumber value="${rvwAverage[i.index]}" pattern="#.##" /></b>
 										</span>

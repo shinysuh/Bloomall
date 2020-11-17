@@ -138,7 +138,7 @@ $(function(){
 						  	<c:set var="total_shipped" value="${total_shipped + stat.shipped }" />
 						  	<c:set var="total_delivered" value="${total_delivered + stat.delivered }" />
 						  	  <tr>
-								<td>${stat.order_date }</td>
+								<td>${stat.order_date }(${stat.day.substring(0,1)})</td>
 								<td>${stat.order_count }</td>
 								<td style="font-weight:bold;color:brown;"><fmt:formatNumber value="${stat.total_sales }" pattern="###,###,###,###" />원 </td>
 								<td>0</td>
