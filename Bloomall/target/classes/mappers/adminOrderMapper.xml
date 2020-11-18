@@ -148,7 +148,7 @@
 			left join
 			     (select level lv, to_char(trunc(#{ord_date}, 'IW') + level -1, 'day') day, (trunc(#{ord_date}, 'IW') + level -1) date1
 			      from dual
-			      connect by level <= 40) b
+			      connect by level <= (last_day(#{ord_date}) - trunc (#{ord_date}, 'month') +1) + 5) b
 			on a.order_date=b.date1) d
 		]]>
 		on c.date1=d.order_date

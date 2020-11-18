@@ -39,7 +39,7 @@
 						</h1>
 							<ol class="breadcrumb">
 							<li>
-								<a href="/product/list?ctgr_cd=${ctgr_cd }"><i class="fa fa-dashboard"></i> Product</a>
+								<a href="/product/list?prime_ctgr_cd=${prime_ctgr_cd }"><i class="fa fa-dashboard"></i> Product</a>
 							</li>
 							<li>${ctgr_name }</li>
 						</ol>

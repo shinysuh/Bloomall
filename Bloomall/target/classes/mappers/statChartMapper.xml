@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="com.bloomall.mappers.StatChartMapper">
+
+	<!-- 1차 카테고리별 매출(전체)-->
+	<select id="primaryChart" resultType="StatChartVO">
+		select p.ctgr_prt_cd primary_cd, sum(d.ord_amount * d.ord_price) sales_p
+		from product_tb p, ord_detail_tb d
+		where p.prd_idx=d.prd_idx
+		group by p.ctgr_prt_cd
+		order by p.ctgr_prt_cd
+	</select>
+	
+	<!-- 1차 카테고리 별 매출 비율(월별) -->
+	<select id="primaryChartByMonth" resultType="StatChartVO" parameterType="Date">
+		select p.ctgr_prt_cd primary_cd, sum(d.ord_amount * d.ord_price) sales_p
+		from product_tb p, ord_detail_tb d, order_tb o
+		where p.prd_idx=d.prd_idx
+			and o.ord_idx=d.ord_idx
+			and TO_CHAR(o.ord_date, 'YYYY/MM') = TO_CHAR(#{ord_date}, 'YYYY/MM')
+		group by p.ctgr_prt_cd, TO_CHAR(o.ord_date, 'YYYY/MM')
+		order by p.ctgr_prt_cd
+	</select>
+	
+	
+	<!-- 2차 카테고리별 매출(카테고리명으로 출력. ex)소설/시)(전체) -->
+	<select id="secondaryChart" resultType="StatChartVO">
+		select c.ctgr_name c_group, sum(sales) sales_s
+		from category_tb c
+		inner join (select p.ctgr_cd secondary_cd, sum(d.ord_amount * d.ord_price) sales
+		            from product_tb p, ord_detail_tb d
+		            where p.prd_idx=d.prd_idx
+		            group by p.ctgr_cd) a
+		on c.ctgr_cd = a.secondary_cd
+		group by c.ctgr_name
+	</select>
+	
+	<!-- 2차 카테고리 별 매출 비율(월별) -->
+	<select id="secondaryChartByMonth" resultType="StatChartVO" parameterType="Date">
+		select c.ctgr_name c_group, sum(sales) sales_s
+		from category_tb c
+		inner join (select p.ctgr_cd secondary_cd, sum(d.ord_amount * d.ord_price) sales, TO_CHAR(o.ord_date, 'YYYY/MM') order_date
+		            from product_tb p, ord_detail_tb d, order_tb o
+		            where p.prd_idx=d.prd_idx
+			            and o.ord_idx=d.ord_idx
+			            and TO_CHAR(o.ord_date, 'YYYY/MM') = TO_CHAR(#{ord_date}, 'YYYY/MM')
+		            group by p.ctgr_cd, TO_CHAR(o.ord_date, 'YYYY/MM')) a
+		on c.ctgr_cd = a.secondary_cd
+		group by c.ctgr_name
+	</select>
+	
+	
+	<!-- 월별 매출 -->
+	<select id="monthlyChart" resultType="OrderVO" parameterType="Date">
+		select sum(o.ord_tot_price) monthly_sales, TO_CHAR(ord_date, 'YYYY/MM') month
+		from order_tb o
+		where TO_CHAR(ord_date, 'YYYY') = TO_CHAR(#{ord_date}, 'YYYY')
+		group by TO_CHAR(ord_date, 'YYYY/MM')
+		order by month
+	</select>
+
+
+</mapper>

@@ -157,6 +157,11 @@
 							<li><a href="/admin/order/orderStat">주문통계</a></li>
 						</ul>
 					</li>
+					<li class="user user-menu">
+						<a href="/admin/chart/orderChart" class="toggle">
+						  <span class="hidden-xs">통계차트</span>
+						</a>
+					</li>
 					<li class="dropdown user user-menu">
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown">
 						  <span class="hidden-xs">커뮤니티</span>

@@ -239,6 +239,10 @@ $(function(){
 								<td class="col-md-2">
 									<a href="/admin/product/detail?${pageMaker.makeSearch(pageMaker.cri.page)}&prd_idx=${product.prd_idx}" style="color:black;">
 										${product.prd_title }</a>
+										<c:if test="${product.ctgr_prt_cd == '300' }">
+										<br>
+										<span class="print_eBook" style="color: #539ca8;">&nbsp;[eBook]</span>
+										</c:if>
 								</td>
 								<td class="col-md-1">${product.prd_author }</td>
 								<td class="col-md-1">${product.prd_price }</td>

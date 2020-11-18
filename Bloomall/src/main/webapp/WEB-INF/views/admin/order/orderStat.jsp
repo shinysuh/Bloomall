@@ -6,11 +6,11 @@
 <%@include file="/WEB-INF/views/include/header.jsp" %>
 <%@include file="/WEB-INF/views/include/plugin_js.jsp" %>
 <head>
-<script type="text/javascript" src="/js/admin/login.js"></script>
 <script type="text/javascript">
 $(function(){
 	// 날짜 검색 버튼
-		/*
+		/* 
+		// ajax 시도
 	$("#btnSearch").click(function(){
 
 		var form = $("#dateForm");
@@ -102,6 +102,11 @@ $(function(){
 										</select>
 										<button type="submit" id="btnSearch" class="btn btn-default" style="float:left;margin-left:5px;">검색</button>
 									</td>
+									<td>
+										<a href="/admin/chart/orderChart" style="float:right;font-weight:bold;margin: 8px 20px;font-size:16px;color:red;">
+											차트 보러가기 >>
+										</a>
+									</td>
 								</tr>
 							</table>
 						</form>
@@ -164,7 +169,6 @@ $(function(){
 						  </c:if>
 						</table>
 					</div>
-					
 				</div>
 				</div>
 			</section>

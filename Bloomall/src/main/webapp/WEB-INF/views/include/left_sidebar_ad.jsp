@@ -78,6 +78,19 @@
 				</ul>
 			</li>
 			<li class="treeview">
+				<a href="#"><i class="fa fa-book"></i> <span>통계차트</span> <span class="pull-right-container">
+						<i class="fa fa-angle-left pull-right"></i>
+					</span> </a>
+				<ul class="treeview-menu">
+					<li>
+						<a href="/admin/chart/orderChart"><i class="fa fa-bookmark"></i>주문통계차트</a>
+					</li>
+					<li>
+						<a href="#"><i class="fa fa-bookmark"></i>회원통계차트</a>
+					</li>
+				</ul>
+			</li>
+			<li class="treeview">
 				<a href="#"><i class="fa fa-book"></i> <span>회원관리</span> <span class="pull-right-container">
 						<i class="fa fa-angle-left pull-right"></i>
 					</span> </a>

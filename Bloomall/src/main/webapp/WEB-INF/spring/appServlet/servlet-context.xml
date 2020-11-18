@@ -22,10 +22,9 @@
 	<resources mapping="/ckeditor/**" location="/resources/bower_components/ckeditor/" />
 	<resources mapping="/upload/**" location="/resources/upload/" />
 	
-	<!-- common 폴더에 있는 부트스트랩 사용할 경우 필요 -->
-	<resources mapping="/css/**" location="/WEB-INF/views/css/" />
-	<resources mapping="/vendor/**" location="/WEB-INF/views/vendor/" />
+	<resources mapping="/chart/**" location="/resources/chart/" />
 	
+		
 	<!-- 클라이언트로 부터 전송되어 온 파일을 스프링에서 처리하는 기능 -->
 	<!-- MultipartFile file 주입됨 -->
 	<beans:bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">

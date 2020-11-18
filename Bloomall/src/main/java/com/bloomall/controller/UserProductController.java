@@ -108,18 +108,22 @@ public class UserProductController {
 			
 			logger.info("count :"+count);
 		}else {
-			title = service.getCtgrName(ctgr_cd);
-
 			if(prime_ctgr_cd.equals("")||prime_ctgr_cd == null) {
+
 				// 상품 리스트 - 2차
 				productList = service.productList(map);
 				count = service.countByCtgr(ctgr_cd);
+				title = service.getCtgrName(ctgr_cd);
 				
 				logger.info("count :"+count);
 			}else{
 				// 상품 리스트 - 1차 
 				productList = service.primeList(cri, prime_ctgr_cd);
 				count = service.prime_countByCtgr(prime_ctgr_cd);
+				title = service.getCtgrName(prime_ctgr_cd);
+				
+				logger.info("카테고리명: " + title);
+				logger.info("카테고리코드: " + prime_ctgr_cd);
 				
 				logger.info("count :"+count);
 			}
@@ -136,8 +140,8 @@ public class UserProductController {
 			vo = productList.get(i);
 			prd_idx = vo.getPrd_idx();
 			
-			vo.setOrd_amount(orderService.productSalesCount(prd_idx));
 			vo.setRvw_count(reviewService.reviewCount(prd_idx));
+			vo.setOrd_amount(orderService.productSalesCount(prd_idx));
 			
 			rvwCount = vo.getRvw_count();
 			

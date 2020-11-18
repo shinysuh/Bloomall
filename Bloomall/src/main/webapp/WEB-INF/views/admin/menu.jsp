@@ -78,10 +78,11 @@ a:active {
 				<div class="col-md-9" style="width:70%; min-width:300px; padding: 50px 180px;" class="container text-center">
 					<div class="col-sm-1"></div>
 					<ul class="col-sm-11 items" style="list-style:none;">
-						<a href="/admin/product/list"><li class="item"><br><br>상품관리</li></a><br>
-						<a href="/admin/order/orderList"><li class="item"><br><br>주문관리</li></a>
-						<br>
-						<a href="#"><li class="item"><br><br>회원관리</li></a><br>
+						<a href="/admin/product/list"><li class="item"><br><br>상품관리</li></a>
+						<a href="/admin/order/orderList"><li class="item"><br><br>주문관리</li></a><br>
+						<a href="/admin/order/orderStat"><li class="item"><br><br>주문통계</li></a>
+						<a href="/admin/chart/orderChart"><li class="item"><br><br>통계차트</li></a><br>
+						<a href="#"><li class="item"><br><br>회원관리</li></a>
 						<a href="#"><li class="item"><br><br>게시판 관리</li></a>
 					</ul>
 				</div>

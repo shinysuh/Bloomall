@@ -61,13 +61,15 @@ $(function(){
 		
 		if($("#search").val() == "state"){
 			
-			var state = "";
-			
+			var state = $("input[name='state']").val();
+			/*
 			$("input[name='ord_state']").each(function(i, item){
 				if(item.checked == true){
 					state += ($(this).val()) + ",";
 				}else{}
 			});
+			*/
+			
 			
 			
 			state = state.substring(0,state.lastIndexOf(","));
