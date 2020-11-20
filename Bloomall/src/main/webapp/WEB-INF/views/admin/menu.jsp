@@ -81,7 +81,7 @@ a:active {
 						<a href="/admin/product/list"><li class="item"><br><br>상품관리</li></a>
 						<a href="/admin/order/orderList"><li class="item"><br><br>주문관리</li></a><br>
 						<a href="/admin/order/orderStat"><li class="item"><br><br>주문통계</li></a>
-						<a href="/admin/chart/orderChart"><li class="item"><br><br>통계차트</li></a><br>
+						<a href="/admin/chart/overall"><li class="item"><br><br>통계차트</li></a><br>
 						<a href="#"><li class="item"><br><br>회원관리</li></a>
 						<a href="#"><li class="item"><br><br>게시판 관리</li></a>
 					</ul>

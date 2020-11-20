@@ -3,7 +3,6 @@ package com.bloomall.persistence;
 import java.sql.Timestamp;
 import java.util.List;
 
-import com.bloomall.domain.OrderVO;
 import com.bloomall.domain.StatChartVO;
 
 public interface StatChartDAO {
@@ -21,7 +20,9 @@ public interface StatChartDAO {
 	public List<StatChartVO> secondaryChartByMonth(Timestamp ord_date) throws Exception;
 	
 	// 월별 매출
-	public List<OrderVO> monthlyChart(Timestamp ord_date) throws Exception;
+	public List<StatChartVO> monthlyChart(Timestamp ord_date) throws Exception;
 	
+	// 매년 총 매출
+	public List<StatChartVO> yearlySales() throws Exception;
 	
 }

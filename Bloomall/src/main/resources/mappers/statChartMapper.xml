@@ -7,60 +7,80 @@
 
 	<!-- 1차 카테고리별 매출(전체)-->
 	<select id="primaryChart" resultType="StatChartVO">
-		select p.ctgr_prt_cd primary_cd, sum(d.ord_amount * d.ord_price) sales_p
-		from product_tb p, ord_detail_tb d
+		select c.ctgr_name primary_cd, sum(d.ord_amount * d.ord_price) sales_p
+		from product_tb p, ord_detail_tb d, (select p.ctgr_name, c.ctgr_cd from category_tb c, category_tb p where c.ctgr_prt_cd=p.ctgr_cd ) c
 		where p.prd_idx=d.prd_idx
-		group by p.ctgr_prt_cd
-		order by p.ctgr_prt_cd
+		    and p.ctgr_cd=c.ctgr_cd
+		group by c.ctgr_name
+		order by c.ctgr_name
 	</select>
 	
 	<!-- 1차 카테고리 별 매출 비율(월별) -->
 	<select id="primaryChartByMonth" resultType="StatChartVO" parameterType="Date">
-		select p.ctgr_prt_cd primary_cd, sum(d.ord_amount * d.ord_price) sales_p
-		from product_tb p, ord_detail_tb d, order_tb o
+		select c.ctgr_name primary_cd, sum(d.ord_amount * d.ord_price) sales_p
+		from product_tb p, ord_detail_tb d, (select p.ctgr_name, c.ctgr_cd from category_tb c, category_tb p where c.ctgr_prt_cd=p.ctgr_cd ) c,  order_tb o
 		where p.prd_idx=d.prd_idx
-			and o.ord_idx=d.ord_idx
-			and TO_CHAR(o.ord_date, 'YYYY/MM') = TO_CHAR(#{ord_date}, 'YYYY/MM')
-		group by p.ctgr_prt_cd, TO_CHAR(o.ord_date, 'YYYY/MM')
-		order by p.ctgr_prt_cd
+		    and p.ctgr_cd=c.ctgr_cd
+		    and o.ord_idx=d.ord_idx
+		    and TO_CHAR(o.ord_date, 'YYYY/MM') = TO_CHAR(#{ord_date}, 'YYYY/MM')
+		group by c.ctgr_name, TO_CHAR(o.ord_date, 'YYYY/MM')
+		order by c.ctgr_name
 	</select>
 	
 	
 	<!-- 2차 카테고리별 매출(카테고리명으로 출력. ex)소설/시)(전체) -->
 	<select id="secondaryChart" resultType="StatChartVO">
-		select c.ctgr_name c_group, sum(sales) sales_s
+		select c.ctgr_name secondary_cd, sum(sales) sales_s
 		from category_tb c
-		inner join (select p.ctgr_cd secondary_cd, sum(d.ord_amount * d.ord_price) sales
+		inner join (select p.ctgr_cd, sum(d.ord_amount * d.ord_price) sales
 		            from product_tb p, ord_detail_tb d
 		            where p.prd_idx=d.prd_idx
 		            group by p.ctgr_cd) a
-		on c.ctgr_cd = a.secondary_cd
+		on c.ctgr_cd = a.ctgr_cd
+		where c.ctgr_prt_cd != 400
 		group by c.ctgr_name
 	</select>
 	
 	<!-- 2차 카테고리 별 매출 비율(월별) -->
 	<select id="secondaryChartByMonth" resultType="StatChartVO" parameterType="Date">
-		select c.ctgr_name c_group, sum(sales) sales_s
+		select c.ctgr_name secondary_cd, sum(sales) sales_s
 		from category_tb c
-		inner join (select p.ctgr_cd secondary_cd, sum(d.ord_amount * d.ord_price) sales, TO_CHAR(o.ord_date, 'YYYY/MM') order_date
+		inner join (select p.ctgr_cd ctgr_cd, sum(d.ord_amount * d.ord_price) sales, TO_CHAR(o.ord_date, 'YYYY/MM') order_date
 		            from product_tb p, ord_detail_tb d, order_tb o
 		            where p.prd_idx=d.prd_idx
-			            and o.ord_idx=d.ord_idx
-			            and TO_CHAR(o.ord_date, 'YYYY/MM') = TO_CHAR(#{ord_date}, 'YYYY/MM')
+		                and o.ord_idx=d.ord_idx
+		                and TO_CHAR(o.ord_date, 'YYYY/MM') = TO_CHAR(#{ord_date}, 'YYYY/MM')
 		            group by p.ctgr_cd, TO_CHAR(o.ord_date, 'YYYY/MM')) a
-		on c.ctgr_cd = a.secondary_cd
+		on c.ctgr_cd = a.ctgr_cd
+		where c.ctgr_prt_cd != 400
 		group by c.ctgr_name
 	</select>
 	
 	
 	<!-- 월별 매출 -->
-	<select id="monthlyChart" resultType="OrderVO" parameterType="Date">
-		select sum(o.ord_tot_price) monthly_sales, TO_CHAR(ord_date, 'YYYY/MM') month
-		from order_tb o
-		where TO_CHAR(ord_date, 'YYYY') = TO_CHAR(#{ord_date}, 'YYYY')
-		group by TO_CHAR(ord_date, 'YYYY/MM')
-		order by month
+	<select id="monthlyChart" resultType="StatChartVO" parameterType="Date">
+		select b.dt month, NVL(sum(a.sales), 0) monthly_sales     
+		from (select TO_CHAR(ord_date, 'YYYY/MM') month1, sum(ord_tot_price) sales
+		        from order_tb
+		        where ord_date between to_date(trunc(#{ord_date}, 'year')) and to_date(trunc(trunc(#{ord_date}, 'year') + 370, 'year'))
+		        group by TO_CHAR(ord_date, 'YYYY/MM')) a
+		right join
+				<![CDATA[
+		        (select to_char(add_months(trunc(#{ord_date}, 'year'), level-1),'YYYY/MM') as dt from dual
+		            connect by level <= 12)
+		            b
+				]]>
+		on a.month1 = b.dt
+		group by b.dt
+		order by b.dt
 	</select>
 
+	<!-- 매년 총 매출 (컬럼차트(vertical bar)) -->
+	<select id="yearlySales" resultType="StatChartVO">
+		select sum(ord_tot_price) total, to_char(ord_date, 'YYYY') year
+		from order_tb
+		group by to_char(ord_date, 'YYYY')
+		order by to_char(ord_date, 'YYYY')
+	</select>
 
 </mapper>

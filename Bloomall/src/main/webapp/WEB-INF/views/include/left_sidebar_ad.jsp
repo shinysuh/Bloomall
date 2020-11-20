@@ -83,10 +83,13 @@
 					</span> </a>
 				<ul class="treeview-menu">
 					<li>
-						<a href="/admin/chart/orderChart"><i class="fa fa-bookmark"></i>주문통계차트</a>
+						<a href="/admin/chart/overall"><i class="fa fa-bookmark"></i>전체통계차트</a>
 					</li>
 					<li>
-						<a href="#"><i class="fa fa-bookmark"></i>회원통계차트</a>
+						<a href="/admin/chart/monthlyOrder"><i class="fa fa-bookmark"></i>월별주문통계</a>
+					</li>
+					<li>
+						<a href="#"><i class="fa fa-bookmark"></i>월별회원통계</a>
 					</li>
 				</ul>
 			</li>

@@ -158,9 +158,14 @@
 						</ul>
 					</li>
 					<li class="user user-menu">
-						<a href="/admin/chart/orderChart" class="toggle">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown">
 						  <span class="hidden-xs">통계차트</span>
 						</a>
+						<ul class="dropdown-menu" id="order">
+							<li><a href="/admin/chart/overall">전체통계</a></li>
+							<li><a href="/admin/chart/monthlyOrder">월별주문</a></li>
+							<li><a href="#">월별회원</a></li>
+						</ul>
 					</li>
 					<li class="dropdown user user-menu">
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown">

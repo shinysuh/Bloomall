@@ -103,8 +103,8 @@ $(function(){
 										<button type="submit" id="btnSearch" class="btn btn-default" style="float:left;margin-left:5px;">검색</button>
 									</td>
 									<td>
-										<a href="/admin/chart/orderChart" style="float:right;font-weight:bold;margin: 8px 20px;font-size:16px;color:red;">
-											차트 보러가기 >>
+										<a href="/admin/chart/monthlyOrder" style="float:right;font-weight:bold;margin: 8px 20px;font-size:16px;color:blue;">
+											월별 차트 보러가기 >>
 										</a>
 									</td>
 								</tr>

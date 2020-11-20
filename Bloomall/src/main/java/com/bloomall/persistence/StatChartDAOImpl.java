@@ -8,7 +8,6 @@ import javax.inject.Inject;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 
-import com.bloomall.domain.OrderVO;
 import com.bloomall.domain.StatChartVO;
 
 @Repository
@@ -45,8 +44,14 @@ public class StatChartDAOImpl implements StatChartDAO {
 
 	// 월별 매출
 	@Override
-	public List<OrderVO> monthlyChart(Timestamp ord_date) throws Exception {
+	public List<StatChartVO> monthlyChart(Timestamp ord_date) throws Exception {
 		return session.selectList(NS + ".monthlyChart", ord_date);
+	}
+
+	// 매년 총 매출
+	@Override
+	public List<StatChartVO> yearlySales() throws Exception {
+		return session.selectList(NS + ".yearlySales");
 	}
 
 	
