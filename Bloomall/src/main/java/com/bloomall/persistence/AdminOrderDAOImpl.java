@@ -75,12 +75,18 @@ public class AdminOrderDAOImpl implements AdminOrderDAO {
 	public void deleteOrder(int ord_idx) throws Exception {
 		session.delete(NS + ".deleteOrder", ord_idx);
 	}
+	// 3)회원 포인트 차감
+	@Override
+	public void retrievePoint(Map<String, Object> map) throws Exception {
+		session.update(NS + ".retrievePoint", map);
+	}
 
 	// 주문 통계
 	@Override
 	public List<AdminOrderStatVO> orderStat(Timestamp ord_date) throws Exception {
 		return session.selectList(NS + ".orderStat", ord_date);
 	}
+
 
 
 

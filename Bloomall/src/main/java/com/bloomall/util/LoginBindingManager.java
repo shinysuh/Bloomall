@@ -34,6 +34,9 @@ public class LoginBindingManager implements HttpSessionBindingListener {
 	//[세션정보 추가]시 호출되는 이벤트
 	@Override
 	public void valueBound(HttpSessionBindingEvent event) {
+		
+		if(event.getSession().getAttribute("admin") != null) {
+		}
 		loginUsers.put(event.getSession(), event.getName());
 		System.out.println(event.getName() + " 로그인 완료");
 		System.out.println("현재 접속자 수 : " + getUserCount());
@@ -76,6 +79,9 @@ public class LoginBindingManager implements HttpSessionBindingListener {
 		// Session Binding 이벤트가 일어나는 시점
 		// name 값으로 userId, value 값으로 자기자신(HttpSessionBindingListner를 구현하는 Object
 		session.setAttribute(userId, this);		// login에 자기자신을 집어넣음 => 여기서 userId가 valueBound()에서 event.getName()으로 삽입되는 것
+		//여기서 setAttribute 작업을 더 하면??
+		
+		
 	}
 	
 	// 사용자 아이디 가져오기

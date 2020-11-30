@@ -316,14 +316,16 @@ public class AdminOrderController {
 	// 주문상세정보 페이지 - 주문 삭제  POST
 	@ResponseBody
 	@RequestMapping(value = "/deleteOrder", method=RequestMethod.POST)
-	public ResponseEntity<String> deleteOrder(@RequestParam int ord_idx) throws Exception{
+	public ResponseEntity<String> deleteOrder(@RequestParam("ord_idx") int ord_idx,
+											  @RequestParam("mem_id") String mem_id,
+											  @RequestParam("mem_point") int mem_point) throws Exception{
 		
 		logger.info("======== deleteOrder() called ========");
 		
 		ResponseEntity<String> entity = null;
 		
 		try {
-			service.deleteOrder(ord_idx);
+			service.deleteOrder(ord_idx, mem_id, mem_point);
 			entity = new ResponseEntity<String>(HttpStatus.OK);
 		}catch(Exception e) {
 			e.printStackTrace();

@@ -78,8 +78,51 @@
 		where ord_idx = #{ord_idx}
 	</select>
 	
+	<!-- 취소/반품 내역 리스트 -->
+	<select id="cancelledList" resultType="CancelledListVO" parameterType="Map">
+		select ord_idx, prd_title, ord_price, ord_tot_price, ord_amount, mem_id, ord_recp_name, ord_date, return_state, cancel_date
+		from (select o.ord_idx, p.prd_title, d.ord_price, o.ord_tot_price, d.ord_amount, o.mem_id, o.ord_recp_name, o.ord_date, return_state, cancel_date,
+		             row_number() over(order by o.ord_idx desc) o_seq
+		        from backup_ord_tb o inner join backup_o_detail_tb d
+		            on o.ord_idx = d.ord_idx
+		        inner join product_tb p
+		            on p.prd_idx = d.prd_idx
+		        where mem_id=#{mem_id}
+		        order by o.ord_idx desc, d.prd_idx desc
+		        )
+		where o_seq between #{cri.rowStart} and #{cri.rowEnd}
+	</select>
 	
-	<!-- 상품별 주문건수 (사용자 상품리스트에서 출력) -->
+	<!-- 취소/반품 전체 개수 -->
+	<select id="cancelled_Count" resultType="int" parameterType="String">
+		select count(o.ord_idx)
+		from backup_ord_tb o inner join backup_o_detail_tb d
+		            on o.ord_idx = d.ord_idx
+		        inner join product_tb p
+		            on p.prd_idx = d.prd_idx
+		where o.mem_id=#{mem_id}
+	</select>
+	
+	<!-- 취소/반품 상세 -->
+	<select id="cancelledDetail" resultType="CancelledDetailVO" parameterType="int">
+		select d.ord_idx, d.prd_idx, p.prd_title, p.prd_img, d.ord_amount, d.ord_price
+		from backup_o_detail_tb d
+		inner join product_tb p
+		    on p.prd_idx = d.prd_idx
+		where d.ord_idx=#{ord_idx}
+		order by d.prd_idx desc
+	</select>
+	
+	<!-- 취소/반품자 정보(주문취소(백업)테이블) -->
+	<select id="cancelled_buyer" resultType="BackupOrderVO" parameterType="int">
+		select ord_idx, mem_id, ord_recp_name, ord_recp_zip, ord_recp_addr, ord_recp_addr_d,
+		       ord_recp_tel, ord_tot_price, ord_date, return_state, cancel_date
+		from backup_ord_tb
+		where ord_idx = #{ord_idx}
+	</select>
+	
+	
+	<!-- 상품별 주문건수 (사용자 상품리스트(UserProductController)에서 출력) -->
 	<select id="productSalesCount" resultType="int" parameterType="int">
 		select NVL(sum(ord_amount),0)
 		from ord_detail_tb

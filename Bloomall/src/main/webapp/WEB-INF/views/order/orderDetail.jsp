@@ -5,8 +5,29 @@
 <html>
 <%@include file="/WEB-INF/views/include/header.jsp" %>
 <%@include file="/WEB-INF/views/include/plugin_js.jsp" %>
-
-
+<head>
+<script type="text/javascript">
+$(function(){
+	// 주문처리상태 텍스트화
+	getStateText();
+});
+function getStateText(){
+	var ord_state = $(".state"); 
+	
+	if(ord_state.html() == 1){
+		ord_state.html("주문접수");
+		// 주문접수 상태에서는 수량 수정 가능
+		$(".amount").attr("readonly", false);
+	}else if(ord_state.html() == 2){
+		ord_state.html("배송준비중");
+	}else if(ord_state.html() == 3){
+		ord_state.html("배송중");
+	}else if(ord_state.html() == 4){
+		ord_state.html("배송완료");
+	}
+}
+</script>
+</head>
 <body class="hold-transition skin-blue sidebar-mini">
 	<div class="wrapper">
 		<%@include file="/WEB-INF/views/include/main_header.jsp" %>
@@ -54,7 +75,7 @@
 								<table class="table  text-center" id="ordertbl">
 									<thead id="thead">
 										<tr style="background-color: rgb(229, 217, 236);" >
-											<td colspan="5" style="text-align:left;">
+											<td colspan="6" style="text-align:left;">
 												<b>주문날짜: <fmt:formatDate value="${buyer.ord_date}" pattern="yyyy/MM/dd HH:mm"/>
 												(주문번호: ${buyer.ord_idx} )</b>
 											</td>
@@ -66,7 +87,8 @@
 											<td>주문가격</td>
 											<td>주문수량</td>	
 											<td>합계</td> 
-											<td style="font-size:12px;color:#539ca8;">포인트</td> 
+											<td style="font-size:12px;color:#539ca8;">포인트</td>
+											<td>주문현황</td> 
 										</tr>
 									<thead>
 									
@@ -97,6 +119,7 @@
 											<td class="col-md-1">
 												<p style="font-size:12px;color:#539ca8;"><fmt:formatNumber value="${orderDetail.prd_price * 0.03 * orderDetail.ord_amount}"  pattern="###,###,###" />원</p>
 											</td>
+											<td class="state col-md-1">${buyer.ord_state }</td>
 										</tr>
 									</c:forEach>
 									</tbody>

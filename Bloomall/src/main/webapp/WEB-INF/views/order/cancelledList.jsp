@@ -17,14 +17,14 @@
 			<!-- Content Header (Page header) -->
 			<section class="content-header">
 				<h1>
-					Order History <small>주문내역</small>
+					Cancelled Orders <small>취소/반품 내역</small>
 				</h1>
 				<ol class="breadcrumb">
 					<li>
 						<a href="#"><i class="fa fa-dashboard"></i> Order</a>
 					</li>
 					<li>
-						Order History
+						Cancelled Orders
 					</li>
 				</ol>
 			</section>
@@ -40,42 +40,43 @@
 							<table class="table table-striped text-center">
 								<tr>
 									<td colspan="10">
-										<a href="/order/cancelledList" style="float:right;font-weight:bold;margin: 8px 20px;font-size:16px;color:red;">
-											취소/반품 내역 보러가기 >>
+										<a href="/order/orderHistory" style="float:right;font-weight:bold;margin: 8px 20px;font-size:16px;color:blue;">
+											주문 내역 보러가기 >>
 										</a>
 									</td>
 								</tr>
-								<%-- 주문내역이 존재하지 않는 경우 --%>
-								<c:if test="${empty orderHistory}">
+								<%-- 취소/반품 내역이 존재하지 않는 경우 --%>
+								<c:if test="${empty cancelList}">
 									<tr>
 										<td colspan="10"> 
-											<p style="padding:50px 0px; text-align: center;">주문내역이 없습니다.</p>
+											<p style="padding:50px 0px; text-align: center;">취소/반품 내역이 없습니다.</p>
 										</td>
 									<tr>
 								</c:if>
 								
-								<%-- 주문내역이 존재하는 경우, 리스트 출력 --%>
+								<%-- 취소/반품 내역이 존재하는 경우, 리스트 출력 --%>
 
-								<c:forEach items="${orderHistory}" var="orderHistory" varStatus="status">
-								<c:if test="${status.index == 0 || orderHistory.ord_idx != idx}">
-									<tr style="background-color: rgb(229, 217, 236);">
+								<c:forEach items="${cancelList}" var="cancelList" varStatus="status">
+								<c:if test="${status.index == 0 || cancelList.ord_idx != idx}">
+									<tr style="background-color: rgb(231, 236, 217);">
 										<td class="col-sm-3" style="padding-top:15px;font-weight:bold;font-size:15px;">
-											주문번호 : ${orderHistory.ord_idx} / 주문날짜: <fmt:formatDate value="${orderHistory.ord_date }" pattern="yyyy/MM/dd"/> 
+											주문번호 : ${cancelList.ord_idx} / 주문날짜: <fmt:formatDate value="${cancelList.ord_date }" pattern="yyyy/MM/dd"/>
+											/ <span style="color:red;">취소접수날짜: <fmt:formatDate value="${cancelList.cancel_date }" pattern="yyyy/MM/dd"/></span> 
 										</td>
 										<td class="col-sm-1"></td>
 										<td class="col-sm-1"></td>
 										<td class="col-sm-2" style="text-align:right;">
-											<a href="/order/orderDetail?ord_idx=${orderHistory.ord_idx}">
+											<a href="/order/cancelledDetail?ord_idx=${cancelList.ord_idx}">
 												<button class="btn btn-primary" style="float:right;height:5%;font-size:12px;">주문상세보기</button>
 											</a>
 										</td>
 									</tr>
-									<tr style="background-color: rgb(247, 242, 250);">
-										<td class="col-sm-3">주문자: ${user.mem_name } / 수령자: ${orderHistory.ord_recp_name }</td>
+									<tr style="background-color: rgb(250, 250, 242);">
+										<td class="col-sm-3">주문자: ${user.mem_name } / 수령자: ${cancelList.ord_recp_name }</td>
 										<td class="col-sm-1"></td>
 										<td class="col-sm-1"></td>
-										<td class="col-sm-2" style="text-align:right;font-weight:bold;font-size:15px;">
-											총 주문금액: <fmt:formatNumber value="${orderHistory.ord_tot_price}" pattern="###,###,###"/>원
+										<td class="col-sm-2" style="text-align:right;font-weight:bold;font-size:15px;color:red;">
+											총 주문금액: <fmt:formatNumber value="${cancelList.ord_tot_price}" pattern="###,###,###"/>원
 										</td>
 									</tr>
 									<tr style="font-weight:bold;">
@@ -86,12 +87,12 @@
 									</tr>
 								</c:if>
 									<tr>
-										<td>${orderHistory.prd_title}</td>
-										<td><fmt:formatNumber value="${orderHistory.prd_price}" pattern="###,###,###"/>원</td>
-										<td>${orderHistory.ord_amount}</td>
-										<td style="font-weight:bold;"><fmt:formatNumber value="${orderHistory.prd_price * orderHistory.ord_amount}" pattern="###,###,###"/>원</td>
+										<td>${cancelList.prd_title}</td>
+										<td><fmt:formatNumber value="${cancelList.ord_price}" pattern="###,###,###"/>원</td>
+										<td>${cancelList.ord_amount}</td>
+										<td style="font-weight:bold;"><fmt:formatNumber value="${cancelList.ord_price * cancelList.ord_amount}" pattern="###,###,###"/>원</td>
 									</tr>
-								<c:set var="idx" value="${orderHistory.ord_idx}"></c:set>
+								<c:set var="idx" value="${cancelList.ord_idx}"></c:set>
 								</c:forEach>
 							</table>
 						</div>

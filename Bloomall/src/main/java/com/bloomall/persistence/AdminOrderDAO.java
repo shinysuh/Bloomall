@@ -36,6 +36,8 @@ public interface AdminOrderDAO {
 	public void deleteDetail(int ord_idx) throws Exception;
 	// 2)주문테이블 삭제
 	public void deleteOrder(int ord_idx) throws Exception;
+	// 3)회원 포인트 차감
+	public void retrievePoint(Map<String, Object> map) throws Exception;
 	
 	// 주문 통계
 	public List<AdminOrderStatVO> orderStat(Timestamp ord_date) throws Exception;

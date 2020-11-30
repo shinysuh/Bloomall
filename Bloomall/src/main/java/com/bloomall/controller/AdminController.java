@@ -64,9 +64,10 @@ public class AdminController {
 				// 아이디가 이미 사용 중이면 기존 세션 소멸
 				binder.removeSesseion(ad_id);
 			}
-			
 			// 새로운 세션 생성 - 아래 session.setAttribute 코드와 overlap되는 기능. "admin"을 어떻게 한번에 저장할지 고민 필요
+			// 강사님 조언: "session_bound 이벤트에서 "admin" key로 dto 작업시 저장하는 부분을 if문으로 컬렉션에 저장되지 않게하여 제거되지 않게 해보세요"...?
 			binder.setSession(session, ad_id);
+//			session.setAttribute("aaa", adVO);
 			session.setAttribute("admin", adVO);	// 세션에 관리자 정보 저장
 
 			rttr.addFlashAttribute("msg", "ADMIN_LOGIN_SUCCESS");

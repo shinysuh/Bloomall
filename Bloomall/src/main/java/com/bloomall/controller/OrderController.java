@@ -18,6 +18,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.bloomall.domain.BackupOrderVO;
+import com.bloomall.domain.CancelledDetailVO;
+import com.bloomall.domain.CancelledListVO;
 import com.bloomall.domain.OrderDetailListVO;
 import com.bloomall.domain.OrderDetailVO;
 import com.bloomall.domain.OrderHistoryDetailVO;
@@ -375,7 +378,7 @@ public class OrderController {
 	
 	// 주문 상세 조회 (GET) - 주문 내역 상세 페이지		/order/orderDetail		service.orderHistoryDetail() / recipientInfo()
 	@RequestMapping(value = "/orderDetail", method=RequestMethod.GET)
-	public String orderDetail(@ModelAttribute Criteria cri, int ord_idx, Model model, HttpSession session) throws Exception{
+	public String orderDetail(@ModelAttribute Criteria cri, int ord_idx, Model model) throws Exception{
 		
 		logger.info("======== orderDetail() called ========");
 		logger.info("ord_idx : " + ord_idx);
@@ -393,6 +396,60 @@ public class OrderController {
 		
 		return "/order/orderDetail";
 	}
+	
+	
+	// 취소/반품 주문 목록
+	@RequestMapping(value = "/cancelledList", method=RequestMethod.GET)
+	public String cancelledList(@ModelAttribute("cri") Criteria cri, Model model, HttpSession session) throws Exception{
+		
+		logger.info("======== cancelledList() called ========");
+		
+		PageMaker pageMaker = new PageMaker();
+		pageMaker.setCri(cri);
+		pageMaker.getCri().setPerPageNum(10);
+		
+		logger.info(cri.toString());
+		
+		MemberDTO dto = (MemberDTO) session.getAttribute("user");
+		String mem_id = dto.getMem_id();
+		pageMaker.setTotalCount(service.cancelled_Count(mem_id));
+		
+		List<CancelledListVO> cancelList = service.cancelledList(cri, mem_id);
+		
+		model.addAttribute("cancelList", cancelList);
+		model.addAttribute("pageMaker", pageMaker);
+		
+		return "/order/cancelledList";
+	}
+	
+	
+	
+	
+	// 취소/반품 주문상세
+	@RequestMapping(value = "/cancelledDetail", method=RequestMethod.GET)
+	public String cancelledDetail(@ModelAttribute("cri") Criteria cri, int ord_idx, Model model) throws Exception{
+		
+		logger.info("======== ordcancelledDetailerDetail() called ========");
+		
+		List<CancelledDetailVO> cancelDetail = service.cancelledDetail(ord_idx);
+		BackupOrderVO cancelledBuyer = service.cancelled_buyer(ord_idx);
+		
+		PageMaker pageMaker = new PageMaker();
+		pageMaker.setCri(cri);
+		pageMaker.getCri().setPerPageNum(10);
+		
+		logger.info(cri.toString());
+		
+		model.addAttribute("cancelDetail", cancelDetail);
+		model.addAttribute("cancelledBuyer", cancelledBuyer);
+		model.addAttribute("pageMaker", pageMaker);
+		
+		return "/order/cancelledDetail";
+	}
+	
+	
+	
+	
 	
 }
 

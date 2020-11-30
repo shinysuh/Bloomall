@@ -76,9 +76,18 @@ public class AdminOrderServiceImpl implements AdminOrderService {
 	
 	/* 주문정보 상세 페이지 [삭제] */
 	@Override
-	public void deleteOrder(int ord_idx) throws Exception {
+	public void deleteOrder(int ord_idx, String mem_id, int mem_point) throws Exception {
+		// 1)주문상세 삭제
 		dao.deleteDetail(ord_idx);
+		// 2)주문 삭제
 		dao.deleteOrder(ord_idx);
+
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("mem_id", mem_id);
+		map.put("mem_point", mem_point);
+		
+		// 3)회원포인트 차감
+		dao.retrievePoint(map);
 	}
 
 	// 주문 통계

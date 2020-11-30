@@ -9,12 +9,16 @@ import javax.inject.Inject;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.bloomall.domain.BackupOrderVO;
+import com.bloomall.domain.CancelledDetailVO;
+import com.bloomall.domain.CancelledListVO;
 import com.bloomall.domain.OrderDetailListVO;
 import com.bloomall.domain.OrderDetailVO;
 import com.bloomall.domain.OrderHistoryDetailVO;
 import com.bloomall.domain.OrderHistoryVO;
 import com.bloomall.domain.OrderVO;
 import com.bloomall.persistence.OrderDAO;
+import com.bloomall.util.Criteria;
 
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -307,6 +311,35 @@ public class OrderServiceImpl implements OrderService {
 		dao.updatePoint(map);
 	}
 
+	// 취소/반품 내역 리스트
+	@Override
+	public List<CancelledListVO> cancelledList(Criteria cri, String mem_id) throws Exception {
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("cri", cri);
+		map.put("mem_id", mem_id);
+		
+		return dao.cancelledList(map);
+	}
+
+	// 취소/반품 개수
+	@Override
+	public int cancelled_Count(String mem_id) throws Exception {
+		return dao.cancelled_Count(mem_id);
+	}
+
+	// 취소/반품 상세
+	@Override
+	public List<CancelledDetailVO> cancelledDetail(int ord_idx) throws Exception {
+		return dao.cancelledDetail(ord_idx);
+	}
+
+	// 취소/반품자 정보(주문취소(백업)테이블)
+	@Override
+	public BackupOrderVO cancelled_buyer(int ord_idx) throws Exception {
+		return dao.cancelled_buyer(ord_idx);
+	}
+	
 	// 상품당 주문건수 (사용자 상품리스트에서 출력)
 	@Override
 	public int productSalesCount(int prd_idx) throws Exception {

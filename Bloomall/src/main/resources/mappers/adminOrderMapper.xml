@@ -126,6 +126,12 @@
 		delete from order_tb
 		where ord_idx=#{ord_idx}
 	</delete>
+	<!-- 3)회원 포인트 차감 -->
+	<update id="retrievePoint" parameterType="Map">
+		update member_tb set mem_point = mem_point - #{mem_point}
+		where mem_id = #{mem_id}
+	</update>
+	
 	
 	
 	<!-- 주문통계 페이지 -->

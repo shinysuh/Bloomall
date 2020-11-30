@@ -34,14 +34,16 @@ $(function(){
 	$("#deleteOrder").click(function(){
 		
 		var ord_idx = $("input[name='ord_idx']").val();
+		var mem_id = $("#mem_id").val();
+		var mem_point = parseInt($("#mem_point").val());
 		
-		if(confirm("정말 이 주문건을 삭제하시겠습니까? \n이 작업은 DB정보만 삭제하며, 포인트 회수 및 쿠폰 취소를 위해서는 \n주문취소 작업 후 진행해주시기 바랍니다. \n이 작업은 취소할 수 없으므로 신중하게 결정해주세요.")){
+		if(confirm("정말 이 주문건을 삭제하시겠습니까? \n이 작업은 취소할 수 없으므로 신중하게 결정해주세요.")){
 
 			$.ajax({
 				type	: 'post',
 				url		: '/admin/order/deleteOrder',
 				dataType: 'text',
-				data	: {ord_idx : ord_idx},
+				data	: {ord_idx : ord_idx, mem_id : mem_id, mem_point : mem_point},
 				success	: function(data){
 					
 					alert("해당 주문건이 정상적으로 삭제되었습니다.")
@@ -55,28 +57,20 @@ $(function(){
 	// 목록 버튼
 	$(".btnList").click(function(){
 		//location.href = "/admin/order/orderList${pageMaker.makeSearch(pageMaker.cri.page, stateList)}";
-		var url = "/admin/order/orderList${pageMaker.makeQuery(1)}"
-						+ "&searchType=" + $("#search").val()
-						+ "&keyword=" + $("#keyword").val();
+		var url = "/admin/order/orderList${pageMaker.makeQuery(cri.page)}"
+						+ "&searchType=" + $("input[name='searchType']").val()
+						+ "&keyword=" + $("input[name='keyword']").val();
 		
-		if($("#search").val() == "state"){
+		if($("input[name='searchType']").val() == "state"){
 			
 			var state = $("input[name='state']").val();
-			/*
-			$("input[name='ord_state']").each(function(i, item){
-				if(item.checked == true){
-					state += ($(this).val()) + ",";
-				}else{}
-			});
-			*/
+						
 			
+			state = state.substring(1,state.lastIndexOf("]"));
 			
-			
-			state = state.substring(0,state.lastIndexOf(","));
-			
-			url = "orderList${pageMaker.makeQuery(1)}&searchType="
-				+ $("#search").val() +
-				"&keyword=" + $("#keyword").val() + "&state=" + state;
+			url = "orderList${pageMaker.makeQuery(cri.page)}&searchType="
+				+ $("input[name='searchType']").val() +
+				"&keyword=" + $("input[name='keyword']").val() + "&state=" + state;
 		}else{}
 
 		location.href = url;
@@ -180,6 +174,7 @@ function getStateText(){
 									<c:forEach items="${orderDetail }" var="orderDetail" varStatus="i">
 									<c:set var="totalPrice" value="${totalPrice + orderDetail.prd_price * orderDetail.ord_amount }" />
 									<c:set var="totalDC" value="${totalDC + (orderDetail.prd_price - orderDetail.ord_price) * orderDetail.ord_amount }" />
+									<c:set var="totalPoint" value="${totalPoint + orderDetail.prd_price * 0.03 * orderDetail.ord_amount}" />
 								  	<tr style="text-align:center;">
 								  		<td><input type="checkbox" name="check" class="check" /></td>
 								  		<td>
@@ -221,7 +216,7 @@ function getStateText(){
 													<option value="4" <c:out value="${order.ord_state == 4 ? 'selected':''}" />>배송완료</option>
 												</select>
 												<button type="button" id="btnUpdate" class="btn btn-default" style="float:left;margin-left:5px;">변경</button>
-												<button type="button" id="deleteOrder" class="btn btn-danger" style="float:right;">이 주문 삭제하기</button>
+												<button type="button" id="deleteOrder" class="btn btn-danger" style="float:right;">이 주문 취소/삭제</button>
 											</td>
 										</tr>
 									</table>
@@ -235,15 +230,20 @@ function getStateText(){
 								<table class="table table-striped text-center" id="table_3">
 									<tr>
 										<td class="col-sm-2" style="font-weight:bold;">주문금액</td>
-										<td style="float:left;"><fmt:formatNumber value="${totalPrice }" pattern="###,###,###" />원</td>
+										<td colspan="2" style="float:left;"><fmt:formatNumber value="${totalPrice }" pattern="###,###,###" />원</td>
 									</tr>
 									<tr>
 										<td style="font-weight:bold;">할인금액</td>
-										<td style="float:left;"> - <fmt:formatNumber value="${totalDC }" pattern="###,###,###" />원</td>
+										<td colspan="2" style="float:left;"> - <fmt:formatNumber value="${totalDC }" pattern="###,###,###" />원</td>
 									</tr>
 									<tr>
 										<td style="font-weight:bold;">결제금액</td>
-										<td style="float:left;font-weight:bold;color:blue;font-size:18px;"><fmt:formatNumber value="${order.ord_tot_price }" pattern="###,###,###" />원</td>
+										<td style="float:left;font-weight:bold;color:blue;font-size:18px;">
+											<fmt:formatNumber value="${order.ord_tot_price }" pattern="###,###,###" />원
+											&nbsp;&nbsp;&nbsp;
+											<span style="font-size:12px;color:#539ca8;">(적립포인트 : <fmt:formatNumber value="${totalPoint }" pattern="###,###,###" />원)</span>
+											<input type="hidden" id="mem_point" name="mem_point" value="${totalPoint }" />
+										</td>
 									</tr>
 								</table>
 								</div>
@@ -257,7 +257,9 @@ function getStateText(){
 								<table class="table table-striped text-center" id="table_4">
 									<tr>
 										<td class="col-sm-3" style="font-weight:bold;">이름/ID</td>
-										<td style="float:left;">${member.mem_name } / ${member.mem_id}</td>
+										<td style="float:left;">${member.mem_name } / ${member.mem_id}
+											<input type="hidden" id="mem_id" name="mem_id" value="${member.mem_id}" />
+										</td>
 									</tr>
 									<tr>
 										<td style="font-weight:bold;">이메일</td>

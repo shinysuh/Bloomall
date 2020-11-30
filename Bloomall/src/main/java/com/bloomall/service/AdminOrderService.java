@@ -32,7 +32,7 @@ public interface AdminOrderService {
 	public void updateAmount(int ord_idx, int prd_idx, int ord_amount) throws Exception;
 	
 	/* 주문정보 상세 페이지 [삭제] */
-	public void deleteOrder(int ord_idx) throws Exception;
+	public void deleteOrder(int ord_idx, String mem_id, int mem_point) throws Exception;
 
 	// 주문 통계
 	public List<AdminOrderStatVO> orderStat(Timestamp ord_date) throws Exception;

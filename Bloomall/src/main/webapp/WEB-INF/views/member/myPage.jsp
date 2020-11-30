@@ -1,6 +1,6 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <!DOCTYPE html>
 <html>
 <%@include file="/WEB-INF/views/include/header.jsp" %>
@@ -70,7 +70,7 @@ a:active {
 								<td style="font-size:16px;">${vo.mem_name }님의 회원등급은 <b>[Member]</b>입니다.</td>
 							</tr>					
 							<tr>
-								<td>가용 포인트 : ${vo.mem_point }</td>
+								<td>가용 포인트 : <fmt:formatNumber value="${vo.mem_point }" pattern="###,###,###" />원</td>
 							</tr>					
 						</table>
 					</div>
@@ -78,9 +78,11 @@ a:active {
 					<div class="col-sm-1"></div>
 					<ul class="col-sm-11 items" style="list-style:none;">
 						<a href="/order/orderHistory"><li class="item"><br><br>주문내역</li></a>
-						<a href="/member/checkPW?url=modify"><li class="item"><br><br>회원정보 수정</li></a>
+						<a href="/order/cancelledList"><li class="item"><br><br>취소/반품내역</li></a>
 						<br>
+						<a href="/member/checkPW?url=modify"><li class="item"><br><br>회원정보 수정</li></a>
 						<a href="/member/checkPW?url=updatePW"><li class="item"><br><br>비밀번호 변경</li></a>
+						<br>
 						<a href="/member/checkPW?url=delete"><li class="item"><br><br>회원 탈퇴</li></a>
 					</ul>
 				</div>
