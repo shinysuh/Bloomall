@@ -140,8 +140,7 @@ public class AdminOrderController {
 	}
 	//==========================================================================================================
 
-	
-	
+		
 	// 주문처리상태 변경
 	@ResponseBody
 	@RequestMapping(value = "/updateState", method=RequestMethod.POST)

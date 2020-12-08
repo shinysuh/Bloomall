@@ -34,7 +34,6 @@ public class ReviewController {
 
 	
 	// 상품 리뷰 쓰기
-	
 	@RequestMapping(value = "/write", method = RequestMethod.POST)
 	public void writeRvw(ReviewVO vo, HttpSession session) throws Exception{
 		

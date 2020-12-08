@@ -7,22 +7,23 @@
 		http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd">
 
-	<!-- spring-jdbc 
+	<!-- spring-jdbc -->
 	<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
 		<property name="driverClassName" value="oracle.jdbc.driver.OracleDriver" />
 		<property name="url" value="jdbc:oracle:thin:@localhost:1521:orcl" />
-		<property name="username" value="project" />
+		<property name="username" value="PROJECT" />
 		<property name="password" value="1234" />
-	</bean>-->
+	</bean>
 	
 	<!-- log4 jdbc -->			
-	<!-- sql문에서 오류가 났을 때, 오류 구문을 로그에 나타내 유지보수 용이. BUT 성능에 좋지 않아 사용 후 다시 위 dataSource로 돌려줘야 함. -->
+	<!-- sql문에서 오류가 났을 때, 오류 구문을 로그에 나타내 유지보수 용이. BUT 성능에 좋지 않아 사용 후 다시 위 dataSource로 돌려줘야 함. 
 	<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
 		<property name="driverClassName" value="net.sf.log4jdbc.sql.jdbcapi.DriverSpy" />
 		<property name="url" value="jdbc:log4jdbc:oracle:thin:@localhost:1521:orcl" />
 		<property name="username" value="PROJECT" />
 		<property name="password" value="1234" />
 	</bean> 
+	-->
 	
 	<!-- mybatis-spring -->
 	<!-- SqlSession 을 생성하는 기능 -->
