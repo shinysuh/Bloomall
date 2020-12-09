@@ -21,9 +21,9 @@ function formSetting(){
 	// ${type} value 가져오기
 	var type = $("#btnOrder").prev().val();
 	
-	if(type == 1){  // 단일상품 구매
+	if(type == 1){  // 리스트 단일상품 구매
 		form.attr("action", "/order/orderOne");
-	}else if(type == 2){  // 여러상품 구매
+	}else if(type == 2){  // 카트 단일상품 구매
 		form.attr("action", "/order/orderCartOne");
 	}
 }

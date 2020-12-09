@@ -50,7 +50,7 @@ public class OrderServiceImpl implements OrderService {
 		return ord_idx;
 	}
 
-	// [여러상품(선택상품)] - 상품리스트/카트(선택)/카트(전체)
+	// [여러상품(선택상품)] - 상품리스트
 	@Transactional
 	@Override
 	public int orderChk(OrderVO orderVO, OrderDetailListVO detailList) throws Exception {
