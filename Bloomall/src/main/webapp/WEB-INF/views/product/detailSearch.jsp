@@ -309,7 +309,7 @@ $(function(){
 					 							 <!-- timeline time label -->
 												<li class="time-label" id="repliesDiv">
 													<span class="btn btn-default">
-												    	<span>리뷰보기</span> <small id="s_rvwCount"> [ ${rvwCount} ] </small>
+												    	<span>리뷰보기</span> <small id="s_rvwCount"> [ ${vo.rvw_count} ] </small>
 												    </span>
 												    <button class="btn btn-primary" id="btn_writeRvw" type="button">리뷰작성</button>
 												</li>
