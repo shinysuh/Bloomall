@@ -129,8 +129,9 @@ public class PageMaker {
 		return uric.toUriString();
 	}
 	
-public String makeSearch(int page, List<String> stateList) {
-		System.out.println(stateList);
+	public String makeSearch(int page, List<String> stateList) {
+
+//		System.out.println(stateList);
 	
 		UriComponents uric = null;
 		String state = "";

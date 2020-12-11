@@ -250,7 +250,7 @@ function disableKeyword(){
 								<th>주문자아이디</th>
 								<th>주문자</th>
 								<th>수령자</th>
-								<th>결제수단</th>
+								<!-- <th>결제수단</th>  -->
 								<th>결제금액</th>
 								<th>처리상태</th>
 							</tr>
@@ -290,8 +290,8 @@ function disableKeyword(){
 								<td class="col-md-1">${orderList.mem_id }</td>
 								<td class="col-md-1">${orderList.mem_name }</td>
 								<td class="col-md-1">${orderList.ord_recp_name }</td>
-								<td class="col-md-1">결제수단</td>
-								<td class="col-md-1" style="font-weight:bold;">
+								<!-- <td class="col-md-1">결제수단</td>  -->
+								<td class="col-md-2" style="font-weight:bold;">
 									<fmt:formatNumber value="${orderList.ord_tot_price }" pattern="###,###,###"/>원
 								</td>
 								<td class="col-md-2">

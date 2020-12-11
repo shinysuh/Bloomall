@@ -62,6 +62,7 @@ public class AdminOrderController {
 		
 		List<String> stateList = new ArrayList<String>();
 		
+		// [주문처리상태] 검색 시 state 파라미터 부여 - PageMaker에 makeSearch(int page, List<String> stateList) 별도 생성
 		if(state == null || state == "") {
 			stateList.add("noSel");
 			logger.info("state1 : " + state);
@@ -140,7 +141,8 @@ public class AdminOrderController {
 	}
 	//==========================================================================================================
 
-		
+	
+	
 	// 주문처리상태 변경
 	@ResponseBody
 	@RequestMapping(value = "/updateState", method=RequestMethod.POST)
