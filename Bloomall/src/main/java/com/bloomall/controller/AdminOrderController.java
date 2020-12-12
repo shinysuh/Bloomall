@@ -143,7 +143,7 @@ public class AdminOrderController {
 
 	
 	
-	// 주문처리상태 변경
+	// 주문처리상태 단일(개별) 변경
 	@ResponseBody
 	@RequestMapping(value = "/updateState", method=RequestMethod.POST)
 	public ResponseEntity<String> updateState(@RequestParam int ord_idx, @RequestParam int ord_state, Model model){
@@ -194,7 +194,7 @@ public class AdminOrderController {
 		return entity;
 	}
 	
-	// 주문처리상태 [선택] 위에서 한번에 설정 변경
+	// 주문처리상태 [선택] 위에서 한번에 설정 변경(일괄변경)
 	@ResponseBody
 	@RequestMapping(value = "/chk_all", method=RequestMethod.POST)
 	public ResponseEntity<String> updateChkAllTogether(@RequestParam("chkArr[]") List<Integer> chkArr,
