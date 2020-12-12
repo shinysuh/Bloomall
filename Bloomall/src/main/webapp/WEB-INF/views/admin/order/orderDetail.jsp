@@ -84,8 +84,10 @@ function getStateText(){
 	
 	if(ord_state.html() == 1){
 		ord_state.html("주문접수");
-		// 주문접수 상태에서는 수량 수정 가능
+		// 주문접수 상태에서는 수량/수령자정보 수정 가능
 		$(".amount").attr("readonly", false);
+		$(".recipient").attr("readonly", false);
+		$("#btn_postCode").attr("onclick", "sample2_execDaumPostcode()");
 	}else if(ord_state.html() == 2){
 		ord_state.html("배송준비중");
 	}else if(ord_state.html() == 3){
@@ -313,23 +315,23 @@ function getStateText(){
 								<table class="table table-striped text-center" id="table_5">
 									<tr>
 										<td class="col-sm-3" style="font-weight:bold;">수령자</td>
-										<td style="float:left;"><input type="text" value="${order.ord_recp_name }" name="ord_recp_name" /></td>
+										<td style="float:left;"><input type="text" value="${order.ord_recp_name }" name="ord_recp_name" class="recipient" readonly/></td>
 									</tr>
 									<tr>
 										<td style="font-weight:bold;">연락처</td>
-										<td style="float:left;"><input type="tel" value="${order.ord_recp_tel }" name="ord_recp_tel" /></td>
+										<td style="float:left;"><input type="tel" value="${order.ord_recp_tel }" name="ord_recp_tel" class="recipient" readonly/></td>
 									</tr>
 									<tr>
 										<td style="font-weight:bold;">주소</td>
 										<td style="float:left;">
-											<input type="text" id="sample2_postcode" name="ord_recp_zip" class="form-control" 
+											<input type="text" id="sample2_postcode" name="ord_recp_zip" class="form-control recipient" readonly
 												value = "${order.ord_recp_zip}" 
 												style="width:calc(100% - 128px); margin-right: 5px; display: inline-block;" placeholder="우편번호">
-											<input type="button" onclick="sample2_execDaumPostcode()" id="btn_postCode" class="btn btn-default" value="우편번호 찾기"><br>
-											<input type="text" id="sample2_address" name="ord_recp_addr" class="form-control" 
+											<input type="button" onclick="" id="btn_postCode" class="btn btn-default" value="우편번호 찾기"><br>
+											<input type="text" id="sample2_address" name="ord_recp_addr" class="form-control recipient" readonly 
 												value = "${order.ord_recp_addr}" 
 												placeholder="주소" style=" margin:3px 0px;">
-											<input type="text" id="sample2_detailAddress" name="ord_recp_addr_d" class="form-control" 
+											<input type="text" id="sample2_detailAddress" name="ord_recp_addr_d" class="form-control recipient" readonly 
 												value = "${order.ord_recp_addr_d}"
 												placeholder="상세주소">
 											<input type="hidden" id="sample2_extraAddress" class="form-control" placeholder="참고항목">
