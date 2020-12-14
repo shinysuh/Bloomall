@@ -2,6 +2,7 @@ package com.bloomall.domain;
 
 import java.sql.Timestamp;
 
+// 주문취소 테이블(백업테이블)
 public class BackupOrderVO {
 	/*	주문 백업 테이블
 	 *  ord_idx             number                  primary key,                           
@@ -17,7 +18,7 @@ public class BackupOrderVO {
 	    ord_count           number default 1,
 	    ord_updatedate      date default sysdate,
 	    state_updatedate    date default sysdate,
-	    return_state        number default 7        not null,       -- 취소/환불상태 '주문취소(7)/환불처리중(8)/환불완료(9)'
+	    return_state        number default 7        not null,       -- 취소/환불상태 '주문취소(7)/환불처리중(8)/환불완료(9)/환불완료(0)'
 	    cancel_date         date default sysdate    not null,       -- 주문취소 접수 날짜
 	    cancel_updatedate   date default sysdate    not null       -- 취소/환불상태 변경날짜 (개발단 처리)
 	    --, cancel_user         varchar2(20)            not null        -- 주문취소 접수자(관리자 중) 아이디
@@ -35,9 +36,9 @@ public class BackupOrderVO {
 	private int ord_count;
 	private Timestamp ord_updatedate;
 	private Timestamp state_updatedate;
-	private int return_state;
-	private Timestamp cancel_date;
-	private Timestamp cancel_updatedate;
+	private int return_state;				// 취소/환불상태 '주문취소(7)/환불처리중(8)/환불완료(9)/환불완료(0)'
+	private Timestamp cancel_date;			// 주문취소 접수 날짜
+	private Timestamp cancel_updatedate;	// 취소/환불상태 변경날짜
 	
 	public int getOrd_idx() {
 		return ord_idx;

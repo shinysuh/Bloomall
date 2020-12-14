@@ -1,5 +1,6 @@
 package com.bloomall.domain;
 
+// 주문상세 취소 테이블(백업테이블)
 public class BackupOrderDetailVO {
 	/*	주문상세 백업 테이블
 	 *  ord_idx             number              not null,
