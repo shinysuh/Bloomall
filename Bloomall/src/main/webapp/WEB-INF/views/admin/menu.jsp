@@ -64,7 +64,6 @@ a:active {
 
 			<!-- Main content -->
 			<section class="content container-fluid">
-				<section class="content container-fluid">
 				<%-- 로그인 안된 상태 --%>
 				<div style="margin-top:80px;">
 				<c:if test="${sessionScope.admin == null }">

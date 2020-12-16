@@ -384,7 +384,7 @@ $(function(){
 					</div>
 					<!--/.col (left) -->
 				</div>
-
+				</div>
 			</section>
 			<!-- /.content -->
 		</div>

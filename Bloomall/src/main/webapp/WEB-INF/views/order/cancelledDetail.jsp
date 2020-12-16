@@ -72,7 +72,7 @@ function getStateText(){
 								<%-- 주문내역 테이블 --%>
 								<table class="table  text-center" id="ordertbl">
 									<thead id="thead">
-										<tr style="background-color: rgb(229, 217, 236);" >
+										<tr style="background-color: rgb(231, 236, 217);" >
 											<td colspan="6" style="text-align:left;">
 												<b>취소접수날짜: <fmt:formatDate value="${cancelledBuyer.cancel_date}" pattern="yyyy/MM/dd HH:mm"/>
 												(주문번호: ${cancelledBuyer.ord_idx} )</b> / <span>주문날짜: <fmt:formatDate value="${cancelledBuyer.ord_date }" pattern="yyyy/MM/dd"/></span>

@@ -13,6 +13,8 @@ $(function(){
 	// 주문처리상태 텍스트
 	getStateText();
 	
+	removeNoSel();
+	
 	// 주문상태 변경 버튼 btnUpdate
 	$("#btnUpdate").click(function(){
 		var ord_idx = $("input[name='ord_idx']").val();
@@ -61,6 +63,7 @@ $(function(){
 						+ "&searchType=" + $("input[name='searchType']").val()
 						+ "&keyword=" + $("input[name='keyword']").val();
 		
+		// [주문처리상태] 구분, 체크박스 검색 시
 		if($("input[name='searchType']").val() == "state"){
 			
 			var state = $("input[name='state']").val();
@@ -72,7 +75,7 @@ $(function(){
 				+ $("input[name='searchType']").val() +
 				"&keyword=" + $("input[name='keyword']").val() + "&state=" + state;
 		}else{}
-
+		
 		location.href = url;
 		
 	});
@@ -95,6 +98,16 @@ function getStateText(){
 	}else if(ord_state.html() == 4){
 		ord_state.html("배송완료");
 	}
+}
+
+function removeNoSel(){
+	
+	var state = $("input[name='state']");
+	var search = $("input[name='searchType']");
+	
+	if(state.val() == '[noSel]'){
+		state.val("");
+	}else{}
 }
 
 </script>

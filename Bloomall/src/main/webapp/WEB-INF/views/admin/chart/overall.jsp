@@ -98,7 +98,7 @@
 					</div>
 					<br>
 						<div class="col-xs-6">
-							<div style="color:green;"><b>&#9660; 1차 카테고리별 매출통계</div>
+							<div style="color:green;"><b>&#9660; 1차 카테고리별 매출통계</b></div>
 							<!-- 파이차트 -->
 							<div id="prime_chart" style="width:600px;height:333px;"></div>
 							
@@ -109,7 +109,7 @@
 							
 						</div>
 						<div class="col-xs-6">
-							<div style="color:green;"><b>&#9660; 2차 카테고리별 매출통계</div>
+							<div style="color:green;"><b>&#9660; 2차 카테고리별 매출통계</b></div>
 							<!-- 파이차트 -->
 							<div id="second_chart" style="width:600px;height:333px;"></div>
 							
@@ -117,7 +117,7 @@
 						</div>
 
 						<div class="col-xs-12">
-							<div style="color:green;"><b>&#9660; 연도별 매출통계</div>
+							<div style="color:green;"><b>&#9660; 연도별 매출통계</b></div>
 							<!-- 컬럼차트(vertical bar) -->
      						<div id="yearly_sales" style="width:100%;height:500px;"></div>
 						</div>

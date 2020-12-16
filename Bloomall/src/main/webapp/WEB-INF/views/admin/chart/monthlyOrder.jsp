@@ -114,17 +114,17 @@
 					</div>
 					<br>
 						<div class="col-xs-6">
-							<div style="color:green;"><b>&#9660; 1차 카테고리별 매출통계</div>
+							<div style="color:green;"><b>&#9660; 1차 카테고리별 매출통계</b></div>
 							<!-- 파이차트 -->
 							<div id="prime_chart_m" style="width:600px;height:333px;"></div>
 						</div>
 						<div class="col-xs-6">
-							<div style="color:green;"><b>&#9660; 2차 카테고리별 매출통계</div>
+							<div style="color:green;"><b>&#9660; 2차 카테고리별 매출통계</b></div>
 							<!-- 파이차트 -->
 							<div id="second_chart_m" style="width:600px;height:333px;"></div>
 						</div>
 						<div class="col-xs-12">
-							<div style="color:green;"><b>&#9660; 월별 매출통계</div>
+							<div style="color:green;"><b>&#9660; 월별 매출통계</b></div>
 							<!-- 꺾은선 그래프 -->
      						<div id="monthly_sales" style="width:100%;height:500px;"></div>
 						</div>
